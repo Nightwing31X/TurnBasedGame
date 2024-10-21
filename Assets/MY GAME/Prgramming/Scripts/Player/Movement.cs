@@ -8,73 +8,93 @@ namespace Player
     [AddComponentMenu("GameDev/Player/First Person Movement")]
     public class Movement : MonoBehaviour
     {
-        #region Newer version rotate the ` with buttons
+        #region Newer version rotate the Player with buttons
 
         GameObject _player;
-        Vector3 currentPOS;
-        public float rotationDirection = 90f;
-        public float bigRotationDirection = 180;
-        public float moveDistance = 3f;
+        [SerializeField] private float _rotationDirection = 90f;
+        [SerializeField] private float _bigRotationDirection = 180;
+        [SerializeField] private GameObject _walkPosition;
         [SerializeField] private bool _turnedRight;
         [SerializeField] private bool _turnedLeft;
         [SerializeField] private bool _facingForward;
         [SerializeField] private bool _facingBackward;
         [SerializeField] private bool _wallInFront;
         [SerializeField] private bool _enemyInFront;
+        // [SerializeField] private Transform _target;
+        [SerializeField] private Vector3 _target;
+        [SerializeField] private float _speed = 1;
+        [SerializeField] private float _stoppingDistance = 0.1f; // A small value for how close is considered "reached"
+        public bool isMoving;
 
         private void Start()
         {
             _player = GameObject.FindWithTag("Player");
+            _target = _walkPosition.transform.position;
         }
 
-        private void Update()
+
+        void Update()
         {
             _wallInFront = GetComponent<Interact>().wallHit;
-            // _enemyInFront = GetComponent<Interact>().enemyFront;
+            _enemyInFront = GetComponent<Interact>().enemyFront;
+            if (isMoving)
+            {
+                // Move towards the _target
+                _player.GetComponent<Animator>().SetBool("Walk", true);
+                _player.GetComponent<Animator>().SetBool("Idle", false);
+                transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
+                // Check if the object has reached the _target
+                if (Vector3.Distance(transform.position, _target) <= _stoppingDistance)
+                {
+                    // Snap the player to the target position so things stay even 
+                    transform.position = _target;
+                    // Object has reached the _target
+                    Debug.Log("_target reached!");
+                    _player.GetComponent<Animator>().SetBool("Idle", true);
+                    _player.GetComponent<Animator>().SetBool("Walk", false);
+                    isMoving = false;
+                    CheckWalls();
+                }
+            }
         }
+
+        private void CheckWalls()
+        {
+            if (!_wallInFront)
+            {
+                _target = _walkPosition.transform.position;
+            }
+            else
+            {
+                Debug.Log("I cannot move Object, a wall is in front of Player...");
+            }
+        }
+
+
 
         public void Move()
         {
             if (!_wallInFront)
             {
-                // if (!_enemyInFront)
-                // {
-                if (_turnedRight)
+                if (!_enemyInFront)
                 {
-                    transform.position += new Vector3(moveDistance, 0f, 0f);
+                    isMoving = true;
                 }
-                else if (_turnedLeft)
+                else
                 {
-                    transform.position += new Vector3(-moveDistance, 0f, 0f);
+                    Debug.Log("Enemy is in front... I can attack or run away...");
                 }
-                else if (_facingForward)
-                {
-                    transform.position += new Vector3(0f, 0f, moveDistance);
-                }
-                else if (_facingBackward)
-                {
-                    transform.position += new Vector3(0f, 0f, -moveDistance);
-                }
-                // }
-                // else if (_enemyInFront)
-                // {
-                //     Debug.Log("Enemy is in front... I can attack or run away...");
-                // }
-            }
-            else if (_wallInFront)
-            {
-                Debug.Log("I cannot move, a wall is in front of me...");
             }
             else
             {
-                Debug.LogWarning("Why did this play!!!");
+                Debug.Log("I cannot move, a wall is in front of me...");
             }
-
         }
 
         public void LeftTurn()
         {
-            transform.Rotate(0, -rotationDirection, 0);
+            transform.Rotate(0, -_rotationDirection, 0);
+            CheckWalls();
             if (_turnedRight)
             {
                 _facingForward = true;
@@ -100,7 +120,8 @@ namespace Player
 
         public void RightTurn()
         {
-            transform.Rotate(0, rotationDirection, 0);
+            transform.Rotate(0, _rotationDirection, 0);
+            CheckWalls();
             if (_turnedLeft)
             {
                 _facingForward = true;
@@ -126,7 +147,8 @@ namespace Player
 
         public void BigTurn()
         {
-            transform.Rotate(0, bigRotationDirection, 0);
+            transform.Rotate(0, _bigRotationDirection, 0);
+            CheckWalls();
             if (_facingForward)
             {
                 _facingBackward = true;
@@ -148,7 +170,6 @@ namespace Player
                 _facingBackward = false;
             }
         }
-
 
         #endregion
     }

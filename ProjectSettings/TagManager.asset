@@ -7,6 +7,7 @@ TagManager:
   - RightCamera
   - LeftCamera
   - BehideCamera
+  - Shrine
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Interaction
   - Attack
   - Wall
-  - 
+  - HidePlayer
   - 
   - 
   - 
