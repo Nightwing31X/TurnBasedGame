@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 namespace Player
@@ -20,40 +21,67 @@ namespace Player
         [Tooltip("The distance that the player can reach interactions."), SerializeField, Range(0, 100)] private float distance = 2f;
 
         public bool wallHit = false;
+        public bool enemyFront = false;
+        public bool enemyRight = false;
+        public bool enemyLeft = false;
+        public bool enemyBack = false;
         public bool enemyHit = false;
 
         public bool showToolTip = false;
         //public string action, button, instruction;
         public bool pickUpObj;
-        public bool attackToolTip;
+        // public bool attackToolTip;
         public GameObject keyboardPickUpText; //# Text to pickup things
         public GameObject keyboardAttackText;
         public GameObject controllerPickUpText; //# Text to pickup things
         public GameObject controllerAttackText;
+
+        #region Reference to the player cameras - for the raycast 
+        [Header("Cameras for Raycast")]
+        [SerializeField] private GameObject _rightCamera;
+        [SerializeField] private GameObject _leftCamera;
+        [SerializeField] private GameObject _behideCamera;
+        #endregion
+
+
+        void Start()
+        {
+            _rightCamera = GameObject.FindGameObjectWithTag("RightCamera");
+            _leftCamera = GameObject.FindGameObjectWithTag("LeftCamera");
+            _behideCamera = GameObject.FindGameObjectWithTag("BehideCamera");
+        }
+
         private void Update()
         {
             //_forceControllerInput = InputHandler.instance.forceController;
             //_checkControllerInput = InputHandler.instance.onController;
+            
+            # region Raycast for the Forward view
             // create a ray (a Ray is ?? a beam, line that comes into contact with colliders)
-            Ray interactRay;
+            Ray interactRayForward;
             // this ray shoots forward from the center of the camera
-            interactRay = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            interactRayForward = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
             if (_debug)
             {
-                Debug.DrawRay(interactRay.origin, transform.forward * distance, Color.green);
+                Debug.DrawRay(interactRayForward.origin, transform.forward * distance, Color.green); // Forward side
+                // Debug.DrawRay(interactRayForward.origin, transform.right * distance, Color.green); // Right side
+                // Debug.DrawRay(interactRayForward.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
+                // Debug.DrawRay(interactRayForward.origin, -transform.right * distance, Color.green); //-transform.right = Left side
             }
             // create hit info (this holds the info for the stuff we interact with) 
-            RaycastHit hitInfo;
+            RaycastHit hitInfoForward;
             // if this physics ray that gets cast in a direction hits a object within our distance and or layer
-            if (Physics.Raycast(interactRay, out hitInfo, distance, Layers /*This part here is the layer its optional*/ ))
+            if (Physics.Raycast(interactRayForward, out hitInfoForward, distance, Layers /*This part here is the layer its optional*/ ))
             {
                 if (_debug)
                 {
                     Debug.DrawRay(transform.position, transform.forward * distance, Color.yellow, 0.5f);
+                    Debug.DrawRay(transform.position, transform.right * distance, Color.yellow, 0.5f);
+                    Debug.DrawRay(transform.position, -transform.forward * distance, Color.yellow, 0.5f);
+                    Debug.DrawRay(transform.position, -transform.right * distance, Color.yellow, 0.5f);
                 }
-
                 # region Detect the interact layer (Interaction Layer)
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer(interactionLayer))
+                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(interactionLayer))
                 {
                     if (_debug)
                     {
@@ -64,19 +92,19 @@ namespace Player
                         }
                     }
                     showToolTip = true;
-                    attackToolTip = false;
+                    // attackToolTip = false;
                     OnGUI(); // Displays out ToolTip
                     if (Input.GetButtonDown("Interaction"))
                     {
-                        if (hitInfo.collider.TryGetComponent(out IInteractable interactableObject))
+                        if (hitInfoForward.collider.TryGetComponent(out IInteractable interactableObject))
                         {
                             interactableObject.Interact();
                         }
                     }
                 }
                 # endregion
-                # region Detect the attack layer (Enemy Layer)
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
+                # region Detect the attack layer (Enemy Layer) - Forward Player view
+                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                 {
                     if (_debug)
                     {
@@ -87,31 +115,15 @@ namespace Player
                         }
                     }
                     enemyHit = true;
+                    enemyFront = true;
+                    wallHit = false;
                     showToolTip = true;
-                    attackToolTip = true;
+                    // attackToolTip = true;
                     OnGUI(); // Displays out ToolTip
-                    // if (KeyBindManager.Keys.Count <= 0)
-                    // {
-                    if (Input.GetButtonDown("Attack"))
-                    {
-                        if (hitInfo.collider.TryGetComponent(out IInteractable interactableObject))
-                        {
-                            interactableObject.Interact();
-                            if (_debug)
-                            {
-                                _hasRan = false;
-                                if (!_hasRan)
-                                {
-                                    Debug.Log("I have hit the enemy");
-                                    _hasRan = true;
-                                }
-                            }
-                        }
-                    }
                 }
                 # endregion
                 # region Detect the wall layer (Wall Layer)
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
+                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
                 {
                     if (_debug)
                     {
@@ -122,23 +134,187 @@ namespace Player
                         }
                     }
                     wallHit = true;
+                    enemyFront = false;
+                    enemyHit = false;
                     showToolTip = true;
-                    attackToolTip = true;
+                    // attackToolTip = false;
                     OnGUI(); // Displays out ToolTip
                 }
                 # endregion
             }
             else
             {
-                wallHit = false;
+                enemyFront = false;
+                enemyHit = false;
                 showToolTip = false;
-                attackToolTip = false;
+                // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
                 //controllerPickUpText.SetActive(false);
                 //controllerAttackText.SetActive(false);
                 _hasRan = false;
             }
+            #endregion
+
+
+            # region Raycast for the Right side view
+            Ray interactRayRight;
+            // this ray shoots forward from the center of the camera (Right)
+            // interactRayForward = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            interactRayRight = _rightCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            if (_debug)
+            {
+                // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
+                Debug.DrawRay(interactRayRight.origin, transform.right * distance, Color.magenta); // Right side
+                // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
+                // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
+            }
+            // create hit info (this holds the info for the stuff we interact with) 
+            RaycastHit hitInfoRight;
+            
+            if (Physics.Raycast(interactRayRight, out hitInfoRight, distance, Layers /*This part here is the layer its optional*/ ))
+            {
+                if (hitInfoRight.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
+                {
+                    if (_debug)
+                    {
+                        if (!_hasRan)
+                        {
+                            Debug.Log($"Hit Layer = {attackLayer}");
+                            _hasRan = true;
+                        }
+                    }
+
+                    enemyFront = false;
+                    enemyRight = true;
+                    enemyLeft = false;
+                    enemyBack = false;
+
+                    enemyHit = false;
+                    showToolTip = true;
+                    // attackToolTip = false;
+                    // OnGUI(); // Displays out ToolTip
+                }
+            }
+            else
+            {
+                enemyRight = false;
+                enemyHit = false;
+                showToolTip = false;
+                // attackToolTip = false;
+                //keyboardPickUpText.SetActive(false); //# Pickup text turns off
+                //keyboardAttackText.SetActive(false);
+                //controllerPickUpText.SetActive(false);
+                //controllerAttackText.SetActive(false);
+                _hasRan = false;
+            }
+            #endregion
+            # region Raycast for the Left side view
+            Ray interactRayLeft;
+            // this ray shoots forward from the center of the camera (Right)
+            // interactRayForward = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            interactRayLeft = _leftCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            if (_debug)
+            {
+                // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
+                Debug.DrawRay(interactRayLeft.origin, -transform.right * distance, Color.magenta); // Right side
+                // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
+                // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
+            }
+            // create hit info (this holds the info for the stuff we interact with) 
+            RaycastHit hitInfoLeft;
+            
+            if (Physics.Raycast(interactRayLeft, out hitInfoLeft, distance, Layers /*This part here is the layer its optional*/ ))
+            {
+                if (hitInfoLeft.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
+                {
+                    if (_debug)
+                    {
+                        if (!_hasRan)
+                        {
+                            Debug.Log($"Hit Layer = {attackLayer}");
+                            _hasRan = true;
+                        }
+                    }
+
+                    enemyFront = false;
+                    enemyRight = false;
+                    enemyLeft = true;
+                    enemyBack = false;
+
+                    enemyHit = false;
+                    showToolTip = true;
+                    // attackToolTip = false;
+                    // OnGUI(); // Displays out ToolTip
+                }
+            }
+            else
+            {
+                enemyLeft = false;
+                enemyHit = false;
+                showToolTip = false;
+                // attackToolTip = false;
+                //keyboardPickUpText.SetActive(false); //# Pickup text turns off
+                //keyboardAttackText.SetActive(false);
+                //controllerPickUpText.SetActive(false);
+                //controllerAttackText.SetActive(false);
+                _hasRan = false;
+            }
+            #endregion
+            # region Raycast for the Behide side view
+            Ray interactRayBehide;
+            // this ray shoots forward from the center of the camera (Right)
+            // interactRayForward = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            interactRayBehide = _behideCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            if (_debug)
+            {
+                // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
+                Debug.DrawRay(interactRayBehide.origin, -transform.forward * distance, Color.magenta); // Right side
+                // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
+                // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
+            }
+            // create hit info (this holds the info for the stuff we interact with) 
+            RaycastHit hitInfoBehide;
+            
+            if (Physics.Raycast(interactRayBehide, out hitInfoBehide, distance, Layers /*This part here is the layer its optional*/ ))
+            {
+                if (hitInfoBehide.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
+                {
+                    if (_debug)
+                    {
+                        if (!_hasRan)
+                        {
+                            Debug.Log($"Hit Layer = {attackLayer}");
+                            _hasRan = true;
+                        }
+                    }
+
+                    enemyFront = false;
+                    enemyRight = false;
+                    enemyLeft = false;
+                    enemyBack = true;
+
+                    enemyHit = false;
+                    showToolTip = true;
+                    // attackToolTip = false;
+                    // OnGUI(); // Displays out ToolTip
+                }
+            }
+            else
+            {
+                enemyBack = false;
+                enemyHit = false;
+                showToolTip = false;
+                // attackToolTip = false;
+                //keyboardPickUpText.SetActive(false); //# Pickup text turns off
+                //keyboardAttackText.SetActive(false);
+                //controllerPickUpText.SetActive(false);
+                //controllerAttackText.SetActive(false);
+                _hasRan = false;
+            }
+            #endregion
+
+
         }
         void OnGUI()
         {
