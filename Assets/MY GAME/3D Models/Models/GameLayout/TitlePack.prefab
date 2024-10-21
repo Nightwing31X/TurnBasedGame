@@ -685,6 +685,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 2996212525485730647, guid: d264cb97be6f44c4b957f5656ea09026, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2996212525485730647, guid: d264cb97be6f44c4b957f5656ea09026, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7575485891559086227, guid: d264cb97be6f44c4b957f5656ea09026, type: 3}
       propertyPath: m_LocalScale.x
       value: 4

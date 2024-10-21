@@ -1,98 +1,69 @@
+using Player;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static UnityEngine.GridBrushBase;
 
 public class Movement : MonoBehaviour
 {
-    #region Old version - Could move the player though I had to set the location
-    //public GameObject _player;
-
-    //public Transform currentPostion;
-    //public Transform nextPostion;
-
-    //public float moveSpeed;
-    //private Vector3 current;
-    //private Vector3 target;
-    //private float sinTime;
-
-    //void Start()
-    //{
-    //    current = currentPostion.transform.position;
-    //    target = nextPostion.transform.position;
-    //    transform.position = current;
-    //    _player = GameObject.FindWithTag("Player");
-    //}
-
-    //void Update()
-    //{
-    //    if (transform.position != target)
-    //    {
-    //        sinTime += Time.deltaTime * moveSpeed;
-    //        sinTime = Mathf.Clamp(sinTime, 0, Mathf.PI);
-    //        float t = Evaluate(sinTime);
-    //        transform.position = Vector3.Lerp(current, target, t);
-    //    }
-
-    //    Swap();
-    //}
-
-    //public void Swap()
-    //{
-    //    if (current.z != target.y)
-    //    {
-    //        return;
-    //    }
-
-    //    Vector3 t = current;
-    //    current.z = target.y;
-    //    target = t;
-    //    sinTime = 0;
-    //}
-
-
-    //public float Evaluate(float x)
-    //{
-    //    return 0.5f * Mathf.Sin(x - Mathf.PI / 2f) * 05f;
-    //}
-    #endregion
-
-    #region Newer version rotate the player with buttons
+   #region Newer version rotate the player with buttons
 
     GameObject PlayerCharacter;
     Vector3 currentPOS;
     public float rotationDirection = 90f;
+    public float bigRotationDirection = 180;
     public float moveDistance = 3f;
     [SerializeField] private bool _turnedRight;
     [SerializeField] private bool _turnedLeft;
     [SerializeField] private bool _facingForward;
     [SerializeField] private bool _facingBackward;
+    [SerializeField] private bool _wallInFront;
+    [SerializeField] private bool _enemyInFront;
 
     private void Start()
     {
         PlayerCharacter = GameObject.FindWithTag("Player");
     }
 
+    private void Update()
+    {
+        _wallInFront = GetComponent<Interact>().wallHit;
+        _enemyInFront = GetComponent<Interact>().enemyHit;
+    }
+
     public void Move()
     {
-        if (_turnedRight)
+        if (!_wallInFront || !_enemyInFront)
         {
-            transform.position += new Vector3(moveDistance, 0f, 0f);
+            if (_turnedRight)
+            {
+                transform.position += new Vector3(moveDistance, 0f, 0f);
+            }
+            else if (_turnedLeft)
+            {
+                transform.position += new Vector3(-moveDistance, 0f, 0f);
+            }
+            else if (_facingForward)
+            {
+                transform.position += new Vector3(0f, 0f, moveDistance);
+            }
+            else if (_facingBackward)
+            {
+                transform.position += new Vector3(0f, 0f, -moveDistance);
+            }
         }
-        else if (_turnedLeft)
+        else if (_wallInFront)
         {
-            transform.position += new Vector3(-moveDistance, 0f, 0f);
+            Debug.Log("I cannot move, a wall is in front of me...");
         }
-        else if (_facingForward)
+        else if (_enemyInFront)
         {
-            transform.position += new Vector3(0f, 0f, moveDistance);
+            Debug.Log("Enemy is in front... I can attack or run away...");
         }
-        else if (_facingBackward)
-        {
-            transform.position += new Vector3(0f, 0f, -moveDistance);
-        }
+
     }
 
     public void LeftTurn()
@@ -147,6 +118,30 @@ public class Movement : MonoBehaviour
         }
     }
 
+    public void BigTurn()
+    {
+        transform.Rotate(0, bigRotationDirection, 0);
+        if (_facingForward)
+        {
+            _facingBackward = true;
+            _facingForward = false;
+        }
+        else if (_turnedRight)
+        {
+            _turnedLeft = true;
+            _turnedRight = false;
+        }
+        else if (_turnedLeft)
+        {
+            _turnedRight = true;
+            _turnedLeft = false;
+        }
+        else if (_facingBackward)
+        {
+            _facingForward = true;
+            _facingBackward = false;
+        }
+    }
 
 
     #endregion
