@@ -19,9 +19,9 @@ TagManager:
   - Attack
   - Wall
   - HidePlayer
-  - 
-  - 
-  - 
+  - PlayerFullbody
+  - PlayerShield
+  - PlayerSword
   - 
   - 
   - 
