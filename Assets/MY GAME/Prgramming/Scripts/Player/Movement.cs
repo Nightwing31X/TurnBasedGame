@@ -1,3 +1,4 @@
+using GameDev;
 using Player;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace Player
         #region Newer version rotate the Player with buttons
 
         GameObject _player;
+        Animator _playerAnim;
         [SerializeField] private float _rotationDirection = 90f;
         [SerializeField] private float _bigRotationDirection = 180;
         [SerializeField] private GameObject _walkPosition;
@@ -29,37 +31,50 @@ namespace Player
         private void Start()
         {
             _player = GameObject.FindWithTag("Player");
+            _playerAnim = _player.GetComponent<Animator>();
             _target = _walkPosition.transform.position;
         }
 
-
         void Update()
         {
-            _wallInFront = GetComponent<Interact>().wallHit;
-            _enemyInFront = GetComponent<Interact>().enemyFront;
-            if (isMoving)
+            if (GameManager.instance.state == GameStates.Play)
             {
-                // Move towards the _target
-                _player.GetComponent<Animator>().SetBool("Walk", true);
-                _player.GetComponent<Animator>().SetBool("Idle", false);
-                transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
-                // Check if the object has reached the _target
-                if (Vector3.Distance(transform.position, _target) <= _stoppingDistance)
+                if (_playerAnim.speed == 0)
                 {
-                    // Snap the player to the target position so things stay even 
-                    transform.position = _target;
-                    // Object has reached the _target
-                    Debug.Log("_target reached!");
-                    _player.GetComponent<Animator>().SetBool("Idle", true);
-                    _player.GetComponent<Animator>().SetBool("Walk", false);
-                    isMoving = false;
-                    CheckWalls();
+                    _playerAnim.speed = 1;
                 }
+                _wallInFront = GetComponent<Interact>().wallHit;
+                _enemyInFront = GetComponent<Interact>().enemyFront;
+
+                if (isMoving)
+                {
+                    // Move towards the _target
+                    _playerAnim.SetBool("Walk", true);
+                    _playerAnim.SetBool("Idle", false);
+                    transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
+                    // Check if the object has reached the _target
+                    if (Vector3.Distance(transform.position, _target) <= _stoppingDistance)
+                    {
+                        // Snap the player to the target position so things stay even 
+                        transform.position = _target;
+                        // Object has reached the _target
+                        Debug.Log("_target reached!");
+                        _playerAnim.SetBool("Idle", true);
+                        _playerAnim.SetBool("Walk", false);
+                        isMoving = false;
+                        StartCoroutine(CheckWalls());
+                    }
+                }
+            }
+            else
+            {
+                _playerAnim.speed = 0;
             }
         }
 
-        private void CheckWalls()
+        IEnumerator CheckWalls()
         {
+            yield return new WaitForSeconds(0.1f);
             if (!_wallInFront)
             {
                 _target = _walkPosition.transform.position;
@@ -69,7 +84,6 @@ namespace Player
                 Debug.Log("I cannot move Object, a wall is in front of Player...");
             }
         }
-
 
 
         public void Move()
@@ -94,7 +108,7 @@ namespace Player
         public void LeftTurn()
         {
             transform.Rotate(0, -_rotationDirection, 0);
-            CheckWalls();
+            StartCoroutine(CheckWalls());
             if (_turnedRight)
             {
                 _facingForward = true;
@@ -121,7 +135,7 @@ namespace Player
         public void RightTurn()
         {
             transform.Rotate(0, _rotationDirection, 0);
-            CheckWalls();
+            StartCoroutine(CheckWalls());
             if (_turnedLeft)
             {
                 _facingForward = true;
@@ -148,7 +162,7 @@ namespace Player
         public void BigTurn()
         {
             transform.Rotate(0, _bigRotationDirection, 0);
-            CheckWalls();
+            StartCoroutine(CheckWalls());
             if (_facingForward)
             {
                 _facingBackward = true;

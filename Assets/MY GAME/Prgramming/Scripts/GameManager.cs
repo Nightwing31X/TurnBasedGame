@@ -16,7 +16,7 @@ namespace GameDev
         public bool inDialogue = false;
         public bool inDialoguePlace = false;
         public bool inPause = false;
-        public bool inBook = false;
+        public bool inINV = false;
         public string currentGameState;
 
 
@@ -77,14 +77,15 @@ namespace GameDev
 
         public void OnPlay()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = true;
             state = GameStates.Play;
             currentGameState = "Play";
         }
         public void OnPause()
         {
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = true;
             // if (InputHandler.instance.forceController)
             // {
             //     Cursor.visible = false;
@@ -102,7 +103,8 @@ namespace GameDev
         }
         public void OnMenu()
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            //Cursor.lockState = CursorLockMode.Confined;
+            //Cursor.visible = true;
             // if (InputHandler.instance.forceController)
             // {
             //     Cursor.visible = false;
@@ -120,7 +122,8 @@ namespace GameDev
         }
         public void OnDeath()
         {
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = true;
             // if (!InputHandler.instance.forceController)
             // {
             //     Cursor.visible = false;
@@ -139,8 +142,9 @@ namespace GameDev
 
         public void OnEndGame()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = true;
+            //Cursor.visible = false;
             state = GameStates.EndGame;
             currentGameState = "EndGame";
         }

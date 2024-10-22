@@ -182,7 +182,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Enemy is in front though to far to fight...Can range attack");
+                            Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
                             _hasRan = true;
                         }
                     }
