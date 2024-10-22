@@ -209,22 +209,19 @@ namespace Player
                 _hasRan = false;
             }
             #endregion
-
             # region Raycast for the Right side view
-            Ray interactRayRight;
             // this ray shoots forward from the center of the camera (Right)
-            interactRayRight = _rightCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
             if (_debug)
             {
                 // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
-                Debug.DrawRay(interactRayRight.origin, transform.right * attackRadiusDistance, Color.magenta); // Right side
+                Debug.DrawRay(interactRayForward.origin, transform.right * attackRadiusDistance, Color.magenta); // Right side
                 // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
                 // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
             }
             // create hit info (this holds the info for the stuff we interact with) 
             RaycastHit hitInfoRight;
 
-            if (Physics.Raycast(interactRayRight, out hitInfoRight, attackRadiusDistance, Layers /*This part here is the layer its optional*/ ))
+            if (Physics.Raycast(interactRayForward, out hitInfoRight, attackRadiusDistance, Layers /*This part here is the layer its optional*/ ))
             {
                 if (hitInfoRight.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                 {
@@ -236,7 +233,6 @@ namespace Player
                             _hasRan = true;
                         }
                     }
-
                     enemyFront = false;
                     enemyRight = true;
                     enemyLeft = false;
