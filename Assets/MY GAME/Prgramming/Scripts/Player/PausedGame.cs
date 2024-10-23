@@ -17,7 +17,7 @@ namespace Player
         [SerializeField] GameObject PausedBTN;
         [SerializeField] GameObject ForwardBTN;
         [SerializeField] GameObject PlayerHUD;
-        [SerializeField] GameObject invBTN;
+        [SerializeField] GameObject profileBTN;
         [SerializeField] Button restartPauseBTN;
         GameObject player;
 
@@ -51,7 +51,7 @@ namespace Player
                     PausedMenu = true;
                     MenuPaused.SetActive(PausedMenu);
                     PlayerHUD.SetActive(false);
-                    invBTN.SetActive(false);
+                    profileBTN.SetActive(false);
                     PausedBTN.SetActive(false);
 
                     // Cursor.lockState = CursorLockMode.None;
@@ -59,8 +59,8 @@ namespace Player
                     _inCutscene = GameManager.instance.inCutscene;
                     if (_inCutscene)
                     {
-                        restartPauseBTN.interactable = false; //? This leaves the button on the screen with the disabled color and the user can’t click it
-                        //restartPauseBTN.enabled = false; //? This leaves the button on the screen, the user can’t click it, but does NOT use the disabled color
+                        restartPauseBTN.interactable = false; //? This leaves the button on the screen with the disabled color and the user canï¿½t click it
+                        //restartPauseBTN.enabled = false; //? This leaves the button on the screen, the user canï¿½t click it, but does NOT use the disabled color
                         //restartPauseBTN.gameObject.SetActive(false); //? This removes the button from the UI entirely:
                     }
                     else
@@ -75,7 +75,7 @@ namespace Player
                     PausedMenu = false;
                     MenuPaused.SetActive(PausedMenu);
                     PlayerHUD.SetActive(true);
-                    invBTN.SetActive(true);
+                    profileBTN.SetActive(true);
                     PausedBTN.SetActive(true);
                 }
             }
@@ -127,7 +127,7 @@ namespace Player
             PausedMenu = true;
             MenuPaused.SetActive(PausedMenu);
             PlayerHUD.SetActive(false);
-            invBTN.SetActive(false);
+            profileBTN.SetActive(false);
             PausedBTN.SetActive(false);
         }
         public void Resume()
@@ -137,7 +137,7 @@ namespace Player
             PausedMenu = false;
             MenuPaused.SetActive(PausedMenu);
             PlayerHUD.SetActive(true);
-            invBTN.SetActive(true);
+            profileBTN.SetActive(true);
             PausedBTN.SetActive(true);
 
             SelectObjectUI(ForwardBTN);

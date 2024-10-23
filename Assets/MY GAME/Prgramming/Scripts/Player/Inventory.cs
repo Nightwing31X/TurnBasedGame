@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 
@@ -16,18 +17,17 @@ namespace Player
         [SerializeField] GameObject forwardBTN;
         [SerializeField] GameObject playerHUD;
         [SerializeField] GameObject pausedBTN;
-        GameObject _player;
 
         [SerializeField] bool _inINV = false;
 
         [SerializeField] GameObject invMenuFirstObject;
+        public Text title;
+        public Text description;
 
         private void Start()
         {
             _inINV = false;
             menuINV.SetActive(_inINV);
-
-            _player = GameObject.FindGameObjectWithTag("Player");
         }
 
         void Update()
@@ -38,7 +38,7 @@ namespace Player
                 {
                     OpenINV();
                 }
-            }  
+            }
             else if (GameManager.instance.state == GameStates.Menu)
             {
                 if (_inINV && Input.GetButtonDown("Inventory"))
@@ -72,6 +72,8 @@ namespace Player
 
         public void CloseINV()
         {
+            title.text = "Name of the Item";
+            description.text = "Description about the item...";
             CheckState();
             _inINV = false;
             menuINV.SetActive(_inINV);
@@ -80,6 +82,7 @@ namespace Player
             profileBTN.SetActive(true);
 
             SelectObjectUI(forwardBTN);
+
         }
 
         private void CheckState()

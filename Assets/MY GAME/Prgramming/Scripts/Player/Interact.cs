@@ -97,7 +97,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Hit Layer = {interactionLayer}");
+                            // Debug.Log($"Hit Layer = {interactionLayer}");
                             _hasRan = true;
                         }
                     }

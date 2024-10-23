@@ -4,31 +4,58 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+// public class DraggableItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public RawImage image;
     [HideInInspector] public Transform parentAfterDrag;
 
-    public string title;
-    public string description;
+    public Item item;
+    public RawImage image;
+    public Text title;
+    public Text description;
 
 
-    public void OnBeginDrag(PointerEventData eventData) {
+    // void Start()
+    // {
+    //     image.texture = item.artwork;
+    //     title.text = "Name of the Item";
+    //     description.text = "Description about the item...";
+    // }
+
+    // public void OnPointerClick(PointerEventData eventData)
+    // {
+    //     title.text = item.name;
+    //     description.text = item.description;
+    // }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
         Debug.Log("Begin drag");
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
+
+        // title.text = item.name;
+        // description.text = item.description;
     }
 
-    public void OnDrag(PointerEventData eventData) {
+    public void OnDrag(PointerEventData eventData)
+    {
         Debug.Log("Dragging");
         transform.position = Input.mousePosition;
     }
 
-    public void OnEndDrag(PointerEventData eventData) {
+    public void OnEndDrag(PointerEventData eventData)
+    {
         Debug.Log("End drag");
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
     }
+
+    // public void DefaultText()
+    // {
+    //     title.text = "Name of the Item";
+    //     description.text = "Description about the item...";
+    // }
 }
