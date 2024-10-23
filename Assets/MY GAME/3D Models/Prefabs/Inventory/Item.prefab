@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5371154540345969742}
-  - component: {fileID: 3905672761692026404}
   - component: {fileID: 2676470930761675179}
+  - component: {fileID: -6183657960894481594}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -39,14 +39,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3905672761692026404
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2511868585891263111}
-  m_CullTransparentMesh: 1
 --- !u!114 &2676470930761675179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,6 +51,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b8218a899071d940b6bd8d90058dcb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
+--- !u!114 &-6183657960894481594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511868585891263111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70b95d1878eb124393cad3ef7947081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentAfterDrag: {fileID: 0}
+  item: {fileID: 0}
+  title: {fileID: 0}
+  description: {fileID: 0}
+  image: {fileID: 0}
 --- !u!1 &3788210866889956680
 GameObject:
   m_ObjectHideFlags: 0

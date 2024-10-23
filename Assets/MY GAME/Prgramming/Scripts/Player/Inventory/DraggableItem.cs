@@ -4,23 +4,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-// public class DraggableItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+// public class DraggableItem : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler 
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+// public class DraggableItem : MonoBehaviour
 {
     [HideInInspector] public Transform parentAfterDrag;
 
     public Item item;
-    public RawImage image;
     public Text title;
     public Text description;
+    public RawImage image;
 
+    void Start()
+    {
+        item = GetComponent<InventoryItemController>().item;
 
-    // void Start()
-    // {
-    //     image.texture = item.artwork;
-    //     title.text = "Name of the Item";
-    //     description.text = "Description about the item...";
-    // }
+        // image.texture = item.artwork;
+        title = GameObject.Find("IconTitleText").GetComponent<Text>();
+        description = GameObject.Find("IconDescriptionText").GetComponent<Text>();
+        image = transform.Find("ItemIcon").GetComponent<RawImage>();
+        // title.text = "Name of the Item";
+        // description.text = "Description about the item...";
+
+        // image.texture = item.artwork;
+        // title.text = item.name;
+    }
+
+    public void updateTextData()
+    {
+        title.text = item.name;
+        description.text = item.description;
+    }
 
     // public void OnPointerClick(PointerEventData eventData)
     // {
@@ -36,8 +50,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetAsLastSibling();
         image.raycastTarget = false;
 
-        // title.text = item.name;
-        // description.text = item.description;
+        title.text = item.name;
+        description.text = item.description;
     }
 
     public void OnDrag(PointerEventData eventData)

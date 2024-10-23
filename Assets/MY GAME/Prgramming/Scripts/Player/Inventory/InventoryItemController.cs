@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class InventoryItemController : MonoBehaviour
 {
-    Item item;
+    public Item item;
 
     public void RemoveItem()
     {
         InventoryManager.Instance.Remove(item);
-
+        
         Destroy(gameObject);
     }
 

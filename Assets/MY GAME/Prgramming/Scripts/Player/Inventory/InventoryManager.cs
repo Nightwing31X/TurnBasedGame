@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,10 @@ namespace Interactions
         // Text Elements from the scriptableObject - I reference them in the code...
         [HideInInspector] public RawImage itemIcon;
         [HideInInspector] public Button removeButton;
+        [HideInInspector] public Text BagTitleText;
+
+        public int currentItemValue = 0;
+        public int maxNumber = 24;
 
 
         private void Awake()
@@ -39,11 +44,14 @@ namespace Interactions
         public void Add(Item item)
         {
             Items.Add(item);
+            currentItemValue = currentItemValue + 1;
         }
 
         public void Remove(Item item)
         {
+            currentItemValue = currentItemValue - 1;
             Items.Remove(item);
+            checkItemNumber();
         }
 
         public void ListItems()
@@ -53,9 +61,11 @@ namespace Interactions
             {
                 GameObject obj = Instantiate(InventoryItem, ItemContent);
                 // var itemName = obj.transform.Find("ItemName").GetComponent<Text>();
-                itemIcon = obj.transform.Find("ItemIcon").GetComponent<RawImage>();
-                removeButton = obj.transform.Find("RemoveButton").GetComponent<Button>();
+                itemIcon = obj.transform.Find("Item/ItemIcon").GetComponent<RawImage>();
+                removeButton = obj.transform.Find("Item/RemoveButton").GetComponent<Button>();
+                BagTitleText = GameObject.Find("BagTitleText").GetComponent<Text>();
 
+                checkItemNumber();
                 itemIcon.texture = item.artwork;
                 // itemIcon.texture = item.artwork;
 
@@ -68,12 +78,18 @@ namespace Interactions
             SetInventoryItems();
         }
 
+        public void checkItemNumber()
+        {
+            BagTitleText.text = $"Bag - {currentItemValue}/{maxNumber}";
+        }
+
         public void EnableItemsRemove()
         {
             foreach (Transform item in ItemContent)
             {
-                item.Find("RemoveButton").gameObject.SetActive(EnableRemove.isOn);
+                item.Find("Item/RemoveButton").gameObject.SetActive(EnableRemove.isOn);
             }
+            // checkItemNumber();
         }
 
         public void clearItemsOnClose()
@@ -95,6 +111,7 @@ namespace Interactions
             {
                 InventoryItems[i].AddItem(Items[i]); // Calls the function from InventoryItemController to "save" the item.
             }
+            checkItemNumber();
         }
     }
 }

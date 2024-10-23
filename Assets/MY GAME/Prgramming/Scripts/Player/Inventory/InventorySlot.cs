@@ -5,8 +5,16 @@ using UnityEngine.EventSystems;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
+    [SerializeField] bool _buttonClicked = false;
+    [SerializeField] bool _playerINV = false;
+
+
     public void OnDrop(PointerEventData eventData)
     {
+        if (_playerINV)
+        {
+            Debug.Log("I am now inside the player's INV - No longer Bag");
+        }
         if (transform.childCount == 0)
         {
             GameObject dropped = eventData.pointerDrag;
@@ -24,5 +32,15 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             currentDraggable.transform.SetParent(draggableItem.parentAfterDrag);
             draggableItem.parentAfterDrag = transform;
         }
+    }
+
+
+    public void ClickedButton()
+    {
+        Debug.Log("Something???");
+        _buttonClicked = !_buttonClicked;
+
+        transform.Find("Item").GetComponent<DraggableItem>().updateTextData();
+        
     }
 }
