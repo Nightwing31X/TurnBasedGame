@@ -1,4 +1,5 @@
 using GameDev;
+using Interactions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,7 @@ namespace Player
                 if (!_inINV && Input.GetButtonDown("Inventory"))
                 {
                     OpenINV();
+                    InventoryManager.Instance.ListItems();
                 }
             }
             else if (GameManager.instance.state == GameStates.Menu)
@@ -44,6 +46,7 @@ namespace Player
                 if (_inINV && Input.GetButtonDown("Inventory"))
                 {
                     CloseINV();
+                    InventoryManager.Instance.clearItemsOnClose();
                 }
             }
         }
@@ -60,7 +63,7 @@ namespace Player
         {
             title.text = "Name of the Item";
             description.text = "Description about the item...";
-            SelectObjectUI(invMenuFirstObject);
+            // SelectObjectUI(invMenuFirstObject);
 
             GameManager.instance.OnMenu();
             _inINV = true;
@@ -84,7 +87,6 @@ namespace Player
             profileBTN.SetActive(true);
 
             SelectObjectUI(forwardBTN);
-
         }
 
         private void CheckState()

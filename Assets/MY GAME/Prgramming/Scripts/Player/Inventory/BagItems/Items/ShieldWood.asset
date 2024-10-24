@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b5399863b6e797448bce3e8c397b3fe, type: 3}
-  m_Name: Sword
+  m_Name: ShieldWood
   m_EditorClassIdentifier: 
-  name: Sword
-  description: This sword is only for the mighty hero...
-  artwork: {fileID: 8400000, guid: 0e17c8574a0e52c4c823d317377b1d12, type: 2}
+  name: Shield Wood
+  description: Might only be made out of wood though can still block many hard hits.
+  artwork: {fileID: 8400000, guid: e42ccb79469b7b6439a7c2e1b887076e, type: 2}

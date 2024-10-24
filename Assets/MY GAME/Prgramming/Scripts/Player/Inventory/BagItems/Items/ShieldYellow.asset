@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b5399863b6e797448bce3e8c397b3fe, type: 3}
-  m_Name: Shield
+  m_Name: ShieldYellow
   m_EditorClassIdentifier: 
-  name: Shield
-  description: This shield  is only for the mighty hero...
+  name: Shield Yellow
+  description: This shield is only for the mighty hero...
   artwork: {fileID: 8400000, guid: e1a6b4c268efa6b47a1630c66c433dc8, type: 2}
