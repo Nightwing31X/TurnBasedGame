@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class InventoryItemController : MonoBehaviour
 {
-    Item item;
+    public Item item;
     // private Item _bagItem;
     private Text _title;
     private Text _description;

@@ -19,7 +19,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     void Start()
     {
-        bagItem = GetComponent<BagItemController>().bagItem;
+        bagItem = GetComponent<InventoryItemController>().item;
 
         // image.texture = item.artwork;
         title = GameObject.Find("IconTitleText").GetComponent<Text>();

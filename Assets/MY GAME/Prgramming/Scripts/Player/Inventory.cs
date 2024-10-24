@@ -17,7 +17,7 @@ namespace Player
         [SerializeField] GameObject forwardBTN;
         [SerializeField] GameObject playerHUD;
         [SerializeField] GameObject pausedBTN;
-        [SerializeField] Toggle enableRemoveToggle;
+        // [SerializeField] Toggle enableRemoveToggle;
 
         [SerializeField] bool _inINV = false;
 
@@ -38,11 +38,7 @@ namespace Player
                 if (!_inINV && Input.GetButtonDown("Inventory"))
                 {
                     OpenINV();
-<<<<<<< Updated upstream
-                    BagManager.Instance.ListItems();
-=======
                     InventoryManager.Instance.ListItems();
->>>>>>> Stashed changes
                 }
             }
             else if (GameManager.instance.state == GameStates.Menu)
@@ -50,11 +46,7 @@ namespace Player
                 if (_inINV && Input.GetButtonDown("Inventory"))
                 {
                     CloseINV();
-<<<<<<< Updated upstream
-                    BagManager.Instance.clearItemsOnClose();
-=======
                     InventoryManager.Instance.clearItemsOnClose();
->>>>>>> Stashed changes
                 }
             }
         }
@@ -94,7 +86,7 @@ namespace Player
             pausedBTN.SetActive(true);
             profileBTN.SetActive(true);
 
-            enableRemoveToggle.isOn = false;
+            // enableRemoveToggle.isOn = false;
             SelectObjectUI(forwardBTN);
         }
 
