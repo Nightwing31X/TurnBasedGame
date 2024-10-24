@@ -38,7 +38,11 @@ namespace Player
                 if (!_inINV && Input.GetButtonDown("Inventory"))
                 {
                     OpenINV();
+<<<<<<< Updated upstream
                     BagManager.Instance.ListItems();
+=======
+                    InventoryManager.Instance.ListItems();
+>>>>>>> Stashed changes
                 }
             }
             else if (GameManager.instance.state == GameStates.Menu)
@@ -46,7 +50,11 @@ namespace Player
                 if (_inINV && Input.GetButtonDown("Inventory"))
                 {
                     CloseINV();
+<<<<<<< Updated upstream
                     BagManager.Instance.clearItemsOnClose();
+=======
+                    InventoryManager.Instance.clearItemsOnClose();
+>>>>>>> Stashed changes
                 }
             }
         }
@@ -63,7 +71,7 @@ namespace Player
         {
             title.text = "Name of the Item";
             description.text = "Description about the item...";
-            SelectObjectUI(invMenuFirstObject);
+            // SelectObjectUI(invMenuFirstObject);
 
             GameManager.instance.OnMenu();
             _inINV = true;
@@ -88,7 +96,6 @@ namespace Player
 
             enableRemoveToggle.isOn = false;
             SelectObjectUI(forwardBTN);
-
         }
 
         private void CheckState()
