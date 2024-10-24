@@ -6,6 +6,8 @@ using UnityEngine;
 public class ItemPickup : MonoBehaviour, IInteractable
 {
     public Item item;
+    private int _currentValue;
+    private int _maxValue;
 
     void Pickup()
     {
@@ -15,6 +17,15 @@ public class ItemPickup : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        Pickup();
+        _currentValue = InventoryManager.Instance.currentBagValue;
+        _maxValue = InventoryManager.Instance.maxBagValue;
+        if (_currentValue != _maxValue)
+        {
+            Pickup();
+        }
+        else
+        {
+            Debug.Log("Bag is full... " + _currentValue);
+        }
     }
 }

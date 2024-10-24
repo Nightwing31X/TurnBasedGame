@@ -58,6 +58,8 @@ namespace Player
 
         public void OpenINV()
         {
+            title.text = "Name of the Item";
+            description.text = "Description about the item...";
             SelectObjectUI(invMenuFirstObject);
 
             GameManager.instance.OnMenu();

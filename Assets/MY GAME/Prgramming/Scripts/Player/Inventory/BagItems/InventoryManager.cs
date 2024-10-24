@@ -14,11 +14,15 @@ namespace Interactions
         public Transform ItemContent; // Where the Items get filled...
         public GameObject InventoryItem; // 2D Items
 
+        public int currentBagValue = 0;
+        public int maxBagValue = 24;
+
         public Toggle EnableRemove;
 
         public InventoryItemController[] InventoryItems;
 
         // Text Elements from the scriptableObject - I reference them in the code...
+        [HideInInspector] public Text bagTitle;
         [HideInInspector] public RawImage itemIcon;
         [HideInInspector] public Button removeButton;
 
@@ -39,10 +43,13 @@ namespace Interactions
         public void Add(Item item)
         {
             Items.Add(item);
+            ChangeValue(1);
         }
 
         public void Remove(Item item)
         {
+            ChangeValue(-1);
+            checkValue();
             Items.Remove(item);
         }
 
@@ -53,6 +60,7 @@ namespace Interactions
             {
                 GameObject obj = Instantiate(InventoryItem, ItemContent);
                 // var itemName = obj.transform.Find("ItemName").GetComponent<Text>();
+                bagTitle = GameObject.Find("BagTitleText").GetComponent<Text>();
                 itemIcon = obj.transform.Find("ItemIcon").GetComponent<RawImage>();
                 removeButton = obj.transform.Find("RemoveButton").GetComponent<Button>();
 
@@ -66,6 +74,19 @@ namespace Interactions
             }
 
             SetInventoryItems();
+        }
+
+
+        public void ChangeValue(int num)
+        {
+            currentBagValue = currentBagValue + num;
+        }
+        public void checkValue()
+        {
+            if (bagTitle != null)
+            {
+                bagTitle.text = $"Bag - {currentBagValue}/{maxBagValue}";
+            }
         }
 
         public void EnableItemsRemove()
@@ -95,6 +116,7 @@ namespace Interactions
             {
                 InventoryItems[i].AddItem(Items[i]); // Calls the function from InventoryItemController to "save" the item.
             }
+            checkValue();
         }
     }
 }
