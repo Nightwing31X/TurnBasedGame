@@ -15,3 +15,5 @@ MonoBehaviour:
   name: Sword
   description: This sword is only for the mighty hero...
   artwork: {fileID: 8400000, guid: 0e17c8574a0e52c4c823d317377b1d12, type: 2}
+  isWeapon: 1
+  isPoition: 0

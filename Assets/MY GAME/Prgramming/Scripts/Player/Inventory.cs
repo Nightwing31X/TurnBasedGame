@@ -1,10 +1,10 @@
 using GameDev;
+using Interactions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 
 namespace Player
@@ -17,6 +17,7 @@ namespace Player
         [SerializeField] GameObject forwardBTN;
         [SerializeField] GameObject playerHUD;
         [SerializeField] GameObject pausedBTN;
+        [SerializeField] Toggle enableRemoveToggle;
 
         [SerializeField] bool _inINV = false;
 
@@ -37,6 +38,7 @@ namespace Player
                 if (!_inINV && Input.GetButtonDown("Inventory"))
                 {
                     OpenINV();
+                    BagManager.Instance.ListItems();
                 }
             }
             else if (GameManager.instance.state == GameStates.Menu)
@@ -44,6 +46,7 @@ namespace Player
                 if (_inINV && Input.GetButtonDown("Inventory"))
                 {
                     CloseINV();
+                    BagManager.Instance.clearItemsOnClose();
                 }
             }
         }
@@ -81,6 +84,7 @@ namespace Player
             pausedBTN.SetActive(true);
             profileBTN.SetActive(true);
 
+            enableRemoveToggle.isOn = false;
             SelectObjectUI(forwardBTN);
 
         }

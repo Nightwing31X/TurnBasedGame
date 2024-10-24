@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using Interactions;
 using UnityEngine;
 
-public class InventoryItemController : MonoBehaviour
+public class BagItemController : MonoBehaviour
 {
-    public Item item;
+    public Item bagItem;
 
     public void RemoveItem()
     {
-        InventoryManager.Instance.Remove(item);
+        BagManager.Instance.Remove(bagItem);
         
         Destroy(gameObject);
     }
 
     public void AddItem(Item newItem)
     {
-        item = newItem;
+        bagItem = newItem;
     }
 }
