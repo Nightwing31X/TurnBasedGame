@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using GameDev;
 using UnityEngine.UI;
+using System.Globalization;
 
 
 namespace Menu
@@ -22,7 +23,8 @@ namespace Menu
 
         public void ChangeScene(int sceneNumber)
         {
-            SceneManager.LoadScene(sceneNumber);
+            StartCoroutine(Delay(sceneNumber));
+            //SceneManager.LoadScene(sceneNumber);
         }
         public void ExitToDesktop()
         {
@@ -32,6 +34,11 @@ namespace Menu
             Application.Quit();
         }
 
+        IEnumerator Delay(int num)
+        {
+            yield return new WaitForSeconds(2);
+            SceneManager.LoadScene(num);
+        }
 
         private void Awake()
         {
@@ -80,6 +87,7 @@ namespace Menu
         public void ToggleGender(bool check)
         {
             savePlayerData.GenderToggle(check);
+            Debug.Log(check);
         }
         public void SetUsername(string name)
         {
