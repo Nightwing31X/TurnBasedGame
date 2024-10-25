@@ -88,27 +88,33 @@ namespace Player
 
         public void Move()
         {
-            if (!_wallInFront)
+            if (_player != null)
             {
-                if (!_enemyInFront)
+                if (!_wallInFront)
                 {
-                    isMoving = true;
+                    if (!_enemyInFront)
+                    {
+                        isMoving = true;
+                    }
+                    else
+                    {
+                        Debug.Log("Enemy is in front... I can attack or run away...");
+                    }
                 }
                 else
                 {
-                    Debug.Log("Enemy is in front... I can attack or run away...");
+                    Debug.Log("I cannot move, a wall is in front of me...");
                 }
-            }
-            else
-            {
-                Debug.Log("I cannot move, a wall is in front of me...");
             }
         }
 
         public void LeftTurn()
         {
             transform.Rotate(0, -_rotationDirection, 0);
-            StartCoroutine(CheckWalls());
+            if (_player != null)
+            {
+                StartCoroutine(CheckWalls());
+            }
             if (_turnedRight)
             {
                 _facingForward = true;
@@ -135,7 +141,10 @@ namespace Player
         public void RightTurn()
         {
             transform.Rotate(0, _rotationDirection, 0);
-            StartCoroutine(CheckWalls());
+            if (_player != null)
+            {
+                StartCoroutine(CheckWalls());
+            }
             if (_turnedLeft)
             {
                 _facingForward = true;
@@ -162,7 +171,10 @@ namespace Player
         public void BigTurn()
         {
             transform.Rotate(0, _bigRotationDirection, 0);
-            StartCoroutine(CheckWalls());
+            if (_player != null)
+            {
+                StartCoroutine(CheckWalls());
+            }
             if (_facingForward)
             {
                 _facingBackward = true;

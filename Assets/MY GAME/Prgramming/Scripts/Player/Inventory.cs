@@ -69,6 +69,8 @@ namespace Player
             _inINV = true;
             GameManager.instance.inINV = _inINV;
 
+            PlayerCharacterManager.Instance.PlayerINFO();
+
             menuINV.SetActive(_inINV);
             playerHUD.SetActive(false);
             pausedBTN.SetActive(false);
