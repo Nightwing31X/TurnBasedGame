@@ -34,14 +34,19 @@ public class PlayerCharacterManager : MonoBehaviour
         Instance = this;
 
         _playerData = GetComponent<SavePlayerData>();
-
-
-        male = _playerData.maleREF;
         _malePlayer = GameObject.Find("MalePlayer");
         _maleModel = GameObject.Find("MaleModel");
 
         _femalePlayer = GameObject.Find("FemalePlayer");
         _femaleModel = GameObject.Find("FemaleModel");
+
+
+        username = GameObject.Find("Username").GetComponent<Text>();
+        level = GameObject.Find("characterLevel").GetComponent<Text>();
+    }
+    public void updatePlayerINFO()
+    {
+        male = _playerData.maleREF;
 
         if (male)
         {
@@ -62,10 +67,34 @@ public class PlayerCharacterManager : MonoBehaviour
 
             SetActiveRecursively(_malePlayer.transform, false);
         }
-
-        username = GameObject.Find("Username").GetComponent<Text>();
-        level = GameObject.Find("characterLevel").GetComponent<Text>();
+        //StartCoroutine(SendPlayerData());
     }
+
+    //IEnumerator SendPlayerData()
+    //{
+    //    yield return new WaitForSeconds(0.01f);
+    //    male = _playerData.maleREF;
+
+    //    if (male)
+    //    {
+    //        _malePlayer.SetActive(true);
+    //        _maleModel.SetActive(true);
+
+    //        _femalePlayer.SetActive(false);
+    //        _femaleModel.SetActive(false);
+    //        SetActiveRecursively(_femalePlayer.transform, false);
+    //    }
+    //    else
+    //    {
+    //        _femalePlayer.SetActive(true);
+    //        _femaleModel.SetActive(true);
+
+    //        _malePlayer.SetActive(false);
+    //        _maleModel.SetActive(false);
+
+    //        SetActiveRecursively(_malePlayer.transform, false);
+    //    }
+    //}
 
     public void PlayerINFO()
     {

@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameDev
 {
@@ -9,21 +11,44 @@ namespace GameDev
     {
         [SerializeField] private PlayerDataSave playerDataSave = new PlayerDataSave();
 
-        public bool firstTImeREF;
+        public bool firstTimeREF;
 
         public string usernameREF;
         public bool maleREF;
         public int levelREF;
         public bool swordPurpleREF;
         public bool shieldWoodREF;
+        
+        public bool noName;
+        private bool hasRan;
+
 
         [ContextMenu("Save")]
         public void Save()
         {
             RefValues();
-            string json = JsonUtility.ToJson(playerDataSave);
-            File.WriteAllText($"{Application.persistentDataPath}/PlayerDataSaved.txt", json);
-            Debug.Log("Player data saved.");
+            if (usernameREF == "")
+            {
+                Debug.Log("Need to enter a name!");
+                noName = true;
+                if (!hasRan)
+                {
+                    hasRan = true;
+                    string json = JsonUtility.ToJson(playerDataSave);
+                    File.WriteAllText($"{Application.persistentDataPath}/PlayerDataSaved.txt", json);
+                    Debug.Log("Player data saved.");
+                }
+            }
+            else
+            {
+                if (noName)
+                {
+                    noName = false;
+                }
+                string json = JsonUtility.ToJson(playerDataSave);
+                File.WriteAllText($"{Application.persistentDataPath}/PlayerDataSaved.txt", json);
+                Debug.Log("Player data saved.");
+            }
         }
 
         [ContextMenu("Load")]
@@ -34,7 +59,7 @@ namespace GameDev
             if (!File.Exists(path))
             {
                 playerDataSave = new PlayerDataSave(); // Initialise with default values
-                playerDataSave.firstTime = true;
+                firstTimeREF = true;
                 Save(); // Create the new file
                 Debug.Log("File not found. Created new save file with default values.");
                 return;
@@ -44,6 +69,12 @@ namespace GameDev
             playerDataSave = JsonUtility.FromJson<PlayerDataSave>(json);
             SavedValues();
             Debug.Log("Loaded player data.");
+            int currentScene = SceneManager.GetActiveScene().buildIndex;
+            if (currentScene == 1)
+            {
+                Debug.Log("Rans only in the game...");
+                PlayerCharacterManager.Instance.updatePlayerINFO();
+            }
         }
 
         void Awake()
@@ -54,10 +85,7 @@ namespace GameDev
 
         public void RefValues()
         {
-            Debug.Log(playerDataSave.firstTime);
-            playerDataSave.firstTime = firstTImeREF;
-            Debug.Log(playerDataSave.firstTime);
-            Debug.Log(firstTImeREF);
+            playerDataSave.firstTime = firstTimeREF;
 
             playerDataSave.playerName = usernameREF;
             playerDataSave.male = maleREF;
@@ -70,7 +98,7 @@ namespace GameDev
 
         public void SavedValues()
         {
-            firstTImeREF = playerDataSave.firstTime;
+            firstTimeREF = playerDataSave.firstTime;
 
             usernameREF = playerDataSave.playerName;
             maleREF = playerDataSave.male;

@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using GameDev;
 using UnityEngine.UI;
-using System.Globalization;
 
 
 namespace Menu
@@ -17,13 +16,21 @@ namespace Menu
 
         public GameObject playercharacterMenu;
 
-        public Toggle GenderToggle;
+        public Toggle maleToggle;
+        public Toggle femaleToggle;
 
         public SavePlayerData savePlayerData;
 
         public void ChangeScene(int sceneNumber)
         {
-            StartCoroutine(Delay(sceneNumber));
+            int currentScene = SceneManager.GetActiveScene().buildIndex;
+            if (currentScene == 0)
+            {
+                if (!savePlayerData.noName)
+                {
+                    StartCoroutine(Delay(sceneNumber));
+                }
+            }
             //SceneManager.LoadScene(sceneNumber);
         }
         public void ExitToDesktop()
@@ -36,7 +43,8 @@ namespace Menu
 
         IEnumerator Delay(int num)
         {
-            yield return new WaitForSeconds(2);
+            Debug.Log("Make the loading screen show here");
+            yield return new WaitForSeconds(1f);
             SceneManager.LoadScene(num);
         }
 
@@ -48,10 +56,17 @@ namespace Menu
 
             SelectObjectUI();
 
-            if (GenderToggle.isOn)
-            {
-                ToggleGender(GenderToggle.isOn);
-            }
+            //if (maleToggle.isOn)
+            //{
+            //    ToggleMale();
+            //}
+            //else
+            //{
+            //    if (femaleToggle.isOn)
+            //    {
+            //        ToggleFemale();
+            //    }
+            //}
         }
 
         public void SelectObjectUI()
@@ -64,7 +79,7 @@ namespace Menu
 
         public void OpenFirstPlayMenu()
         {
-            if (savePlayerData.firstTImeREF)
+            if (savePlayerData.firstTimeREF)
             {
                 Debug.Log("Have saved file - Username is already done, just load in to the game.");
                 ChangeScene(1);
@@ -84,11 +99,34 @@ namespace Menu
             EventSystem.current.SetSelectedGameObject(settingsFirstButton);
         }
 
-        public void ToggleGender(bool check)
+        public void ToggleMale()
         {
-            savePlayerData.GenderToggle(check);
-            Debug.Log(check);
+            if (maleToggle.isOn == false)
+            {
+                femaleToggle.isOn = true;
+                savePlayerData.GenderToggle(false);
+                Debug.Log("This one...");
+            }
+            else if (maleToggle.isOn == true)
+            {
+                savePlayerData.GenderToggle(true);
+                femaleToggle.isOn = false;
+            }
         }
+        public void ToggleFemale()
+        {
+            if (femaleToggle.isOn == false)
+            {
+                maleToggle.isOn = true;
+                savePlayerData.GenderToggle(true);
+            }
+            else if (femaleToggle.isOn == true)
+            {
+                savePlayerData.GenderToggle(false);
+                maleToggle.isOn = false;
+            }
+        }
+
         public void SetUsername(string name)
         {
             savePlayerData.SaveUsername(name);
