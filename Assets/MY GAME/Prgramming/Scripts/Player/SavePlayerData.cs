@@ -72,7 +72,7 @@ namespace GameDev
             int currentScene = SceneManager.GetActiveScene().buildIndex;
             if (currentScene == 1)
             {
-                Debug.Log("Rans only in the game...");
+                Debug.Log("Runs only in the game...");
                 PlayerCharacterManager.Instance.updatePlayerINFO();
             }
         }

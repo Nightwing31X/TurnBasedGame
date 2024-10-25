@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Interactions;
 using UnityEngine;
 
-public class ItemPickup : MonoBehaviour, IInteractable
+public class ItemPickup : MonoBehaviour
 {
     public Item item;
     private int _currentValue;
@@ -15,7 +15,16 @@ public class ItemPickup : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    public void Interact()
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            // Debug.Log("Player hit...");
+            _interact();
+        }
+    }
+
+    public void _interact()
     {
         _currentValue = InventoryManager.Instance.currentBagValue;
         _maxValue = InventoryManager.Instance.maxBagValue;

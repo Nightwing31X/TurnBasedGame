@@ -13,13 +13,27 @@ public class PlayerCharacterManager : MonoBehaviour
 
     public Text username;
     public bool male;
+    public bool shield;
     public Text level;
+        public bool sword;
 
 
+    [Header("Male Player Objects")]
     public GameObject _malePlayer;
     public GameObject _maleModel;
+    public GameObject playerWoodenShieldMALE;
+    public GameObject playerYellowShieldMALE;
+    public GameObject playerPurpleSwordMALE;
+    public GameObject playerGreenSwordMALE;
+
+
+    [Header("Female Player Objects")]
     public GameObject _femalePlayer;
     public GameObject _femaleModel;
+    public GameObject playerWoodenShieldFEMALE;
+    public GameObject playerYellowShieldFEMALE;
+    public GameObject playerPurpleSwordFEMALE;
+    public GameObject playerGreenSwordFEMALE;
 
     void Awake()
     {
@@ -43,10 +57,36 @@ public class PlayerCharacterManager : MonoBehaviour
 
         username = GameObject.Find("Username").GetComponent<Text>();
         level = GameObject.Find("characterLevel").GetComponent<Text>();
+
+
+
+        // Male Objects - Shield
+        playerWoodenShieldMALE = GameObject.Find("WoodenShieldMALE");
+        playerYellowShieldMALE = GameObject.Find("YellowShieldMALE");
+        // Male Objects - Sword
+        playerPurpleSwordMALE = GameObject.Find("PurpleSwordMALE");
+        playerGreenSwordMALE = GameObject.Find("GreenSwordMALE");
+
+
+
+        // Female Objects - Shield
+        playerWoodenShieldFEMALE = GameObject.Find("WoodenShieldFEMALE");
+        playerYellowShieldFEMALE = GameObject.Find("YellowShieldFEMALE");
+        // Female Objects - Sword
+        playerPurpleSwordFEMALE = GameObject.Find("PurpleSwordFEMALE");
+        playerGreenSwordFEMALE = GameObject.Find("GreenSwordFEMALE");
     }
+
+
+
+
+
+
     public void updatePlayerINFO()
     {
         male = _playerData.maleREF;
+        shield = _playerData.shieldWoodREF;
+        sword = _playerData.swordPurpleREF;
 
         if (male)
         {
@@ -56,6 +96,59 @@ public class PlayerCharacterManager : MonoBehaviour
             _femalePlayer.SetActive(false);
             _femaleModel.SetActive(false);
             SetActiveRecursively(_femalePlayer.transform, false);
+
+            if (shield)
+            {
+                Debug.Log("Wooden Shield...");
+                playerYellowShieldMALE.SetActive(false);
+                playerWoodenShieldMALE.SetActive(true);
+
+                if (playerWoodenShieldFEMALE != null)
+                {
+                    playerWoodenShieldFEMALE.SetActive(false);
+                }
+
+                if (playerYellowShieldFEMALE != null)
+                {
+                    playerYellowShieldFEMALE.SetActive(false);
+                }
+            }
+            else
+            {
+                Debug.Log("Yellow Shield...");
+                playerWoodenShieldMALE.SetActive(false);
+                playerYellowShieldMALE.SetActive(true);
+
+                playerWoodenShieldFEMALE.SetActive(false);
+                playerYellowShieldFEMALE.SetActive(false);
+            }
+            // Get current saved sword type if true...
+            if (sword)
+            {
+                Debug.Log("Purple Sword...");
+                playerGreenSwordFEMALE.SetActive(false);
+                playerPurpleSwordFEMALE.SetActive(true);
+
+                if (playerPurpleSwordMALE != null)
+                {
+                    playerPurpleSwordMALE.SetActive(false);
+                }
+                
+                if (playerGreenSwordMALE != null)
+                {
+                    playerGreenSwordMALE.SetActive(false);
+                }
+            }
+            else
+            {
+                Debug.Log("Wooden Sword...");
+                playerPurpleSwordFEMALE.SetActive(false);
+                playerGreenSwordFEMALE.SetActive(true);
+
+                playerWoodenShieldMALE.SetActive(false);
+                playerYellowShieldMALE.SetActive(false);
+                // playerYellowSwordFEMALE.SetActive(false);
+            }
         }
         else
         {
@@ -64,37 +157,37 @@ public class PlayerCharacterManager : MonoBehaviour
 
             _malePlayer.SetActive(false);
             _maleModel.SetActive(false);
-
             SetActiveRecursively(_malePlayer.transform, false);
+
+            if (shield)
+            {
+                Debug.Log("Wooden Shield...");
+                playerYellowShieldFEMALE.SetActive(false);
+                playerWoodenShieldFEMALE.SetActive(true);
+
+                if (playerWoodenShieldMALE != null)
+                {
+                    playerWoodenShieldMALE.SetActive(false);
+                }
+
+                if (playerYellowShieldMALE != null)
+                {
+                    playerYellowShieldMALE.SetActive(false);
+                }
+            }
+            else
+            {
+                Debug.Log("Yellow Shield...");
+                playerWoodenShieldFEMALE.SetActive(false);
+                playerYellowShieldFEMALE.SetActive(true);
+
+                playerWoodenShieldMALE.SetActive(false);
+                playerYellowShieldMALE.SetActive(false);
+            }
+
+
         }
-        //StartCoroutine(SendPlayerData());
     }
-
-    //IEnumerator SendPlayerData()
-    //{
-    //    yield return new WaitForSeconds(0.01f);
-    //    male = _playerData.maleREF;
-
-    //    if (male)
-    //    {
-    //        _malePlayer.SetActive(true);
-    //        _maleModel.SetActive(true);
-
-    //        _femalePlayer.SetActive(false);
-    //        _femaleModel.SetActive(false);
-    //        SetActiveRecursively(_femalePlayer.transform, false);
-    //    }
-    //    else
-    //    {
-    //        _femalePlayer.SetActive(true);
-    //        _femaleModel.SetActive(true);
-
-    //        _malePlayer.SetActive(false);
-    //        _maleModel.SetActive(false);
-
-    //        SetActiveRecursively(_malePlayer.transform, false);
-    //    }
-    //}
 
     public void PlayerINFO()
     {
