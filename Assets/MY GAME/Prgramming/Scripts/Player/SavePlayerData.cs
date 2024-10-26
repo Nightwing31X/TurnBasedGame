@@ -11,17 +11,14 @@ namespace GameDev
     {
         [SerializeField] private PlayerDataSave playerDataSave = new PlayerDataSave();
 
-        public bool firstTimeREF;
+        public bool firstTimeREF = false;
 
-        public string usernameREF;
-        public bool maleREF;
-        public int levelREF;
-        public bool swordPurpleREF;
-        public bool shieldWoodREF;
-        
-        public bool noName;
+        public string usernameREF = "The Bob";
+        public bool maleREF = true;
+        public int levelREF = 0;
+        public bool swordPurpleREF = false;
+        public bool shieldWoodREF = true;
         private bool hasRan;
-
 
         [ContextMenu("Save")]
         public void Save()
@@ -30,7 +27,6 @@ namespace GameDev
             if (usernameREF == "")
             {
                 Debug.Log("Need to enter a name!");
-                noName = true;
                 if (!hasRan)
                 {
                     hasRan = true;
@@ -41,10 +37,6 @@ namespace GameDev
             }
             else
             {
-                if (noName)
-                {
-                    noName = false;
-                }
                 string json = JsonUtility.ToJson(playerDataSave);
                 File.WriteAllText($"{Application.persistentDataPath}/PlayerDataSaved.txt", json);
                 Debug.Log("Player data saved.");
