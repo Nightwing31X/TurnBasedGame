@@ -14,10 +14,10 @@ namespace GameDev
         public bool firstTimeREF = false;
 
         public string usernameREF = "The Bob";
-        public bool maleREF = true;
+        public bool maleREF;
         public int levelREF = 0;
-        public bool swordPurpleREF = true;
-        public bool shieldWoodREF = false;
+        public bool swordPurpleREF;
+        public bool shieldWoodREF;
         private bool hasRan;
 
         [ContextMenu("Save")]
@@ -71,6 +71,7 @@ namespace GameDev
             int currentScene = SceneManager.GetActiveScene().buildIndex;
             if (currentScene == 1)
             {
+                Debug.Log(shieldWoodREF);
                 Debug.Log("Runs only in the game...");
                 PlayerCharacterManager.Instance.updatePlayerINFO();
             }

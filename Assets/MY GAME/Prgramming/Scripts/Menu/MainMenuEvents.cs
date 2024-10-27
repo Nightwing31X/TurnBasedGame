@@ -24,15 +24,15 @@ namespace Menu
         private GameObject _femaleDisplayUsernameText;
 
         [Header("Male Player Objects")]
-        private GameObject playerWoodenShieldMALE;
-        private GameObject playerYellowShieldMALE;
-        private GameObject playerPurpleSwordMALE;
-        private GameObject playerGreenSwordMALE;
+        [SerializeField] private GameObject playerWoodenShieldMALE;
+        [SerializeField] private GameObject playerYellowShieldMALE;
+        [SerializeField] private GameObject playerPurpleSwordMALE;
+        [SerializeField] private GameObject playerGreenSwordMALE;
         [Header("Female Player Objects")]
-        private GameObject playerWoodenShieldFEMALE;
-        private GameObject playerYellowShieldFEMALE;
-        private GameObject playerPurpleSwordFEMALE;
-        private GameObject playerGreenSwordFEMALE;
+        [SerializeField] private GameObject playerWoodenShieldFEMALE;
+        [SerializeField] private GameObject playerYellowShieldFEMALE;
+        [SerializeField] private GameObject playerPurpleSwordFEMALE;
+        [SerializeField] private GameObject playerGreenSwordFEMALE;
         [SerializeField] private Dropdown valueDropdown;
 
         [SerializeField] private bool shieldWood = false;
@@ -74,18 +74,18 @@ namespace Menu
             _femaleDisplayUsernameText = GameObject.Find("femaleDisplayUsernameTEXT");
 
             // Male Objects - Shield
-            playerWoodenShieldMALE = GameObject.Find("WoodenShieldMALE");
-            playerYellowShieldMALE = GameObject.Find("YellowShieldMALE");
+            playerWoodenShieldMALE = GameObject.Find("playerWoodenShieldMALE");
+            playerYellowShieldMALE = GameObject.Find("playerYellowShieldMALE");
             // Male Objects - Sword
-            playerPurpleSwordMALE = GameObject.Find("PurpleSwordMALE");
-            playerGreenSwordMALE = GameObject.Find("GreenSwordMALE");
+            playerPurpleSwordMALE = GameObject.Find("playerPurpleSwordMALE");
+            playerGreenSwordMALE = GameObject.Find("playerGreenSwordMALE");
 
             // Female Objects - Shield
-            playerWoodenShieldFEMALE = GameObject.Find("WoodenShieldFEMALE");
-            playerYellowShieldFEMALE = GameObject.Find("YellowShieldFEMALE");
+            playerWoodenShieldFEMALE = GameObject.Find("playerWoodenShieldFEMALE");
+            playerYellowShieldFEMALE = GameObject.Find("playerYellowShieldFEMALE");
             // Female Objects - Sword
-            playerPurpleSwordFEMALE = GameObject.Find("PurpleSwordFEMALE");
-            playerGreenSwordFEMALE = GameObject.Find("GreenSwordFEMALE");
+            playerGreenSwordFEMALE = GameObject.Find("playerGreenSwordFEMALE");
+            playerPurpleSwordFEMALE = GameObject.Find("playerPurpleSwordFEMALE");
 
             SelectObjectUI();
         }
@@ -111,6 +111,7 @@ namespace Menu
                 _femaleDisplayUsernameText.GetComponent<Text>().text = savePlayerData.usernameREF;
             }
 
+            SetSwordChoice(0);
             // updatePlayerINFO();
         }
 
@@ -165,9 +166,9 @@ namespace Menu
                 _femaleCharacter.SetActive(true);
                 SetActiveRecursively(_femaleCharacter.transform, true);
                 _femaleDisplayUsernameText.GetComponent<Text>().text = savePlayerData.usernameREF;
+
                 _maleCharacter.SetActive(false);
                 SetActiveRecursively(_maleCharacter.transform, false);
-
                 savePlayerData.GenderToggle(false);
             }
             else if (maleToggle.isOn == true)
@@ -200,7 +201,6 @@ namespace Menu
             }
             else if (femaleToggle.isOn == true)
             {
-
                 maleToggle.isOn = false;
                 _femaleCharacter.SetActive(true);
                 SetActiveRecursively(_femaleCharacter.transform, true);
@@ -238,8 +238,11 @@ namespace Menu
 
         public void dropdownREFComponent()
         {
-            valueDropdown.value = GameObject.Find("SwordDropdown").GetComponent<Dropdown>().value;
-            SetSwordChoice(valueDropdown.value);
+            if (savePlayerData.firstTimeREF)
+            {
+                valueDropdown = GameObject.Find("SwordDropdown").GetComponent<Dropdown>();
+                SetSwordChoice(valueDropdown.value);
+            }
         }
 
         public void SetSwordChoice(int dropdownValue)
@@ -250,7 +253,6 @@ namespace Menu
                 swordPurple = true;
                 shieldWood = false;
                 updatePlayerINFO();
-
             }
             else if (dropdownValue == 1) // Purple Sword & Wooden Shield
             {
@@ -289,14 +291,14 @@ namespace Menu
 
                 if (shieldWood)
                 {
-                    Debug.Log("Wooden Shield...");
-                    if (playerYellowShieldFEMALE != null)
+                    Debug.Log("Wooden Shield... MALE");
+                    if (playerYellowShieldMALE != null)
                     {
                         playerYellowShieldMALE.SetActive(false);
                     }
-                    if (playerWoodenShieldFEMALE != null)
+                    if (playerWoodenShieldMALE != null)
                     {
-                        playerWoodenShieldMALE.SetActive(true);
+                        playerWoodenShieldMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
                     }
 
                     if (playerWoodenShieldFEMALE != null)
@@ -311,7 +313,7 @@ namespace Menu
                 }
                 else
                 {
-                    Debug.Log("Yellow Shield...");
+                    Debug.Log("Yellow Shield... MALE");
                     if (playerWoodenShieldMALE != null)
                     {
                         playerWoodenShieldMALE.SetActive(false);
@@ -319,7 +321,7 @@ namespace Menu
 
                     if (playerYellowShieldMALE != null)
                     {
-                        playerYellowShieldMALE.SetActive(true);
+                        playerYellowShieldMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
                     }
 
                     if (playerWoodenShieldFEMALE != null)
@@ -335,14 +337,114 @@ namespace Menu
                 // Get current saved sword type if true...
                 if (swordPurple)
                 {
-                    Debug.Log("Purple Sword...");
+                    Debug.Log("Purple Sword... MALE");
+                    if (playerGreenSwordMALE != null)
+                    {
+                        playerGreenSwordMALE.SetActive(false);
+                    }
+                    if (playerPurpleSwordMALE != null)
+                    {
+                        playerPurpleSwordMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                    }
+
+                    if (playerPurpleSwordFEMALE != null)
+                    {
+                        playerPurpleSwordFEMALE.SetActive(false);
+                    }
+
+                    if (playerGreenSwordFEMALE != null)
+                    {
+                        playerGreenSwordFEMALE.SetActive(false);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Green Sword... MALE");
+                    if (playerPurpleSwordMALE != null)
+                    {
+                        playerPurpleSwordMALE.SetActive(false);
+                    }
+
+                    if (playerGreenSwordMALE != null)
+                    {
+                        playerGreenSwordMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                    }
+
+                    if (playerPurpleSwordFEMALE != null)
+                    {
+                        playerPurpleSwordFEMALE.SetActive(false);
+                    }
+
+                    if (playerGreenSwordFEMALE != null)
+                    {
+                        playerGreenSwordFEMALE.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                // _femaleCharacter.SetActive(true);
+
+                // _maleCharacter.SetActive(false);
+                // SetActiveRecursively(_maleCharacter.transform, false);
+
+#region New test Idea for the female
+                if (shieldWood)
+                {
+                    Debug.Log("Wooden Shield... FEMALE");
+                    if (playerYellowShieldFEMALE != null)
+                    {
+                        playerYellowShieldFEMALE.SetActive(false);
+                    }
+                    if (playerWoodenShieldFEMALE != null)
+                    {
+                        playerWoodenShieldFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                    }
+
+                    if (playerWoodenShieldMALE != null)
+                    {
+                        playerWoodenShieldMALE.SetActive(false);
+                    }
+
+                    if (playerYellowShieldMALE != null)
+                    {
+                        playerYellowShieldMALE.SetActive(false);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Yellow Shield... FEMALE");
+                    if (playerWoodenShieldFEMALE != null)
+                    {
+                        playerWoodenShieldFEMALE.SetActive(false);
+                    }
+
+                    if (playerYellowShieldFEMALE != null)
+                    {
+                        playerYellowShieldFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                    }
+
+                    if (playerWoodenShieldMALE != null)
+                    {
+                        playerWoodenShieldMALE.SetActive(false);
+                    }
+
+                    if (playerYellowShieldMALE != null)
+                    {
+                        playerYellowShieldMALE.SetActive(false);
+                    }
+                }
+                // Get current saved sword type if true...
+                if (swordPurple)
+                {
+                    Debug.Log("Purple Sword... FEMALE");
                     if (playerGreenSwordFEMALE != null)
                     {
                         playerGreenSwordFEMALE.SetActive(false);
                     }
                     if (playerPurpleSwordFEMALE != null)
                     {
-                        playerPurpleSwordFEMALE.SetActive(true);
+                        playerPurpleSwordFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
                     }
 
                     if (playerPurpleSwordMALE != null)
@@ -357,7 +459,7 @@ namespace Menu
                 }
                 else
                 {
-                    Debug.Log("Green Sword...");
+                    Debug.Log("Green Sword... FEMALE");
                     if (playerPurpleSwordFEMALE != null)
                     {
                         playerPurpleSwordFEMALE.SetActive(false);
@@ -365,53 +467,110 @@ namespace Menu
 
                     if (playerGreenSwordFEMALE != null)
                     {
-                        playerGreenSwordFEMALE.SetActive(true);
+                        playerGreenSwordFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
                     }
 
-                    if (playerWoodenShieldMALE)
+                    if (playerPurpleSwordMALE != null)
                     {
-                        playerWoodenShieldMALE.SetActive(false);
+                        playerPurpleSwordMALE.SetActive(false);
                     }
 
-                    if (playerYellowShieldMALE)
+                    if (playerGreenSwordMALE != null)
                     {
-                        playerYellowShieldMALE.SetActive(false);
-                    }
-                    // playerYellowSwordFEMALE.SetActive(false);
-                }
-            }
-            else
-            {
-                // _femaleCharacter.SetActive(true);
-
-                // _maleCharacter.SetActive(false);
-                // SetActiveRecursively(_maleCharacter.transform, false);
-
-                if (shieldWood)
-                {
-                    Debug.Log("Wooden Shield...");
-                    playerYellowShieldFEMALE.SetActive(false);
-                    playerWoodenShieldFEMALE.SetActive(true);
-
-                    if (playerWoodenShieldMALE != null)
-                    {
-                        playerWoodenShieldMALE.SetActive(false);
-                    }
-
-                    if (playerYellowShieldMALE != null)
-                    {
-                        playerYellowShieldMALE.SetActive(false);
+                        playerGreenSwordMALE.SetActive(false);
                     }
                 }
-                else
-                {
-                    Debug.Log("Yellow Shield...");
-                    playerWoodenShieldFEMALE.SetActive(false);
-                    playerYellowShieldFEMALE.SetActive(true);
+#endregion
 
-                    playerWoodenShieldMALE.SetActive(false);
-                    playerYellowShieldMALE.SetActive(false);
-                }
+
+                // if (shieldWood)
+                // {
+                //     Debug.Log("Wooden Shield... FEMALE");
+                //     if (playerYellowShieldFEMALE != null)
+                //     {
+                //         playerYellowShieldFEMALE.SetActive(false);
+                //     }
+                //     if (playerWoodenShieldFEMALE != null)
+                //     {
+                //         playerWoodenShieldFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON                    
+                //     }
+                //     if (playerWoodenShieldMALE != null)
+                //     {
+                //         playerWoodenShieldMALE.SetActive(false);
+                //     }
+                //     if (playerYellowShieldMALE != null)
+                //     {
+                //         playerYellowShieldMALE.SetActive(false);
+                //     }
+                // }
+                // else
+                // {
+                //     Debug.Log("Yellow Shield... FEMALE");
+                //     if (playerWoodenShieldFEMALE != null)
+                //     {
+                //         playerWoodenShieldFEMALE.SetActive(false);
+                //     }
+                //     if (playerYellowShieldFEMALE != null)
+                //     {
+                //         playerYellowShieldFEMALE.SetActive(true);  //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                //     }
+                //     if (playerWoodenShieldMALE != null)
+                //     {
+                //         playerWoodenShieldMALE.SetActive(false);
+                //     }
+                //     if (playerYellowShieldMALE != null)
+                //     {
+                //         playerYellowShieldMALE.SetActive(false);
+                //     }
+                // }
+
+                // if (swordPurple)
+                // {
+                //     Debug.Log("Purple Sword... FEMALE");
+                //     if (playerGreenSwordFEMALE != null)
+                //     {
+                //         playerGreenSwordFEMALE.SetActive(false);
+                //     }
+                //     if (playerPurpleSwordFEMALE != null)
+                //     {
+                //         playerPurpleSwordFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                //     }
+
+                //     if (playerPurpleSwordMALE != null)
+                //     {
+                //         playerPurpleSwordMALE.SetActive(false);
+                //     }
+
+                //     if (playerGreenSwordMALE != null)
+                //     {
+                //         playerGreenSwordMALE.SetActive(false);
+                //     }
+                // }
+                // else
+                // {
+                //     Debug.Log("Green Sword... FEMALE");
+                //     if (playerPurpleSwordFEMALE != null)
+                //     {
+                //         Debug.Log("I do run???");
+                //         playerPurpleSwordFEMALE.SetActive(false);
+                //         Debug.Log("I Should run!!!");
+                //     }
+
+                //     if (playerGreenSwordFEMALE != null)
+                //     {
+                //         playerGreenSwordFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                //     }
+
+                //     if (playerPurpleSwordMALE != null)
+                //     {
+                //         playerPurpleSwordMALE.SetActive(false);
+                //     }
+
+                //     if (playerGreenSwordMALE != null)
+                //     {
+                //         playerGreenSwordMALE.SetActive(false);
+                //     }
+                // }
             }
         }
 
