@@ -15,7 +15,7 @@ public class PlayerCharacterManager : MonoBehaviour
     public bool male;
     public bool shield;
     public Text level;
-        public bool sword;
+    public bool sword;
 
 
     [Header("Male Player Objects")]
@@ -67,8 +67,6 @@ public class PlayerCharacterManager : MonoBehaviour
         playerPurpleSwordMALE = GameObject.Find("PurpleSwordMALE");
         playerGreenSwordMALE = GameObject.Find("GreenSwordMALE");
 
-
-
         // Female Objects - Shield
         playerWoodenShieldFEMALE = GameObject.Find("WoodenShieldFEMALE");
         playerYellowShieldFEMALE = GameObject.Find("YellowShieldFEMALE");
@@ -100,8 +98,14 @@ public class PlayerCharacterManager : MonoBehaviour
             if (shield)
             {
                 Debug.Log("Wooden Shield...");
-                playerYellowShieldMALE.SetActive(false);
-                playerWoodenShieldMALE.SetActive(true);
+                if (playerYellowShieldFEMALE != null)
+                {
+                    playerYellowShieldMALE.SetActive(false);
+                }
+                if (playerWoodenShieldFEMALE != null)
+                {
+                    playerWoodenShieldMALE.SetActive(true);
+                }
 
                 if (playerWoodenShieldFEMALE != null)
                 {
@@ -126,14 +130,20 @@ public class PlayerCharacterManager : MonoBehaviour
             if (sword)
             {
                 Debug.Log("Purple Sword...");
-                playerGreenSwordFEMALE.SetActive(false);
-                playerPurpleSwordFEMALE.SetActive(true);
+                if (playerGreenSwordFEMALE != null)
+                {
+                    playerGreenSwordFEMALE.SetActive(false);
+                }
+                if (playerPurpleSwordFEMALE != null)
+                {
+                    playerPurpleSwordFEMALE.SetActive(true);
+                }
 
                 if (playerPurpleSwordMALE != null)
                 {
                     playerPurpleSwordMALE.SetActive(false);
                 }
-                
+
                 if (playerGreenSwordMALE != null)
                 {
                     playerGreenSwordMALE.SetActive(false);
@@ -141,7 +151,7 @@ public class PlayerCharacterManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("Wooden Sword...");
+                Debug.Log("Green Sword...");
                 playerPurpleSwordFEMALE.SetActive(false);
                 playerGreenSwordFEMALE.SetActive(true);
 
@@ -184,8 +194,6 @@ public class PlayerCharacterManager : MonoBehaviour
                 playerWoodenShieldMALE.SetActive(false);
                 playerYellowShieldMALE.SetActive(false);
             }
-
-
         }
     }
 

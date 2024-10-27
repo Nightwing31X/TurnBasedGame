@@ -1,8 +1,8 @@
 using System;
 using System.IO;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 
 namespace GameDev
 {
@@ -16,14 +16,21 @@ namespace GameDev
         public string usernameREF = "The Bob";
         public bool maleREF = true;
         public int levelREF = 0;
-        public bool swordPurpleREF = false;
-        public bool shieldWoodREF = true;
+        public bool swordPurpleREF = true;
+        public bool shieldWoodREF = false;
         private bool hasRan;
 
         [ContextMenu("Save")]
         public void Save()
         {
-            RefValues();
+            if (firstTimeREF)
+            {
+                FirstTimeRefValues();
+            }
+            else
+            {
+                RefValues();
+            }
             if (usernameREF == "")
             {
                 Debug.Log("Need to enter a name!");
@@ -75,6 +82,22 @@ namespace GameDev
             Debug.Log("SavedPlayerData script has run...");
         }
 
+        public void FirstTimeRefValues()
+        {
+            playerDataSave.firstTime = firstTimeREF;
+
+            usernameREF = playerDataSave.playerName;
+            // Debug.Log(playerDataSave.playerName);
+            maleREF = playerDataSave.male;
+            // Debug.Log(playerDataSave.male);
+            levelREF = playerDataSave.level;
+            // Debug.Log(playerDataSave.level);
+            swordPurpleREF = playerDataSave.swordPurple;
+            // Debug.Log(playerDataSave);
+            shieldWoodREF = playerDataSave.shieldWood;
+            // Debug.Log(playerDataSave.shieldWood);
+        }
+
         public void RefValues()
         {
             playerDataSave.firstTime = firstTimeREF;
@@ -120,7 +143,7 @@ namespace GameDev
         [SerializeField] public string playerName = "The Bob";
         [SerializeField] public bool male = true;
         [SerializeField] public int level = 0;
-        [SerializeField] public bool swordPurple = false;
-        [SerializeField] public bool shieldWood = true;
+        [SerializeField] public bool swordPurple = true;
+        [SerializeField] public bool shieldWood = false;
     }
 }
