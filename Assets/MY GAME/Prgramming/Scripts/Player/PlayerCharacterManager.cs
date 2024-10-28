@@ -205,7 +205,6 @@ public class PlayerCharacterManager : MonoBehaviour
                 {
                     playerGreenSwordMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
                     modelGreenSwordMALE.SetActive(true);
-                    Debug.Log("Hey sword changed...");
                 }
                 if (playerYellowShieldFEMALE != null)
                 {
@@ -238,17 +237,15 @@ public class PlayerCharacterManager : MonoBehaviour
                 }
                 if (playerWoodenShieldFEMALE != null)
                 {
-                    Debug.Log("START");
-                    playerWoodenShieldFEMALE.SetActive(true);  //* <------- THIS IS THE OBJECT WHICH TURNS ON
+                    playerWoodenShieldFEMALE.SetActive(true); //* <------- THIS IS THE OBJECT WHICH TURNS ON
                     modelWoodenShieldFEMALE.SetActive(true);
-                    Debug.Log("END");
+
                 }
                 if (playerWoodenShieldMALE != null)
                 {
                     playerWoodenShieldMALE.SetActive(false);
                     modelWoodenShieldMALE.SetActive(false);
                 }
-
                 if (playerYellowShieldMALE != null)
                 {
                     playerYellowShieldMALE.SetActive(false);
@@ -285,7 +282,7 @@ public class PlayerCharacterManager : MonoBehaviour
                 if (playerGreenSwordFEMALE != null)
                 {
                     playerGreenSwordFEMALE.SetActive(false);
-                    modelGreenSwordMALE.SetActive(false);
+                    modelGreenSwordFEMALE.SetActive(false);
                 }
                 if (playerPurpleSwordFEMALE != null)
                 {
@@ -326,7 +323,7 @@ public class PlayerCharacterManager : MonoBehaviour
                 if (playerWoodenShieldMALE != null)
                 {
                     playerWoodenShieldMALE.SetActive(false);
-                    modelWoodenShieldFEMALE.SetActive(false);
+                    modelWoodenShieldMALE.SetActive(false);
                 }
             }
         }

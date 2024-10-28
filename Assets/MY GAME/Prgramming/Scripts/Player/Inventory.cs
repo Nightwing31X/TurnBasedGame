@@ -25,10 +25,15 @@ namespace Player
         public Text title;
         public Text description;
 
+        GameObject _playerManager;
+
+
         private void Start()
         {
             _inINV = false;
             menuINV.SetActive(_inINV);
+
+            _playerManager = GameObject.Find("PlayerManager");
         }
 
         void Update()
@@ -70,6 +75,7 @@ namespace Player
             GameManager.instance.inINV = _inINV;
 
             PlayerCharacterManager.Instance.PlayerINFO();
+            _playerManager.GetComponent<Health>().UpdatePlayersHealth();
 
             menuINV.SetActive(_inINV);
             playerHUD.SetActive(false);

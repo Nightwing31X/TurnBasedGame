@@ -18,6 +18,9 @@ namespace GameDev
         public int levelREF = 0;
         public bool swordPurpleREF;
         public bool shieldWoodREF;
+        public int currentHealthREF;
+        public int maxHealthREF;
+
         private bool hasRan;
 
         [ContextMenu("Save")]
@@ -97,6 +100,8 @@ namespace GameDev
             // Debug.Log(playerDataSave);
             shieldWoodREF = playerDataSave.shieldWood;
             // Debug.Log(playerDataSave.shieldWood);
+            currentHealthREF = playerDataSave.currentHealth;
+            maxHealthREF = playerDataSave.maxHealth;
         }
 
         public void RefValues()
@@ -108,6 +113,8 @@ namespace GameDev
             playerDataSave.level = levelREF;
             playerDataSave.swordPurple = swordPurpleREF;
             playerDataSave.shieldWood = shieldWoodREF;
+            playerDataSave.maxHealth = maxHealthREF;
+            playerDataSave.currentHealth = currentHealthREF;
 
             //Debug.Log($"{usernameREF}: {maleREF}: {levelREF}: {swordPurpleREF}: {shieldWoodREF}");
         }
@@ -121,6 +128,8 @@ namespace GameDev
             levelREF = playerDataSave.level;
             swordPurpleREF = playerDataSave.swordPurple;
             shieldWoodREF = playerDataSave.shieldWood;
+            currentHealthREF = playerDataSave.currentHealth;
+            maxHealthREF = playerDataSave.maxHealth;
 
             Debug.Log("SavedValues has run...");
             //Debug.Log($"{playerDataSave.playerName}: {playerDataSave.male}: {playerDataSave.level}: {playerDataSave.swordPurple}: {playerDataSave.shieldWood}");
@@ -146,5 +155,7 @@ namespace GameDev
         [SerializeField] public int level = 0;
         [SerializeField] public bool swordPurple = true;
         [SerializeField] public bool shieldWood = false;
+        [SerializeField] public int currentHealth = 100;
+        [SerializeField] public int maxHealth = 100;
     }
 }

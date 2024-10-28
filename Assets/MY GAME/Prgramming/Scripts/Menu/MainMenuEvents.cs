@@ -111,7 +111,12 @@ namespace Menu
                 _femaleDisplayUsernameText.GetComponent<Text>().text = savePlayerData.usernameREF;
             }
 
-            SetSwordChoice(0);
+            if (!savePlayerData.firstTimeREF)
+            {
+                //SetSwordChoice(0);
+                updatePlayerINFO();
+            }
+
             // updatePlayerINFO();
         }
 
@@ -279,8 +284,16 @@ namespace Menu
 
         public void updatePlayerINFO()
         {
-            savePlayerData.shieldWoodREF = shieldWood;
-            savePlayerData.swordPurpleREF = swordPurple;
+            if (savePlayerData.firstTimeREF)
+            {
+                savePlayerData.shieldWoodREF = shieldWood;
+                savePlayerData.swordPurpleREF = swordPurple;
+            }
+            else
+            {
+                shieldWood = savePlayerData.shieldWoodREF;
+                swordPurple = savePlayerData.swordPurpleREF;
+            }
 
             if (maleToggle.isOn)
             {
