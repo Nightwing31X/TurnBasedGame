@@ -38,6 +38,10 @@ namespace Menu
         [SerializeField] private bool shieldWood = false;
         [SerializeField] private bool swordPurple = true;
 
+        [SerializeField] private GameObject mainMenu;
+        [SerializeField] private GameObject settings;
+
+
         public void ChangeScene(int sceneNumber)
         {
             int currentScene = SceneManager.GetActiveScene().buildIndex;
@@ -154,6 +158,8 @@ namespace Menu
 
         public void opensettingsMenu()
         {
+            OpenMainMenu();
+            settings.SetActive(true);
             // Clear selected object
             EventSystem.current.SetSelectedGameObject(null);
             // Set a new selected object
@@ -291,6 +297,34 @@ namespace Menu
                 savePlayerData.DropdownValueREF = dropdownValue;
             }
         }
+
+
+        public void CloseMainMenu()
+        {
+            mainMenu.GetComponent<Animator>().SetBool("MainMenuOpen", false);
+            StartCoroutine(mainMenuSwitch());
+        }
+
+        public void OpenMainMenu()
+        {
+            mainMenu.GetComponent<Animator>().SetBool("MainMenuOpen", true);
+            StartCoroutine(mainMenuSwitch());
+        }
+
+        IEnumerator mainMenuSwitch()
+        {
+            yield return new WaitForSeconds(1f);
+            if (mainMenu.activeInHierarchy)
+            {
+                mainMenu.SetActive(false);
+            }
+            else
+            {
+                mainMenu.SetActive(true);
+                settings.SetActive(false);
+            }
+        }
+
 
 
         public void updatePlayerINFO()

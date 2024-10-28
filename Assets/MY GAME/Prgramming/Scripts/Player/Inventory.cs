@@ -51,7 +51,6 @@ namespace Player
                 if (_inINV && Input.GetButtonDown("Inventory"))
                 {
                     CloseINV();
-                    InventoryManager.Instance.clearItemsOnClose();
                 }
             }
         }
@@ -68,6 +67,7 @@ namespace Player
         {
             title.text = "Name of the Item";
             description.text = "Description about the item...";
+
             // SelectObjectUI(invMenuFirstObject);
 
             GameManager.instance.OnMenu();
@@ -77,25 +77,44 @@ namespace Player
             PlayerCharacterManager.Instance.PlayerINFO();
             _playerManager.GetComponent<Health>().UpdatePlayersHealth();
 
-            menuINV.SetActive(_inINV);
-            playerHUD.SetActive(false);
             pausedBTN.SetActive(false);
             profileBTN.SetActive(false);
+
+            menuINV.SetActive(_inINV);
+            menuINV.transform.Find("INVBackground").GetComponent<Animator>().SetBool("INVBackgroundFadeIn", true);
+            menuINV.transform.Find("BagObject").GetComponent<Animator>().SetBool("BagObjectOpen", true);
+            menuINV.transform.Find("PlayerINV").GetComponent<Animator>().SetBool("PlayerINVOpen", true);
+            menuINV.transform.Find("PlayerInfo").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
+
+
+            // playerHUD.SetActive(false);
         }
+
 
         public void CloseINV()
         {
             title.text = "Name of the Item";
             description.text = "Description about the item...";
             CheckState();
+            StartCoroutine(ANIMCloseINV());
+
+
+            // enableRemoveToggle.isOn = false;
+            SelectObjectUI(forwardBTN);
+        }
+        IEnumerator ANIMCloseINV()
+        {
+            menuINV.transform.Find("INVBackground").GetComponent<Animator>().SetBool("INVBackgroundFadeIn", false);
+            menuINV.transform.Find("BagObject").GetComponent<Animator>().SetBool("BagObjectOpen", false);
+            menuINV.transform.Find("PlayerINV").GetComponent<Animator>().SetBool("PlayerINVOpen", false);
+            menuINV.transform.Find("PlayerInfo").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
+            yield return new WaitForSeconds(0.5f);
             _inINV = false;
             menuINV.SetActive(_inINV);
             playerHUD.SetActive(true);
             pausedBTN.SetActive(true);
             profileBTN.SetActive(true);
-
-            // enableRemoveToggle.isOn = false;
-            SelectObjectUI(forwardBTN);
+            InventoryManager.Instance.clearItemsOnClose();
         }
 
         private void CheckState()

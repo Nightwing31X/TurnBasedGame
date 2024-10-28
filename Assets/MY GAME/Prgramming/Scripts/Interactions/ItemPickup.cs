@@ -19,6 +19,8 @@ public class ItemPickup : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+
             if (_savePlayerData == null)
             {
                 _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
@@ -37,20 +39,36 @@ public class ItemPickup : MonoBehaviour
         }
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
+        }
+    }
+
     public void ChoicePickUp(Item itemREF)
     {
+
         InventoryManager.Instance.NameItemDetailText.text = item.name;
         InventoryManager.Instance.DescriptionItemDetailText.text = item.description;
         InventoryManager.Instance.IconItemDetail.texture = item.artwork;
+
+
         InventoryManager.Instance.promptChoice.SetActive(true);
+        InventoryManager.Instance.promptChoice.GetComponentInChildren<Animator>().SetBool("Show", true);
+        InventoryManager.Instance.promptChoice.GetComponentInChildren<Animator>().SetBool("Hide", false);
+
+
+
         InventoryManager.Instance.PickUpItemREF = itemREF;
         InventoryManager.Instance.ItemOnGround = gameObject;
     }
-
-    // public void PutInBag()
-    // {
-    //     InventoryManager.Instance.promptChoice.SetActive(false);
-    //     InventoryManager.Instance.Add(item);
-    //     Destroy(gameObject);
-    // }
 }

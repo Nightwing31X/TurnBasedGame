@@ -33,7 +33,7 @@ namespace TurnBase
                 instance = this;
             }
             else if (instance != null && instance != this)
-            { 
+            {
                 Destroy(this);
             }
         }

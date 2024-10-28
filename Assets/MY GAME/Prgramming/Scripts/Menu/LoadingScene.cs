@@ -53,10 +53,14 @@ namespace Menu
             }
             else
             {
+                playercharacterMenu.SetActive(true);
+                playercharacterMenu.transform.Find("AllButtons").GetComponent<Animator>().SetBool("playercharacterMenuOpen", true);
                 savePlayerData.firstTimeREF = false;
                 Debug.Log("First time playing; allow player to create character.");
-                playercharacterMenu.SetActive(true);
             }
         }
     }
 }
+
+
+// {"firstTime":false,"DropdownValue":3,"playerName":"Nightwing31X","male":true,"level":0,"swordPurple":false,"shieldWood":true,"currentHealth":100,"maxHealth":100,"currentBagValue":0,"maxBagValue":24}

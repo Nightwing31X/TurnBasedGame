@@ -51,6 +51,7 @@ namespace Interactions
             Instance = this;
 
             _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
+            promptChoice.SetActive(false);
         }
 
 
@@ -73,14 +74,25 @@ namespace Interactions
         public void NoPickUp()
         {
             Debug.Log("Player choose not to pick up the item... Doesn't go away or enter the bag");
-            promptChoice.SetActive(false);
+            promptChoice.GetComponentInChildren<Animator>().SetBool("Hide", true);
+            promptChoice.GetComponentInChildren<Animator>().SetBool("Show", false);
+            StartCoroutine(HidePromptChoice());
         }
 
         public void PutInBag()
         {
-            promptChoice.SetActive(false);
+            promptChoice.GetComponentInChildren<Animator>().SetBool("Hide", true);
+            promptChoice.GetComponentInChildren<Animator>().SetBool("Show", false);
+            StartCoroutine(HidePromptChoice());
             Add(PickUpItemREF);
             Destroy(ItemOnGround);
+            GameManager.instance.OnPlay();
+        }
+
+        IEnumerator HidePromptChoice()
+        {
+            yield return new WaitForSeconds(3f);
+            promptChoice.SetActive(false);
         }
 
         public void ListItems()
