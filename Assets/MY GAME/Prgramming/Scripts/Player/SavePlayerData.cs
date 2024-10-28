@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Menu;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,7 @@ namespace GameDev
         [SerializeField] private PlayerDataSave playerDataSave = new PlayerDataSave();
 
         public bool firstTimeREF = false;
+        public int DropdownValueREF = 0;
 
         public string usernameREF = "The Bob";
         public bool maleREF;
@@ -23,16 +25,23 @@ namespace GameDev
 
         private bool hasRan;
 
+        public MainMenuEvents mainMenuEvents;
+
+
         [ContextMenu("Save")]
         public void Save()
         {
             if (firstTimeREF)
             {
                 FirstTimeRefValues();
+                mainMenuEvents = GetComponent<MainMenuEvents>();
+                mainMenuEvents.SetSwordChoice(DropdownValueREF); //* Sets the saved dropdownValue so it displays the correct sword and shield
             }
             else
             {
                 RefValues();
+                mainMenuEvents = GetComponent<MainMenuEvents>();
+                mainMenuEvents.SetSwordChoice(DropdownValueREF); //* Sets the saved dropdownValue so it displays the correct sword and shield
             }
             if (usernameREF == "")
             {
@@ -71,12 +80,18 @@ namespace GameDev
             playerDataSave = JsonUtility.FromJson<PlayerDataSave>(json);
             SavedValues();
             Debug.Log("Loaded player data.");
+
             int currentScene = SceneManager.GetActiveScene().buildIndex;
             if (currentScene == 1)
             {
                 Debug.Log(shieldWoodREF);
                 Debug.Log("Runs only in the game...");
                 PlayerCharacterManager.Instance.updatePlayerINFO();
+            }
+            else if (currentScene == 0)
+            {
+                mainMenuEvents = GetComponent<MainMenuEvents>();
+                mainMenuEvents.SetSwordChoice(DropdownValueREF); //* Sets the saved dropdownValue so it displays the correct sword and shield
             }
         }
 
@@ -102,6 +117,8 @@ namespace GameDev
             // Debug.Log(playerDataSave.shieldWood);
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
+
+            DropdownValueREF = playerDataSave.DropdownValue;
         }
 
         public void RefValues()
@@ -116,6 +133,8 @@ namespace GameDev
             playerDataSave.maxHealth = maxHealthREF;
             playerDataSave.currentHealth = currentHealthREF;
 
+            playerDataSave.DropdownValue = DropdownValueREF;
+
             //Debug.Log($"{usernameREF}: {maleREF}: {levelREF}: {swordPurpleREF}: {shieldWoodREF}");
         }
 
@@ -128,8 +147,11 @@ namespace GameDev
             levelREF = playerDataSave.level;
             swordPurpleREF = playerDataSave.swordPurple;
             shieldWoodREF = playerDataSave.shieldWood;
+
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
+
+            DropdownValueREF = playerDataSave.DropdownValue;
 
             Debug.Log("SavedValues has run...");
             //Debug.Log($"{playerDataSave.playerName}: {playerDataSave.male}: {playerDataSave.level}: {playerDataSave.swordPurple}: {playerDataSave.shieldWood}");
@@ -150,6 +172,7 @@ namespace GameDev
     public class PlayerDataSave
     {
         [SerializeField] public bool firstTime = false;
+        [SerializeField] public int DropdownValue = 0;
         [SerializeField] public string playerName = "The Bob";
         [SerializeField] public bool male = true;
         [SerializeField] public int level = 0;

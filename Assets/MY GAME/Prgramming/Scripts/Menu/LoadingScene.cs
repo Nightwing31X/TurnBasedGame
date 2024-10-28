@@ -15,7 +15,6 @@ namespace Menu
 
         public SavePlayerData savePlayerData;
         public GameObject playercharacterMenu;
-        public MainMenuEvents mainMenuEvents;
 
 
         IEnumerator LoadAsynchronously(int sceneIndex)
