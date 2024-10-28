@@ -335,7 +335,7 @@ public class PlayerCharacterManager : MonoBehaviour
 
         level.text = _playerData.levelREF.ToString();
 
-        Debug.Log($"{_playerData.usernameREF}: {_playerData.maleREF}: {_playerData.levelREF}: {_playerData.swordPurpleREF}: {_playerData.shieldWoodREF}");
+        // Debug.Log($"{_playerData.usernameREF}: {_playerData.maleREF}: {_playerData.levelREF}: {_playerData.swordPurpleREF}: {_playerData.shieldWoodREF}");
     }
 
     void SetActiveRecursively(Transform target, bool isActive)

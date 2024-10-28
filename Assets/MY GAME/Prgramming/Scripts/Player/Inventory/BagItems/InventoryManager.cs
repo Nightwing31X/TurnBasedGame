@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameDev;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,16 @@ namespace Interactions
         [HideInInspector] public RawImage itemIcon;
         [HideInInspector] public Button removeButton;
 
+        SavePlayerData _savePlayerData;
+
+        [Header("Objects for the PickUp Prompt")]
+        [SerializeField] public GameObject promptChoice;
+        [SerializeField] public Text NameItemDetailText;
+        [SerializeField] public Text DescriptionItemDetailText;
+        [SerializeField] public RawImage IconItemDetail;
+
+        public Item PickUpItemREF;
+        public GameObject ItemOnGround;
 
         private void Awake()
         {
@@ -38,7 +49,12 @@ namespace Interactions
                 Destroy(this);
             }
             Instance = this;
+
+            _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
         }
+
+
+
 
         public void Add(Item item)
         {
@@ -51,6 +67,20 @@ namespace Interactions
             ChangeValue(-1);
             checkValue();
             Items.Remove(item);
+        }
+
+
+        public void NoPickUp()
+        {
+            Debug.Log("Player choose not to pick up the item... Doesn't go away or enter the bag");
+            promptChoice.SetActive(false);
+        }
+
+        public void PutInBag()
+        {
+            promptChoice.SetActive(false);
+            Add(PickUpItemREF);
+            Destroy(ItemOnGround);
         }
 
         public void ListItems()
@@ -77,11 +107,12 @@ namespace Interactions
         }
 
 
-        public void ChangeValue(int num)
+        public void ChangeValue(int num) //* Changes the Text CurrentValue to increase or decrease
         {
             currentBagValue = currentBagValue + num;
+            _savePlayerData.currentBagValueREF = currentBagValue;
         }
-        public void checkValue()
+        public void checkValue() //* Displays what every the change was above
         {
             if (bagTitle != null)
             {

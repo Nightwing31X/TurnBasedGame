@@ -22,6 +22,8 @@ namespace GameDev
         public bool shieldWoodREF;
         public int currentHealthREF;
         public int maxHealthREF;
+        public int currentBagValueREF = 0;
+        public int maxBagValueREF = 24;
 
         private bool hasRan;
 
@@ -118,6 +120,9 @@ namespace GameDev
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
 
+            currentBagValueREF = playerDataSave.currentBagValue;
+            maxBagValueREF = playerDataSave.maxBagValue;
+
             DropdownValueREF = playerDataSave.DropdownValue;
         }
 
@@ -132,6 +137,9 @@ namespace GameDev
             playerDataSave.shieldWood = shieldWoodREF;
             playerDataSave.maxHealth = maxHealthREF;
             playerDataSave.currentHealth = currentHealthREF;
+
+            playerDataSave.currentBagValue = currentBagValueREF;
+            playerDataSave.maxBagValue = maxBagValueREF;
 
             playerDataSave.DropdownValue = DropdownValueREF;
 
@@ -150,6 +158,9 @@ namespace GameDev
 
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
+
+            currentBagValueREF = playerDataSave.currentBagValue;
+            maxBagValueREF = playerDataSave.maxBagValue;
 
             DropdownValueREF = playerDataSave.DropdownValue;
 
@@ -180,5 +191,7 @@ namespace GameDev
         [SerializeField] public bool shieldWood = false;
         [SerializeField] public int currentHealth = 100;
         [SerializeField] public int maxHealth = 100;
+        [SerializeField] public int currentBagValue = 0;
+        [SerializeField] public int maxBagValue = 24;
     }
 }
