@@ -30,10 +30,10 @@ namespace Interactions
         SavePlayerData _savePlayerData;
 
         [Header("Objects for the PickUp Prompt")]
-        [SerializeField] public GameObject promptChoice;
-        [SerializeField] public Text NameItemDetailText;
-        [SerializeField] public Text DescriptionItemDetailText;
-        [SerializeField] public RawImage IconItemDetail;
+        public GameObject promptChoice;
+        public Text NameItemDetailText;
+        public Text DescriptionItemDetailText;
+        public RawImage IconItemDetail;
 
         public Item PickUpItemREF;
         public GameObject ItemOnGround;
@@ -91,7 +91,7 @@ namespace Interactions
 
         IEnumerator HidePromptChoice()
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
             promptChoice.SetActive(false);
         }
 

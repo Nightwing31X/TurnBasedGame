@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using TMPro;
+using TurnBase;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -24,13 +25,14 @@ namespace Player
 
         public bool wallHit = false;
         public bool enemyFront = false;
+        public bool meleeDistance= false;
         public bool enemyRight = false;
         public bool enemyLeft = false;
         public bool enemyBack = false;
 
-        public bool showToolTip = false;
+        // public bool showToolTip = false;
         //public string action, button, instruction;
-        public bool pickUpObj;
+        // public bool pickUpObj;
         // public bool attackToolTip;
         public GameObject firstButton;
         public GameObject keyboardPickUpText; //# Text to pickup things
@@ -101,9 +103,9 @@ namespace Player
                             _hasRan = true;
                         }
                     }
-                    showToolTip = true;
+                    // showToolTip = true;
                     // attackToolTip = false;
-                    OnGUI(); // Displays out ToolTip
+                    // OnGUI(); // Displays out ToolTip
                     if (Input.GetButtonDown("Interaction"))
                     {
                         if (hitInfoForward.collider.TryGetComponent(out IInteractable interactableObject))
@@ -126,9 +128,8 @@ namespace Player
                     }
                     enemyFront = true;
                     wallHit = false;
-                    showToolTip = true;
-                    // attackToolTip = true;
-                    OnGUI(); // Displays out ToolTip
+                    // showToolTip = true;
+                    DisplayBattleChoicePopup();
                 }
                 # endregion
                 # region Detect the wall layer (Wall Layer)
@@ -138,7 +139,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Player - Wall is infront.");
+                            Debug.Log($"Player - Wall is in-front.");
                             _hasRan = true;
                         }
                     }
@@ -146,7 +147,7 @@ namespace Player
                     enemyFront = false;
                     // showToolTip = true;
                     // attackToolTip = false;
-                    OnGUI(); // Displays out ToolTip
+                    // OnGUI(); // Displays out ToolTip
                 }
                 # endregion
             }
@@ -154,12 +155,6 @@ namespace Player
             {
                 wallHit = false;
                 enemyFront = false;
-                showToolTip = false;
-                // attackToolTip = false;
-                //keyboardPickUpText.SetActive(false); //# Pickup text turns off
-                //keyboardAttackText.SetActive(false);
-                //controllerPickUpText.SetActive(false);
-                //controllerAttackText.SetActive(false);
                 _hasRan = false;
             }
             #endregion
@@ -183,25 +178,25 @@ namespace Player
                         if (!_hasRan)
                         {
                             //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
-                            Debug.Log($"Player - Enemy is infront; can do range attacks");
+                            Debug.Log($"Player - Enemy is in-front; can do range attacks");
                             _hasRan = true;
                         }
                     }
 
                     enemyFront = true;
+                    meleeDistance = false;
+                    BattleSystem.instance.meleeRange = meleeDistance;
                     enemyRight = false;
                     enemyLeft = false;
                     enemyBack = false;
                     wallHit = false;
-                    // showToolTip = true;
-                    // attackToolTip = false;
-                    OnGUI(); // Displays out ToolTip
+                    DisplayBattleChoicePopup();
                 }
             }
             else
             {
                 enemyFront = false;
-                showToolTip = false;
+                // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
@@ -249,7 +244,7 @@ namespace Player
             else
             {
                 enemyRight = false;
-                showToolTip = false;
+                // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
@@ -298,7 +293,7 @@ namespace Player
             else
             {
                 enemyLeft = false;
-                showToolTip = false;
+                // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
@@ -347,7 +342,7 @@ namespace Player
             else
             {
                 enemyBack = false;
-                showToolTip = false;
+                // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
@@ -356,73 +351,100 @@ namespace Player
                 _hasRan = false;
             }
             #endregion
-
-
         }
-        void OnGUI()
+
+        void DisplayBattleChoicePopup()
         {
-            //if (showToolTip)
-            //{
-            //    if (pickUpObj)
-            //    {
-            //        if (_forceControllerInput)
-            //        {
-            //            keyboardAttackText.SetActive(false);
-            //            keyboardPickUpText.SetActive(false);
-            //            if (!attackToolTip)
-            //            {
-            //                controllerAttackText.SetActive(false);
-            //                controllerPickUpText.SetActive(true);
-            //            }
-            //            else
-            //            {
-            //                controllerPickUpText.SetActive(false);
-            //                controllerAttackText.SetActive(true);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (_checkControllerInput)
-            //            {
-            //                if (!attackToolTip)
-            //                {
-            //                    keyboardAttackText.SetActive(false);
-            //                    keyboardPickUpText.SetActive(false);
-
-            //                    controllerAttackText.SetActive(false);
-            //                    controllerPickUpText.SetActive(true);
-            //                }
-            //                else
-            //                {
-            //                    keyboardAttackText.SetActive(false);
-            //                    keyboardPickUpText.SetActive(false);
-
-            //                    controllerPickUpText.SetActive(false);
-            //                    controllerAttackText.SetActive(true);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                if (!attackToolTip)
-            //                {
-            //                    controllerPickUpText.SetActive(false);
-            //                    controllerAttackText.SetActive(false);
-
-            //                    keyboardAttackText.SetActive(false);
-            //                    keyboardPickUpText.SetActive(true); //# Pickup text turns on
-            //                }
-            //                else
-            //                {
-            //                    controllerPickUpText.SetActive(false);
-            //                    controllerAttackText.SetActive(false);
-
-            //                    keyboardPickUpText.SetActive(false);
-            //                    keyboardAttackText.SetActive(true);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            if (_forceControllerInput) // If the player forced controller Icons to appear
+            {
+                // keyboardIcon.SetActive(false);
+                // controllerIcon.SetActive(true);
+                BattleSystem.instance.ShowBattleChoice(true);
+            }
+            else
+            {
+                if (_checkControllerInput) // If the player is using/changed to a controller during the game
+                {
+                    // keyboardIcon.SetActive(false);
+                    // controllerIcon.SetActive(true);
+                    BattleSystem.instance.ShowBattleChoice(true);
+                }
+                else // If it isn't anything above then they must be using keyboard - Since xbox doesn't work
+                {
+                    // keyboardIcon.SetActive(true);
+                    // controllerIcon.SetActive(false);
+                    BattleSystem.instance.ShowBattleChoice(true);
+                }
+            }
         }
+
+
+
+
+        // void OnGUI()
+        // {
+        //if (showToolTip)
+        //{
+        //    if (pickUpObj)
+        //    {
+        //        if (_forceControllerInput)
+        //        {
+        //            keyboardAttackText.SetActive(false);
+        //            keyboardPickUpText.SetActive(false);
+        //            if (!attackToolTip)
+        //            {
+        //                controllerAttackText.SetActive(false);
+        //                controllerPickUpText.SetActive(true);
+        //            }
+        //            else
+        //            {
+        //                controllerPickUpText.SetActive(false);
+        //                controllerAttackText.SetActive(true);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (_checkControllerInput)
+        //            {
+        //                if (!attackToolTip)
+        //                {
+        //                    keyboardAttackText.SetActive(false);
+        //                    keyboardPickUpText.SetActive(false);
+
+        //                    controllerAttackText.SetActive(false);
+        //                    controllerPickUpText.SetActive(true);
+        //                }
+        //                else
+        //                {
+        //                    keyboardAttackText.SetActive(false);
+        //                    keyboardPickUpText.SetActive(false);
+
+        //                    controllerPickUpText.SetActive(false);
+        //                    controllerAttackText.SetActive(true);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (!attackToolTip)
+        //                {
+        //                    controllerPickUpText.SetActive(false);
+        //                    controllerAttackText.SetActive(false);
+
+        //                    keyboardAttackText.SetActive(false);
+        //                    keyboardPickUpText.SetActive(true); //# Pickup text turns on
+        //                }
+        //                else
+        //                {
+        //                    controllerPickUpText.SetActive(false);
+        //                    controllerAttackText.SetActive(false);
+
+        //                    keyboardPickUpText.SetActive(false);
+        //                    keyboardAttackText.SetActive(true);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
+    // }
 }

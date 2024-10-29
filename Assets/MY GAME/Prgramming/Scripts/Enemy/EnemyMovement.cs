@@ -28,7 +28,7 @@ public class EnemyMovement : MonoBehaviour
     private void Awake()
     {
         _enemyType = GetComponent<EnemyType>();
-        _enemyName = _enemyType.enemy.enemyName;
+        _enemyName = _enemyType.enemyType.enemyName;
         Debug.Log(_enemyName);
         _enemy = GameObject.Find(_enemyName);
     }

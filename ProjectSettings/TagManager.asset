@@ -9,6 +9,7 @@ TagManager:
   - BehideCamera
   - Shrine
   - PickUpItem
+  - Enemy
   layers:
   - Default
   - TransparentFX

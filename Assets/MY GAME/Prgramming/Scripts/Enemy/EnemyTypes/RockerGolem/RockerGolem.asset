@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: RockerGolem
   description: Can break anything
-  artwork: {fileID: 0}
+  artwork: {fileID: 8400000, guid: 971146c5b379a8044a663f68e8542e9b, type: 2}
   damge: 0
   health: 0
