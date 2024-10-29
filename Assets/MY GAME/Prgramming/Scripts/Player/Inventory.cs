@@ -38,7 +38,7 @@ namespace Player
 
         void Update()
         {
-            if (GameManager.instance.state == GameStates.Play)
+            if (GameManager.instance.state == GameStates.PlayerTurn)
             {
                 if (!_inINV && Input.GetButtonDown("Inventory"))
                 {
@@ -120,7 +120,7 @@ namespace Player
         private void CheckState()
         {
             GameManager.instance.inINV = false;
-            GameManager.instance.OnPlay();
+            GameManager.instance.OnPlayerTurn();
         }
     }
 }

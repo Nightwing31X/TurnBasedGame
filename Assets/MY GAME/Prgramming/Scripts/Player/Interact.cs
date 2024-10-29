@@ -97,7 +97,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                             Debug.Log($"Hit Layer = {interactionLayer}");
+                            Debug.Log($"Player - Interaction layer; can click...");
                             _hasRan = true;
                         }
                     }
@@ -120,7 +120,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Enemy is in range to fight...");
+                            Debug.Log($"Player - Enemy is in range to fight!");
                             _hasRan = true;
                         }
                     }
@@ -138,7 +138,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Hit Layer = {wallLayer}");
+                            Debug.Log($"Player - Wall is infront.");
                             _hasRan = true;
                         }
                     }
@@ -165,7 +165,7 @@ namespace Player
             #endregion
 
 
-            # region Raycast for the Front side view)
+            # region Raycast for the Front side view
             if (_debug)
             {
                 // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
@@ -182,7 +182,8 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
+                            //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
+                            Debug.Log($"Player - Enemy is infront; can do range attacks");
                             _hasRan = true;
                         }
                     }
@@ -232,7 +233,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Hit Layer = {attackLayer}");
+                            Debug.Log($"Player - Enemy is on right side");
                             _hasRan = true;
                         }
                     }
@@ -279,7 +280,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Hit Layer = {attackLayer}");
+                            Debug.Log($"Player - Enemy is on left side");
                             _hasRan = true;
                         }
                     }
@@ -328,7 +329,7 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Hit Layer = {attackLayer}");
+                            Debug.Log($"Player - Enemy is on behide.");
                             _hasRan = true;
                         }
                     }

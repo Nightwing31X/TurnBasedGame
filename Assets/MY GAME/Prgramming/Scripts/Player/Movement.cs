@@ -10,8 +10,6 @@ namespace Player
     [AddComponentMenu("GameDev/Player/First Person Movement")]
     public class Movement : MonoBehaviour
     {
-        #region Newer version rotate the Player with buttons
-
         GameObject _player;
         Animator _playerAnim;
         [SerializeField] private float _rotationDirection = 90f;
@@ -38,7 +36,7 @@ namespace Player
 
         void Update()
         {
-            if (GameManager.instance.state == GameStates.Play)
+            if (GameManager.instance.state == GameStates.PlayerTurn)
             {
                 if (_playerAnim.speed == 0)
                 {
@@ -197,7 +195,5 @@ namespace Player
                 _facingBackward = false;
             }
         }
-
-        #endregion
     }
 }

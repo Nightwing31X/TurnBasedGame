@@ -9,7 +9,7 @@ namespace GameDev
     public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
-        public GameStates state = GameStates.Play;
+        public GameStates state = GameStates.PlayerTurn;
         public bool isPlayerDead = false;
         public bool inQuest = false;
         public bool inCutscene = false;
@@ -44,14 +44,18 @@ namespace GameDev
             {
                 CreditContainer.SetActive(false);
             }
-            OnPlay();
+            OnPlayerTurn();
         }
 
         public void CheckCurrentStat()
         {
-            if (state == GameStates.Play)
+            if (state == GameStates.PlayerTurn)
             {
-                OnPlay();
+                OnPlayerTurn();
+            }
+            if (state == GameStates.EnemyTurn)
+            {
+                OnEnemyTurn();
             }
             else if (state == GameStates.Pause)
             {
@@ -75,12 +79,19 @@ namespace GameDev
             }
         }
 
-        public void OnPlay()
+        public void OnPlayerTurn()
         {
             //Cursor.lockState = CursorLockMode.Locked;
             //Cursor.visible = true;
-            state = GameStates.Play;
-            currentGameState = "Play";
+            state = GameStates.PlayerTurn;
+            currentGameState = "PlayerTurn";
+        }
+        public void OnEnemyTurn()
+        {
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = true;
+            state = GameStates.EnemyTurn;
+            currentGameState = "EnemyTurn";
         }
         public void OnPause()
         {
@@ -177,6 +188,6 @@ namespace GameDev
     }
     public enum GameStates
     {
-        Play, Pause, Menu, Death, EndGame
+        PlayerTurn, EnemyTurn, Pause, Menu, Death, EndGame
     }
 }

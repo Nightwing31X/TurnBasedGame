@@ -99,7 +99,7 @@ namespace Player
             }
             else
             {
-                GameManager.instance.OnPlay();
+                GameManager.instance.OnPlayerTurn();
             }
         }
 

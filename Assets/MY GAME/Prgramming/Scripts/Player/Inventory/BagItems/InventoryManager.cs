@@ -86,7 +86,7 @@ namespace Interactions
             StartCoroutine(HidePromptChoice());
             Add(PickUpItemREF);
             Destroy(ItemOnGround);
-            GameManager.instance.OnPlay();
+            GameManager.instance.OnPlayerTurn();
         }
 
         IEnumerator HidePromptChoice()

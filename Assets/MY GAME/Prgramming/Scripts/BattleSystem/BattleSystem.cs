@@ -79,9 +79,21 @@ namespace TurnBase
         }
         IEnumerator SetupBattle()
         {
+            if (PlayerCharacterManager.Instance.male)
+            {
+                playerPrefab = GameObject.Find("MalePlayer");
+            }
+            else
+            {
+                playerPrefab = GameObject.Find("FemlePlayer");
+            }
+            GameObject player = Instantiate(playerPrefab);
             //GameObject player = Instantiate(playerPrefab, playerBattleStation);
-            //playerUnit = player.GetComponent<Unit>();
+            playerUnit = player.GetComponent<Unit>();
             //GameObject enemy = Instantiate(enemyPrefab, enemyBattleStation);
+            
+            
+            GameObject enemy = Instantiate(enemyPrefab);
             //enemyUnit = enemy.GetComponent<Unit>();
             dialogueText.text = $"{enemyUnit.unitDescription} {enemyUnit.unitName} {enemyUnit.unitAction}...";
             yield return new WaitForSeconds(2f);

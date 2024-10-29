@@ -20,6 +20,7 @@ public class ItemPickup : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+            gameObject.GetComponent<Animator>().enabled = false;
 
             if (_savePlayerData == null)
             {
@@ -44,6 +45,7 @@ public class ItemPickup : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+            gameObject.GetComponent<Animator>().enabled = false;
         }
     }
     void OnTriggerExit(Collider other)
@@ -51,6 +53,7 @@ public class ItemPickup : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             gameObject.GetComponent<MeshRenderer>().enabled = true;
+            gameObject.GetComponent<Animator>().enabled = true;
         }
     }
 
@@ -65,7 +68,6 @@ public class ItemPickup : MonoBehaviour
         InventoryManager.Instance.promptChoice.SetActive(true);
         InventoryManager.Instance.promptChoice.GetComponentInChildren<Animator>().SetBool("Show", true);
         InventoryManager.Instance.promptChoice.GetComponentInChildren<Animator>().SetBool("Hide", false);
-
 
 
         InventoryManager.Instance.PickUpItemREF = itemREF;
