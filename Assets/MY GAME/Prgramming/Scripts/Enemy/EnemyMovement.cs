@@ -41,12 +41,14 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        if (_enemyAnim.speed == 0)
+        {
+            _enemyAnim.speed = 1;
+        }
+
         if (GameManager.instance.state == GameStates.EnemyTurn)
         {
-            if (_enemyAnim.speed == 0)
-            {
-                _enemyAnim.speed = 1;
-            }
+
             _wallInFront = GetComponent<EnemyInteract>().wallHit;
             _enemyInFront = GetComponent<EnemyInteract>().playerFront;
 
@@ -70,11 +72,8 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            _enemyAnim.speed = 0;
-        }
     }
+
 
     IEnumerator CheckWalls()
     {

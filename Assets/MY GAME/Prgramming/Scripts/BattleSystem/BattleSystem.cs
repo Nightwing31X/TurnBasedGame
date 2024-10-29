@@ -38,14 +38,25 @@ namespace TurnBase
             }
         }
 
+        public void StartBattle()
+        {
+            Debug.Log("BattleStarted...");
+            StartCoroutine(SetupBattle());
+        }
 
-        //private void Start()
+        //public void OnPlayerTurn()
         //{
-        //    BattleSystem = BattleStates.NotInBattle;
-        //    //StartCoroutine(SetupBattle());
-        //    //playerHUD.SetHUD(playerUnit);
-        //    //enemyHUD.SetHUD(enemyUnit);
+        //    battleState = BattleStates.PlayerTurn;
+        //    Debug.Log("Play's turn to choose actions in battle");
         //}
+
+        //public void OnEnemyTurn()
+        //{
+        //    battleState = BattleStates.EnemyTurn;
+        //    Debug.Log("Enemy's turn to choose actions in battle");
+        //}
+
+
         void PlayerTurn()
         {
             dialogueText.text = "Choose Action..";
@@ -144,11 +155,6 @@ namespace TurnBase
                 PlayerTurn();
             }
         }
-
-
-
-
-
     }
     public enum BattleStates
     {
