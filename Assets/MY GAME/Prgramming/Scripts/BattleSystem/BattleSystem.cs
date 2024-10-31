@@ -26,6 +26,7 @@ namespace TurnBase
         public Text dialogueText;
 
         public bool meleeRange;
+        public bool playerPickedNo;
 
         public GameObject enemy;
 
@@ -57,11 +58,14 @@ namespace TurnBase
             Debug.Log("Not in a Battle...");
             battleState = BattleStates.NotInBattle;
             // enemy = enemyPrefab;
-            enemy = GameObject.FindWithTag("Enemy");
+            if (enemy == null)
+            {
+                enemy = GameObject.FindWithTag("Enemy");             
+            }
         }
         public void BattleChoice()
         {
-            Debug.Log("Battle Choice; means popup should be here for if its the player's turn...");
+            // Debug.Log("Battle Choice; means popup should be here for if its the player's turn...");
             battleState = BattleStates.BattleChoice;
         }
 
@@ -107,6 +111,7 @@ namespace TurnBase
         }
         public void HideBattleChoice()
         {
+            playerPickedNo = true;
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
             // BattleChoicePopupContainer.SetActive(true);
@@ -114,7 +119,7 @@ namespace TurnBase
         }
 
 
-        public void YesBattleChoice()
+        public void YesBattleChoicePlayer()
         {
             if (meleeRange)
             {
@@ -127,10 +132,10 @@ namespace TurnBase
         }
 
 
-        public void NoBattleChoice()
+        public void NoBattleChoicePlayer()
         {
             HideBattleChoice();
-            Debug.Log("Person choose not to fight...");
+            Debug.Log("Player choose not to fight...");
         }
 
 
@@ -174,7 +179,7 @@ namespace TurnBase
             }
             else
             {
-                playerPrefab = GameObject.Find("FemlePlayer");
+                playerPrefab = GameObject.Find("FemalePlayer");
             }
             GameObject player = Instantiate(playerPrefab);
             //GameObject player = Instantiate(playerPrefab, playerBattleStation);

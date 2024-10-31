@@ -125,7 +125,6 @@ public class EnemyInteract : MonoBehaviour
         {
             wallHit = false;
             playerFront = false;
-            _hasRan = false;
         }
         #endregion
 
@@ -148,7 +147,6 @@ public class EnemyInteract : MonoBehaviour
                         _hasRan = true;
                     }
                 }
-
                 playerFront = true;
                 playerRight = false;
                 enemyLeft = false;
@@ -163,7 +161,6 @@ public class EnemyInteract : MonoBehaviour
             playerFront = false;
             //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //OnGUI(); // Displays out ToolTip
-            _hasRan = false;
         }
         #endregion
         # region Raycast for the Right side view
@@ -206,7 +203,6 @@ public class EnemyInteract : MonoBehaviour
             playerRight = false;
             //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //OnGUI(); // Displays out ToolTip
-            _hasRan = false;
         }
         #endregion
         # region Raycast for the Left side view
@@ -248,7 +244,6 @@ public class EnemyInteract : MonoBehaviour
             enemyLeft = false;
             //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //OnGUI(); // Displays out ToolTip
-            _hasRan = false;
         }
         #endregion
         # region Raycast for the Behide side view
@@ -291,7 +286,6 @@ public class EnemyInteract : MonoBehaviour
             enemyBack = false;
             //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //OnGUI(); // Displays out ToolTip
-            _hasRan = false;
         }
         #endregion
 

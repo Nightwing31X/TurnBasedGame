@@ -3,6 +3,7 @@ using Interactions;
 using Player;
 using System.Collections;
 using System.Collections.Generic;
+using TurnBase;
 using UnityEngine;
 
 namespace Player
@@ -21,6 +22,7 @@ namespace Player
         [SerializeField] private bool _facingBackward;
         [SerializeField] private bool _wallInFront;
         [SerializeField] private bool _enemyInFront;
+        [SerializeField] private bool _enemyInFrontRange;
         // [SerializeField] private Transform _target;
         [SerializeField] private Vector3 _target;
         [SerializeField] private float _speed = 1;
@@ -44,6 +46,8 @@ namespace Player
                 }
                 _wallInFront = GetComponent<Interact>().wallHit;
                 _enemyInFront = GetComponent<Interact>().enemyFront;
+                _enemyInFrontRange = GetComponent<Interact>().enemyFrontRange;
+
 
                 if (isMoving)
                 {
@@ -57,10 +61,13 @@ namespace Player
                         // Snap the player to the target position so things stay even 
                         transform.position = _target;
                         // Object has reached the _target
-                        Debug.Log("_target reached!");
+                        Debug.Log("target reached!");
+
                         _playerAnim.SetBool("Idle", true);
                         _playerAnim.SetBool("Walk", false);
+
                         isMoving = false;
+                        
                         StartCoroutine(CheckWalls());
                     }
                 }
@@ -97,7 +104,14 @@ namespace Player
                     }
                     else
                     {
-                        Debug.Log("Enemy is in front... I can attack or run away...");
+                        if (_enemyInFrontRange)
+                        {
+                            isMoving = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Enemy is in right in-front... I cannot move...");
+                        }
                     }
                 }
                 else

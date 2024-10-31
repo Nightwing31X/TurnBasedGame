@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b5399863b6e797448bce3e8c397b3fe, type: 3}
-  m_Name: ShieldYellow
+  m_Script: {fileID: 11500000, guid: 2542af88d81c41842919be4a8bf07f0d, type: 3}
+  m_Name: Rocker Golem
   m_EditorClassIdentifier: 
-  name: Shield Yellow
-  description: This shield is only for the mighty hero...
-  artwork: {fileID: 8400000, guid: e1a6b4c268efa6b47a1630c66c433dc8, type: 2}
+  enemyName: Rocker Golem
+  description: Can break anything
+  artwork: {fileID: 8400000, guid: 971146c5b379a8044a663f68e8542e9b, type: 2}
+  damge: 0
+  health: 0

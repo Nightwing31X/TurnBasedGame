@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 8409476539417689054}
   - component: {fileID: 5521618635872108256}
   m_Layer: 7
-  m_Name: RockerGolem
+  m_Name: Rocker Golem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

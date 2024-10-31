@@ -15,6 +15,7 @@ public class ItemPickup : MonoBehaviour
     SavePlayerData _savePlayerData;
 
 
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -63,7 +64,6 @@ public class ItemPickup : MonoBehaviour
         InventoryManager.Instance.NameItemDetailText.text = item.name;
         InventoryManager.Instance.DescriptionItemDetailText.text = item.description;
         InventoryManager.Instance.IconItemDetail.texture = item.artwork;
-
 
         InventoryManager.Instance.promptChoice.SetActive(true);
         InventoryManager.Instance.promptChoice.GetComponentInChildren<Animator>().SetBool("Show", true);

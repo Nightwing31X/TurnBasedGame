@@ -4,6 +4,7 @@ using TMPro;
 using TurnBase;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Player
 {
@@ -25,7 +26,9 @@ namespace Player
 
         public bool wallHit = false;
         public bool enemyFront = false;
-        public bool meleeDistance= false;
+        public bool enemyFrontRange = false;
+        public bool meleeDistance = false;
+        [SerializeField] private bool _playerPick = false;
         public bool enemyRight = false;
         public bool enemyLeft = false;
         public bool enemyBack = false;
@@ -122,14 +125,21 @@ namespace Player
                     {
                         if (!_hasRan)
                         {
-                            Debug.Log($"Player - Enemy is in range to fight!");
+                            Debug.Log($"Player - Enemy is in melee distance to fight!");
                             _hasRan = true;
                         }
                     }
                     enemyFront = true;
+                    enemyFrontRange = false;
                     wallHit = false;
+                    meleeDistance = true;
+                    BattleSystem.instance.meleeRange = meleeDistance;
+                    _playerPick = BattleSystem.instance.playerPickedNo;
                     // showToolTip = true;
-                    DisplayBattleChoicePopup();
+                    if (!_playerPick)
+                    {
+                        DisplayBattleChoicePopup();
+                    }
                 }
                 # endregion
                 # region Detect the wall layer (Wall Layer)
@@ -145,6 +155,11 @@ namespace Player
                     }
                     wallHit = true;
                     enemyFront = false;
+                    enemyFrontRange = false;
+                    meleeDistance = false;
+                    BattleSystem.instance.meleeRange = meleeDistance;
+                    _playerPick = false;
+                    BattleSystem.instance.playerPickedNo = _playerPick;
                     // showToolTip = true;
                     // attackToolTip = false;
                     // OnGUI(); // Displays out ToolTip
@@ -153,9 +168,13 @@ namespace Player
             }
             else
             {
-                wallHit = false;
                 enemyFront = false;
-                _hasRan = false;
+                meleeDistance = false;
+                BattleSystem.instance.meleeRange = meleeDistance;
+                _playerPick = false;
+                BattleSystem.instance.playerPickedNo = _playerPick;
+
+                wallHit = false;
             }
             #endregion
 
@@ -163,46 +182,49 @@ namespace Player
             # region Raycast for the Front side view
             if (_debug)
             {
-                // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
-                Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.magenta); // Right side
-                // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
-                // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
+                Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.magenta); // Forward side
             }
 
             if (Physics.Raycast(interactRayForward, out hitInfoForward, attackRadiusDistance, Layers /*This part here is the layer its optional*/ ))
             {
-                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
+                if (!enemyFront)
                 {
-                    if (_debug)
+                    if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                     {
-                        if (!_hasRan)
+                        if (_debug)
                         {
-                            //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
-                            Debug.Log($"Player - Enemy is in-front; can do range attacks");
-                            _hasRan = true;
+                            if (!_hasRan)
+                            {
+                                //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
+                                Debug.Log($"Player - Enemy is in-front; can do range attacks");
+                                _hasRan = true;
+                            }
+                        }
+
+                        enemyFrontRange = true;
+                        meleeDistance = false;
+                        BattleSystem.instance.meleeRange = meleeDistance;
+                        _playerPick = BattleSystem.instance.playerPickedNo;
+                        enemyRight = false;
+                        enemyLeft = false;
+                        enemyBack = false;
+                        wallHit = false;
+                        if (!_playerPick)
+                        {
+                            DisplayBattleChoicePopup();
                         }
                     }
-
-                    enemyFront = true;
-                    meleeDistance = false;
-                    BattleSystem.instance.meleeRange = meleeDistance;
-                    enemyRight = false;
-                    enemyLeft = false;
-                    enemyBack = false;
-                    wallHit = false;
-                    DisplayBattleChoicePopup();
                 }
             }
             else
             {
-                enemyFront = false;
+                enemyFrontRange = false;
                 // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
                 //controllerPickUpText.SetActive(false);
                 //controllerAttackText.SetActive(false);
-                _hasRan = false;
             }
             #endregion
             # region Raycast for the Right side view
@@ -233,6 +255,7 @@ namespace Player
                         }
                     }
                     enemyFront = false;
+                    enemyFrontRange = false;
                     enemyRight = true;
                     enemyLeft = false;
                     enemyBack = false;
@@ -244,25 +267,25 @@ namespace Player
             else
             {
                 enemyRight = false;
+                // meleeDistance = false;
+                // BattleSystem.instance.meleeRange = meleeDistance;
+                // _playerPick = false;
+                // BattleSystem.instance.playerPickedNo = _playerPick;
                 // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off
                 //keyboardAttackText.SetActive(false);
                 //controllerPickUpText.SetActive(false);
                 //controllerAttackText.SetActive(false);
-                _hasRan = false;
             }
             #endregion
             # region Raycast for the Left side view
             Ray interactRayLeft;
-            // this ray shoots forward from the center of the camera (Right)
+            // this ray shoots forward from the center of the camera (Left)
             interactRayLeft = _leftCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
             if (_debug)
             {
-                // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
-                Debug.DrawRay(interactRayLeft.origin, -transform.right * attackRadiusDistance, Color.magenta); // Right side
-                // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
-                // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
+                Debug.DrawRay(interactRayLeft.origin, -transform.right * attackRadiusDistance, Color.magenta); // Left side
             }
             // create hit info (this holds the info for the stuff we interact with) 
             RaycastHit hitInfoLeft;
@@ -281,6 +304,7 @@ namespace Player
                     }
 
                     enemyFront = false;
+                    enemyFrontRange = false;
                     enemyRight = false;
                     enemyLeft = true;
                     enemyBack = false;
@@ -299,19 +323,15 @@ namespace Player
                 //keyboardAttackText.SetActive(false);
                 //controllerPickUpText.SetActive(false);
                 //controllerAttackText.SetActive(false);
-                _hasRan = false;
             }
             #endregion
             # region Raycast for the Behide side view
             Ray interactRayBehide;
-            // this ray shoots forward from the center of the camera (Right)
+            // this ray shoots forward from the center of the camera (Behide)
             interactRayBehide = _behideCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
             if (_debug)
             {
-                // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
-                Debug.DrawRay(interactRayBehide.origin, -transform.forward * attackRadiusDistance, Color.magenta); // Right side
-                // Debug.DrawRay(interactRayRight.origin, -transform.forward * distance, Color.green); // -transform.forward = Backward side
-                // Debug.DrawRay(interactRayRight.origin, -transform.right * distance, Color.green); //-transform.right = Left side
+                Debug.DrawRay(interactRayBehide.origin, -transform.forward * attackRadiusDistance, Color.magenta); // Behide side
             }
             // create hit info (this holds the info for the stuff we interact with) 
             RaycastHit hitInfoBehide;
@@ -330,6 +350,7 @@ namespace Player
                     }
 
                     enemyFront = false;
+                    enemyFrontRange = false;
                     enemyRight = false;
                     enemyLeft = false;
                     enemyBack = true;
@@ -348,7 +369,6 @@ namespace Player
                 //keyboardAttackText.SetActive(false);
                 //controllerPickUpText.SetActive(false);
                 //controllerAttackText.SetActive(false);
-                _hasRan = false;
             }
             #endregion
         }
