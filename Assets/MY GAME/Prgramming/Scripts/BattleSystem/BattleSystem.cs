@@ -11,24 +11,28 @@ namespace TurnBase
         public static BattleSystem instance;
         public BattleStates battleState = BattleStates.NotInBattle;
 
-
-        [Header("Player")]
-        public GameObject playerPrefab;
-        //public Transform playerBattleStation;
-        public Unit playerUnit;
-        public BattleHUD playerHUD;
-        [Header("Enemy")]
-        // public GameObject enemyPrefab;
-        //public Transform enemyBattleStation;
-        public Unit enemyUnit;
-        public BattleHUD enemyHUD;
-
         public Text dialogueText;
 
         public bool meleeRange;
-        public bool playerPickedNo;
+        public bool playerPicked;
+        public bool playerChoice;
 
+        [Header("Player")]
+        //public GameObject playerPrefab;
+        [SerializeField] private GameObject battleCameraMale;
+        [SerializeField] private GameObject battleCameraFemale;
+        [SerializeField] private GameObject playerHUDContainer;
+        [SerializeField] private GameObject BattleHUDContainer;
+        [SerializeField] BattleHUD playerHUD;
+        //public Transform playerBattleStation;
+        public Unit playerUnit;
+        [Header("Enemy")]
+        // public GameObject enemyPrefab;
+        [SerializeField] private GameObject battleCameraEnemy;
         public GameObject enemy;
+        //public Transform enemyBattleStation;
+        public Unit enemyUnit;
+        public BattleHUD enemyHUD;
 
         [Header("Object for which is being displayed in the BattleChoice")]
         public GameObject BattleChoicePopupContainer;
@@ -55,6 +59,7 @@ namespace TurnBase
 
         public void NotInBattle()
         {
+            BattleHUDContainer.SetActive(false);
             Debug.Log("Not in a Battle...");
             battleState = BattleStates.NotInBattle;
             // enemy = enemyPrefab;
@@ -92,6 +97,7 @@ namespace TurnBase
         {
             if (fromWho) // Means it is from the players interact.cs (True) 
             {
+                playerChoice = fromWho;
                 NamePersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.enemyName;
                 DescriptionPersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.description;
                 IconPersonDetail.texture = enemy.GetComponent<EnemyType>().enemyType.artwork;
@@ -111,7 +117,7 @@ namespace TurnBase
         }
         public void HideBattleChoice()
         {
-            playerPickedNo = true;
+            playerPicked = true;
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
             // BattleChoicePopupContainer.SetActive(true);
@@ -121,14 +127,14 @@ namespace TurnBase
 
         public void YesBattleChoicePlayer()
         {
-            if (meleeRange)
-            {
-                Debug.Log("Display only Melee Attacks...");
-            }
-            else
-            {
-                Debug.Log("Display only Range Attacks...");
-            }
+            playerPicked = true;
+            BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
+            BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
+            playerHUDContainer.SetActive(false);
+            BattleHUDContainer.SetActive(true);
+            BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
+            BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", true);
+            StartBattle();
         }
 
 
@@ -175,23 +181,42 @@ namespace TurnBase
         {
             if (PlayerCharacterManager.Instance.male)
             {
-                playerPrefab = GameObject.Find("MalePlayer");
+
+                //battleCameraMale = GameObject.Find("MalePlayerBattleCamera");
+                if (playerChoice)
+                {
+                    Camera.main.gameObject.SetActive(false);
+                    battleCameraMale.SetActive(true);
+                    battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
+                }
+
             }
             else
             {
-                playerPrefab = GameObject.Find("FemalePlayer");
+                //battleCameraFemale = GameObject.Find("FemalePlayerBattleCamera");
+                if (playerChoice)
+                {
+                    Camera.main.gameObject.SetActive(false);
+                    battleCameraFemale.SetActive(true);
+                    battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
+                }
             }
-            GameObject player = Instantiate(playerPrefab);
+
+
+            battleCameraEnemy = GameObject.Find("EnemyBattleCamera");
+
+            //GameObject player = Instantiate(playerPrefab);
             //GameObject player = Instantiate(playerPrefab, playerBattleStation);
             // playerUnit = player.GetComponent<Unit>();
             //GameObject enemy = Instantiate(enemyPrefab, enemyBattleStation);
 
             // enemy = Instantiate(enemyPrefab);
             // enemyUnit = enemy.GetComponent<Unit>();
-            dialogueText.text = $"{enemyUnit.unitDescription} {enemyUnit.unitName} {enemyUnit.unitAction}...";
+            //dialogueText.text = $"{enemyUnit.unitDescription} {enemyUnit.unitName} {enemyUnit.unitAction}...";
             yield return new WaitForSeconds(2f);
-            battleState = BattleStates.PlayerTurn;
-            PlayerTurn();
+            Debug.Log("Animation should play...");
+            //battleState = BattleStates.PlayerTurn;
+            //PlayerTurn();
         }
         IEnumerator PlayerAttack()
         {

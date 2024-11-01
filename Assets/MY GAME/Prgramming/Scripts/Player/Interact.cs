@@ -16,6 +16,7 @@ namespace Player
         public string interactionLayer;
         public string attackLayer;
         public string wallLayer;
+        public string itemLayer;
         [Tooltip("Toggle on to print console messages from this component.")]
         [SerializeField] private bool _debug;
         [SerializeField] private bool _hasRan;
@@ -25,6 +26,7 @@ namespace Player
         [SerializeField, Range(0, 100)] private float attackRadiusDistance = 4f;
 
         public bool wallHit = false;
+        public bool itemHit = false;
         public bool enemyFront = false;
         public bool enemyFrontRange = false;
         public bool meleeDistance = false;
@@ -96,27 +98,27 @@ namespace Player
                     Debug.DrawRay(transform.position, transform.forward * distance, Color.yellow, 0.5f);
                 }
                 # region Detect the interact layer (Interaction Layer)
-                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(interactionLayer))
-                {
-                    if (_debug)
-                    {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - Interaction layer; can click...");
-                            _hasRan = true;
-                        }
-                    }
-                    // showToolTip = true;
-                    // attackToolTip = false;
-                    // OnGUI(); // Displays out ToolTip
-                    if (Input.GetButtonDown("Interaction"))
-                    {
-                        if (hitInfoForward.collider.TryGetComponent(out IInteractable interactableObject))
-                        {
-                            interactableObject.Interact();
-                        }
-                    }
-                }
+                //if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(interactionLayer))
+                //{
+                //    if (_debug)
+                //    {
+                //        if (!_hasRan)
+                //        {
+                //            Debug.Log($"Player - Interaction layer; can click...");
+                //            _hasRan = true;
+                //        }
+                //    }
+                //    // showToolTip = true;
+                //    // attackToolTip = false;
+                //    // OnGUI(); // Displays out ToolTip
+                //    if (Input.GetButtonDown("Interaction"))
+                //    {
+                //        if (hitInfoForward.collider.TryGetComponent(out IInteractable interactableObject))
+                //        {
+                //            interactableObject.Interact();
+                //        }
+                //    }
+                //}
                 # endregion
                 # region Detect the attack layer (Enemy Layer) - Forward Player view
                 if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
@@ -134,7 +136,7 @@ namespace Player
                     wallHit = false;
                     meleeDistance = true;
                     BattleSystem.instance.meleeRange = meleeDistance;
-                    _playerPick = BattleSystem.instance.playerPickedNo;
+                    _playerPick = BattleSystem.instance.playerPicked;
                     // showToolTip = true;
                     if (!_playerPick)
                     {
@@ -154,12 +156,37 @@ namespace Player
                         }
                     }
                     wallHit = true;
+                    itemHit = false;
                     enemyFront = false;
                     enemyFrontRange = false;
                     meleeDistance = false;
                     BattleSystem.instance.meleeRange = meleeDistance;
                     _playerPick = false;
-                    BattleSystem.instance.playerPickedNo = _playerPick;
+                    BattleSystem.instance.playerPicked = _playerPick;
+                    // showToolTip = true;
+                    // attackToolTip = false;
+                    // OnGUI(); // Displays out ToolTip
+                }
+                # endregion
+                # region Detect the item layer (Item Layer) - So I can remove the enemy front detection.
+                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
+                {
+                    if (_debug)
+                    {
+                        if (!_hasRan)
+                        {
+                            Debug.Log($"Player - item is in-front.");
+                            _hasRan = true;
+                        }
+                    }
+                    itemHit = true;
+                    wallHit = false;
+                    enemyFront = false;
+                    enemyFrontRange = false;
+                    meleeDistance = false;
+                    BattleSystem.instance.meleeRange = meleeDistance;
+                    _playerPick = false;
+                    BattleSystem.instance.playerPicked = _playerPick;
                     // showToolTip = true;
                     // attackToolTip = false;
                     // OnGUI(); // Displays out ToolTip
@@ -172,9 +199,10 @@ namespace Player
                 meleeDistance = false;
                 BattleSystem.instance.meleeRange = meleeDistance;
                 _playerPick = false;
-                BattleSystem.instance.playerPickedNo = _playerPick;
+                BattleSystem.instance.playerPicked = _playerPick;
 
                 wallHit = false;
+                itemHit = false;
             }
             #endregion
 
@@ -204,7 +232,7 @@ namespace Player
                         enemyFrontRange = true;
                         meleeDistance = false;
                         BattleSystem.instance.meleeRange = meleeDistance;
-                        _playerPick = BattleSystem.instance.playerPickedNo;
+                        _playerPick = BattleSystem.instance.playerPicked;
                         enemyRight = false;
                         enemyLeft = false;
                         enemyBack = false;
