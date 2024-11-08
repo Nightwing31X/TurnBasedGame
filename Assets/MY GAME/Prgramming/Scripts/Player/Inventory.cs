@@ -108,7 +108,7 @@ namespace Player
             menuINV.transform.Find("BagObject").GetComponent<Animator>().SetBool("BagObjectOpen", false);
             menuINV.transform.Find("PlayerINV").GetComponent<Animator>().SetBool("PlayerINVOpen", false);
             menuINV.transform.Find("PlayerInfo").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
             _inINV = false;
             menuINV.SetActive(_inINV);
             playerHUD.SetActive(true);

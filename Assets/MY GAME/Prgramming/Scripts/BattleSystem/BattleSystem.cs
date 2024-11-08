@@ -135,6 +135,14 @@ namespace TurnBase
             BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
             BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", true);
             StartBattle();
+            if (meleeRange)
+            {
+                Debug.Log("Player is in melee range");
+            }
+            else
+            {
+                Debug.Log("Player is in Range distance");
+            }
         }
 
 
@@ -181,21 +189,26 @@ namespace TurnBase
         {
             if (PlayerCharacterManager.Instance.male)
             {
-
-                //battleCameraMale = GameObject.Find("MalePlayerBattleCamera");
+                Debug.Log("Should be male");
                 if (playerChoice)
                 {
+                    playerUnit = GameObject.Find("MalePlayer").GetComponent<Unit>();
+                    playerUnit.SetUpDataForBattle();
+                    playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
+                    playerHUD.SetHUD(playerUnit);
                     Camera.main.gameObject.SetActive(false);
                     battleCameraMale.SetActive(true);
                     battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
+                    battleState = BattleStates.PlayerTurn;
                 }
-
             }
             else
             {
-                //battleCameraFemale = GameObject.Find("FemalePlayerBattleCamera");
                 if (playerChoice)
                 {
+                    playerUnit = GameObject.Find("FemalePlayer").GetComponent<Unit>();
+                    playerUnit.SetUpDataForBattle();
+                    playerHUD.SetHUD(playerUnit);
                     Camera.main.gameObject.SetActive(false);
                     battleCameraFemale.SetActive(true);
                     battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
@@ -220,20 +233,26 @@ namespace TurnBase
         }
         IEnumerator PlayerAttack()
         {
-            bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
-            enemyHUD.SetHealth(enemyUnit);
-            dialogueText.text = $"{playerUnit.unitName} attacked {enemyUnit.unitName}";
+            if (battleState == BattleStates.PlayerTurn)
+            {
+                Debug.Log("Player has choosen to attack");
+            }
             yield return new WaitForSeconds(2f);
-            if (isDead)
-            {
-                battleState = BattleStates.Win;
-                EndBattle();
-            }
-            else
-            {
-                battleState = BattleStates.EnemyTurn;
-                StartCoroutine(EnemyTurn());
-            }
+            Debug.Log("Player's turn must end after this...");
+            //bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
+            //enemyHUD.SetHealth(enemyUnit);
+            //dialogueText.text = $"{playerUnit.unitName} attacked {enemyUnit.unitName}";
+            //yield return new WaitForSeconds(2f);
+            //if (isDead)
+            //{
+            //    battleState = BattleStates.Win;
+            //    EndBattle();
+            //}
+            //else
+            //{
+            //    battleState = BattleStates.EnemyTurn;
+            //    StartCoroutine(EnemyTurn());
+            //}
         }
         IEnumerator PlayerHeal()
         {

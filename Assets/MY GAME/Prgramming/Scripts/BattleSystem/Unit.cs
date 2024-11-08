@@ -9,7 +9,8 @@ namespace TurnBase
 {
     public class Unit : MonoBehaviour
     {
-        public RenderTexture unitIcon;
+        public SavePlayerData _playerData;
+
         public string unitName;
         public string unitDescription;
         public string unitAction;
@@ -19,13 +20,19 @@ namespace TurnBase
         public float currentHealth;
 
 
-        public SavePlayerData _playerData;
 
 
-        private void Awake()
+        private void Start()
+        {
+            _playerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
+        }
+
+        public void SetUpDataForBattle()
         {
             unitName = _playerData.usernameREF;
             unitLevel = _playerData.levelREF;
+            maxHealth = _playerData.maxHealthREF;
+            currentHealth = _playerData.currentHealthREF;
         }
 
         // When durring TakeDamge pass a damge value in for calculations

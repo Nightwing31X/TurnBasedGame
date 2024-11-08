@@ -196,10 +196,6 @@ namespace Player
             else
             {
                 enemyFront = false;
-                meleeDistance = false;
-                BattleSystem.instance.meleeRange = meleeDistance;
-                _playerPick = false;
-                BattleSystem.instance.playerPicked = _playerPick;
 
                 wallHit = false;
                 itemHit = false;
@@ -207,7 +203,7 @@ namespace Player
             #endregion
 
 
-            # region Raycast for the Front side view
+            # region Raycast for the Front side view - Range Attack
             if (_debug)
             {
                 Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.magenta); // Forward side
@@ -247,6 +243,10 @@ namespace Player
             else
             {
                 enemyFrontRange = false;
+                meleeDistance = false;
+                BattleSystem.instance.meleeRange = meleeDistance;
+                _playerPick = false;
+                BattleSystem.instance.playerPicked = _playerPick;
                 // showToolTip = false;
                 // attackToolTip = false;
                 //keyboardPickUpText.SetActive(false); //# Pickup text turns off

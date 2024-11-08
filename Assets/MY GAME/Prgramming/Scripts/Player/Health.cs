@@ -11,13 +11,11 @@ public class Health : MonoBehaviour
 
     public SavePlayerData _playerData;
 
-    public int maxHealth;
-    public int currentHealth;
+    public float maxHealth;
+    public float currentHealth;
 
     [SerializeField] private Image _playHealthBar;
     [SerializeField] private Text _playHealthText;
-    [SerializeField] private Text _attackHealthText;
-    [SerializeField] private Image _attackHealthBar;
 
     private void Awake()
     {
@@ -41,10 +39,7 @@ public class Health : MonoBehaviour
         maxHealth = _playerData.maxHealthREF;
         currentHealth = _playerData.currentHealthREF;
 
-        if (GameManager.instance.state == GameStates.Menu)
-        { 
-            _playHealthText.text = $"{currentHealth.ToString()}/{maxHealth.ToString()}";
-            _playHealthBar.fillAmount = Mathf.Clamp01(currentHealth/maxHealth);  
-        }
+        _playHealthText.text = $"{currentHealth}/{maxHealth}";
+        _playHealthBar.fillAmount = Mathf.Clamp01(currentHealth/maxHealth);  
     }
 }
