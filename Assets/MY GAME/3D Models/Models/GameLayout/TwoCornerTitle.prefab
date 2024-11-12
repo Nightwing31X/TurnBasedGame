@@ -12,9 +12,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemSpawns (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 268386374847047380, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 732489670902582877, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 732489670902582877, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1002939453916854393, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -39,6 +47,10 @@ PrefabInstance:
     - target: {fileID: 2649850738532784295, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649850738532784295, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3446177228980309769, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
@@ -67,6 +79,10 @@ PrefabInstance:
     - target: {fileID: 5211054482339236626, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5211054482339236626, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5759252591705598657, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -103,6 +119,10 @@ PrefabInstance:
     - target: {fileID: 6876933888369796077, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: Tile (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901786712905595322, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6944591545645734853, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -191,6 +211,10 @@ PrefabInstance:
     - target: {fileID: 9184701053768255569, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9184701053768255569, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

@@ -114,6 +114,7 @@ namespace TurnBase
 
 
             BattleChoice();
+            //battleState = BattleStates.BattleChoice;
         }
         public void HideBattleChoice()
         {
@@ -145,6 +146,27 @@ namespace TurnBase
             }
         }
 
+        public void FleeBattle()
+        {
+            EndBattle();
+            playerHUDContainer.SetActive(true);
+            BattleHUDContainer.SetActive(false);
+            battleState = BattleStates.NotInBattle;
+            Camera.main.gameObject.SetActive(true);
+            if (PlayerCharacterManager.Instance.male)
+            {
+                battleCameraMale.SetActive(false);
+            }
+            else
+            {
+                battleCameraFemale.SetActive(false);
+            }
+
+            //BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
+            //BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", true);
+
+        }
+
 
         public void NoBattleChoicePlayer()
         {
@@ -174,6 +196,14 @@ namespace TurnBase
             }
             StartCoroutine(PlayerHeal());
         }
+        public void OnFlee()
+        {
+            if (battleState != BattleStates.PlayerTurn)
+            { 
+                return;
+            }
+            StartCoroutine(PlayerFlee());
+        }
         void EndBattle()
         {
             if (battleState == BattleStates.Win)
@@ -183,6 +213,10 @@ namespace TurnBase
             else if (battleState == BattleStates.Lose)
             {
                 dialogueText.text = $"You Lost the battle and were defated by {enemyUnit.unitDescription} {enemyUnit.unitName}";
+            }
+            else 
+            {
+                Debug.Log("Fleed the battle...");
             }
         }
         IEnumerator SetupBattle()
@@ -237,6 +271,7 @@ namespace TurnBase
             {
                 Debug.Log("Player has choosen to attack");
             }
+            dialogueText.text = $"{playerUnit.unitName} attacks {NamePersonDetailText.text}";
             yield return new WaitForSeconds(2f);
             Debug.Log("Player's turn must end after this...");
             //bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
@@ -254,14 +289,23 @@ namespace TurnBase
             //    StartCoroutine(EnemyTurn());
             //}
         }
+        IEnumerator PlayerFlee()
+        {
+            Debug.Log("Undo the camera");
+            FleeBattle();
+            yield return new WaitForSeconds(2f);
+            Debug.Log("Back to normal game - Enemey's turn - It costs 3 action points to leave...");
+        }
+
         IEnumerator PlayerHeal()
         {
             playerUnit.Heal(2);
             playerHUD.SetHealth(playerUnit);
             dialogueText.text = $"{playerUnit.unitName} feels stronger!";
             yield return new WaitForSeconds(2f);
-            battleState = BattleStates.EnemyTurn;
-            StartCoroutine(EnemyTurn());
+            Debug.Log("Enemy's Turn now...");
+            //battleState = BattleStates.EnemyTurn;
+            //StartCoroutine(EnemyTurn());
         }
         IEnumerator EnemyTurn()
         {

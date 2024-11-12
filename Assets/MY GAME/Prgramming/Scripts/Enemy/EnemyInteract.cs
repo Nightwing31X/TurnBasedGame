@@ -1,3 +1,4 @@
+using GameDev;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -42,6 +43,15 @@ public class EnemyInteract : MonoBehaviour
     {
         //_forceControllerInput = InputHandler.instance.forceController;
         //_checkControllerInput = InputHandler.instance.onController;
+        if (GameManager.instance.state == GameStates.Pause)
+        {
+            this.GetComponent<Animator>().enabled = false;
+        }
+        else
+        {
+            this.GetComponent<Animator>().enabled = true;
+        }
+
 
         #region Raycast for the Forward view
         // create a ray (a Ray is ?? a beam, line that comes into contact with colliders)

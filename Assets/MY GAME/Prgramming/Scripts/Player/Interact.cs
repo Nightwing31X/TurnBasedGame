@@ -16,7 +16,7 @@ namespace Player
         public string interactionLayer;
         public string attackLayer;
         public string wallLayer;
-        public string itemLayer;
+        //public string itemLayer;
         [Tooltip("Toggle on to print console messages from this component.")]
         [SerializeField] private bool _debug;
         [SerializeField] private bool _hasRan;
@@ -26,7 +26,7 @@ namespace Player
         [SerializeField, Range(0, 100)] private float attackRadiusDistance = 4f;
 
         public bool wallHit = false;
-        public bool itemHit = false;
+        //public bool itemHit = false;
         public bool enemyFront = false;
         public bool enemyFrontRange = false;
         public bool meleeDistance = false;
@@ -134,14 +134,21 @@ namespace Player
                     enemyFront = true;
                     enemyFrontRange = false;
                     wallHit = false;
-                    meleeDistance = true;
                     BattleSystem.instance.meleeRange = meleeDistance;
                     _playerPick = BattleSystem.instance.playerPicked;
-                    // showToolTip = true;
                     if (!_playerPick)
                     {
                         DisplayBattleChoicePopup();
                     }
+                    else
+                    {
+                        if (!meleeDistance && _playerPick)
+                        {
+                            DisplayBattleChoicePopup();
+                        }
+                    }
+                    meleeDistance = true;
+                    // showToolTip = true;
                 }
                 # endregion
                 # region Detect the wall layer (Wall Layer)
@@ -156,7 +163,7 @@ namespace Player
                         }
                     }
                     wallHit = true;
-                    itemHit = false;
+                    //itemHit = false;
                     enemyFront = false;
                     enemyFrontRange = false;
                     meleeDistance = false;
@@ -169,28 +176,28 @@ namespace Player
                 }
                 # endregion
                 # region Detect the item layer (Item Layer) - So I can remove the enemy front detection.
-                if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
-                {
-                    if (_debug)
-                    {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - item is in-front.");
-                            _hasRan = true;
-                        }
-                    }
-                    itemHit = true;
-                    wallHit = false;
-                    enemyFront = false;
-                    enemyFrontRange = false;
-                    meleeDistance = false;
-                    BattleSystem.instance.meleeRange = meleeDistance;
-                    _playerPick = false;
-                    BattleSystem.instance.playerPicked = _playerPick;
-                    // showToolTip = true;
-                    // attackToolTip = false;
-                    // OnGUI(); // Displays out ToolTip
-                }
+                //if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
+                //{
+                //    if (_debug)
+                //    {
+                //        if (!_hasRan)
+                //        {
+                //            Debug.Log($"Player - item is in-front.");
+                //            _hasRan = true;
+                //        }
+                //    }
+                //    itemHit = true;
+                //    wallHit = false;
+                //    enemyFront = false;
+                //    enemyFrontRange = false;
+                //    meleeDistance = false;
+                //    BattleSystem.instance.meleeRange = meleeDistance;
+                //    _playerPick = false;
+                //    BattleSystem.instance.playerPicked = _playerPick;
+                //    // showToolTip = true;
+                //    // attackToolTip = false;
+                //    // OnGUI(); // Displays out ToolTip
+                //}
                 # endregion
             }
             else
@@ -198,7 +205,7 @@ namespace Player
                 enemyFront = false;
 
                 wallHit = false;
-                itemHit = false;
+                //itemHit = false;
             }
             #endregion
 

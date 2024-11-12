@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5484421561971494218}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ItemSpawns (8)
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
@@ -43,9 +43,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemSpawns (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 268386374847047380, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 732489670902582877, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 732489670902582877, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1002939453916854393, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -70,6 +78,10 @@ PrefabInstance:
     - target: {fileID: 2649850738532784295, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649850738532784295, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3446177228980309769, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
@@ -103,6 +115,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5211054482339236626, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5759252591705598657, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -119,6 +135,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6248505534821934211, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6277330639610348823, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
@@ -134,6 +154,10 @@ PrefabInstance:
     - target: {fileID: 6721263814815533994, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: CenterTitle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901786712905595322, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6944591545645734853, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -238,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 9184701053768255569, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
       propertyPath: m_Name
       value: ItemSpawns (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9184701053768255569, guid: 29054f4217c1a7e45824709eb067a7b0, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
