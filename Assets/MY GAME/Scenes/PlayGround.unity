@@ -3314,6 +3314,8 @@ MonoBehaviour:
   meleeRange: 0
   playerPicked: 0
   playerChoice: 0
+  _yesBTN: {fileID: 1337780969}
+  _noBTN: {fileID: 1751713109}
   mainCameraREF: {fileID: 0}
   battleCameraMale: {fileID: 1620612446}
   battleCameraFemale: {fileID: 79221844}

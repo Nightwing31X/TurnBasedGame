@@ -17,6 +17,11 @@ namespace TurnBase
         public bool playerPicked;
         public bool playerChoice;
 
+        [Header("Buttons")]
+        [SerializeField] private Button _yesBTN;
+        [SerializeField] private Button _noBTN;
+
+
         [Header("Player")]
         //public GameObject playerPrefab;
         [SerializeField] private GameObject mainCameraREF;
@@ -62,12 +67,14 @@ namespace TurnBase
         public void NotInBattle()
         {
             BattleHUDContainer.SetActive(false);
+            _noBTN.enabled = true;
+            _yesBTN.enabled = true;
             Debug.Log("Not in a Battle...");
             battleState = BattleStates.NotInBattle;
             // enemy = enemyPrefab;
             if (enemy == null)
             {
-                enemy = GameObject.FindWithTag("Enemy");             
+                enemy = GameObject.FindWithTag("Enemy");
             }
         }
         public void BattleChoice()
@@ -121,6 +128,8 @@ namespace TurnBase
         public void HideBattleChoice()
         {
             playerPicked = true;
+            _noBTN.enabled = false;
+            _yesBTN.enabled = false;
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
             // BattleChoicePopupContainer.SetActive(true);
@@ -131,9 +140,11 @@ namespace TurnBase
         public void YesBattleChoicePlayer()
         {
             playerPicked = true;
+            _yesBTN.enabled = false;
+            _noBTN.enabled = false;
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
             BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
-            playerHUDContainer.transform.Find("Player HUD").GetComponent<Animator>().SetBool("Show",false);
+            playerHUDContainer.transform.Find("Player HUD").GetComponent<Animator>().SetBool("Show", false);
             BattleHUDContainer.SetActive(true);
             BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
             BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", true);
@@ -150,7 +161,7 @@ namespace TurnBase
 
         public void FleeBattle() //? This runs second
         {
-            battleState = BattleStates.NotInBattle;
+            // battleState = BattleStates.NotInBattle;
             if (PlayerCharacterManager.Instance.male)
             {
                 battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
@@ -165,7 +176,7 @@ namespace TurnBase
 
             BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
             BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
-           
+
             EndBattle();
             //playerHUDContainer.SetActive(true);
             //BattleHUDContainer.SetActive(false);
@@ -216,7 +227,7 @@ namespace TurnBase
         public void OnFlee()
         {
             if (battleState != BattleStates.PlayerTurn)
-            { 
+            {
                 return;
             }
             StartCoroutine(PlayerFlee());
@@ -231,9 +242,10 @@ namespace TurnBase
             {
                 dialogueText.text = $"You Lost the battle and were defated by {enemyUnit.unitDescription} {enemyUnit.unitName}";
             }
-            else 
+            else
             {
-                Debug.Log("Fleed the battle...");
+                Debug.Log("Fled the battle...");
+                NotInBattle();
             }
         }
         IEnumerator SetupBattle()
@@ -294,7 +306,7 @@ namespace TurnBase
             //playerObject.GetComponent<Animator>().SetTrigger("Block01");
             if (battleState == BattleStates.PlayerTurn)
             {
-                Debug.Log("Player has choosen to attack");
+                Debug.Log("Player has chosen to attack");
                 if (meleeRange)
                 {
                     playerObject.GetComponent<Animator>().SetTrigger("Attack04");
@@ -357,7 +369,7 @@ namespace TurnBase
         IEnumerator PlayerBlock()
         {
             Debug.Log("Show the block animation");
-            playerObject.GetComponent<Animator>().SetBool("Block",true);
+            playerObject.GetComponent<Animator>().SetBool("Block", true);
             dialogueText.text = $"{playerUnit.unitName} is blocking!";
             yield return new WaitForSeconds(2f);
             Debug.Log("Enemy's Turn now...");
