@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using GameDev;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 namespace TurnBase
 {
@@ -27,6 +26,7 @@ namespace TurnBase
         [SerializeField] private GameObject BattleHUDContainer;
         [SerializeField] BattleHUD playerHUD;
         //public Transform playerBattleStation;
+        [SerializeField] private GameObject playerObject;
         public Unit playerUnit;
         [Header("Enemy")]
         // public GameObject enemyPrefab;
@@ -111,7 +111,7 @@ namespace TurnBase
             }
             else // Means it is from the enemy's interact.cs (False)
             {
-                
+                Debug.Log("Enemy chocie for the battle");
             }
 
 
@@ -205,6 +205,14 @@ namespace TurnBase
             }
             StartCoroutine(PlayerHeal());
         }
+        public void OnBlock()
+        {
+            if (battleState != BattleStates.PlayerTurn)
+            {
+                return;
+            }
+            StartCoroutine(PlayerBlock());
+        }
         public void OnFlee()
         {
             if (battleState != BattleStates.PlayerTurn)
@@ -235,7 +243,8 @@ namespace TurnBase
                 Debug.Log("Should be male");
                 if (playerChoice)
                 {
-                    playerUnit = GameObject.Find("MalePlayer").GetComponent<Unit>();
+                    playerObject = GameObject.Find("MalePlayer");
+                    playerUnit = playerObject.GetComponent<Unit>();
                     playerUnit.SetUpDataForBattle();
                     playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
                     playerHUD.SetHUD(playerUnit);
@@ -250,7 +259,8 @@ namespace TurnBase
             {
                 if (playerChoice)
                 {
-                    playerUnit = GameObject.Find("FemalePlayer").GetComponent<Unit>();
+                    playerObject = GameObject.Find("FemalePlayer");
+                    playerUnit = playerObject.GetComponent<Unit>();
                     playerUnit.SetUpDataForBattle();
                     playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
                     playerHUD.SetHUD(playerUnit);
@@ -281,12 +291,23 @@ namespace TurnBase
         }
         IEnumerator PlayerAttack()
         {
+            //playerObject.GetComponent<Animator>().SetTrigger("Block01");
             if (battleState == BattleStates.PlayerTurn)
             {
                 Debug.Log("Player has choosen to attack");
+                if (meleeRange)
+                {
+                    playerObject.GetComponent<Animator>().SetTrigger("Attack04");
+                }
+                else
+                {
+                    Debug.Log("Range");
+                    playerObject.GetComponent<Animator>().SetTrigger("RangeAttack01");
+                }
+
+                dialogueText.text = $"{playerUnit.unitName} attacks {NamePersonDetailText.text}";
             }
-            dialogueText.text = $"{playerUnit.unitName} attacks {NamePersonDetailText.text}";
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
             Debug.Log("Player's turn must end after this...");
             //bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
             //enemyHUD.SetHealth(enemyUnit);
@@ -328,6 +349,16 @@ namespace TurnBase
             playerUnit.Heal(2);
             playerHUD.SetHealth(playerUnit);
             dialogueText.text = $"{playerUnit.unitName} feels stronger!";
+            yield return new WaitForSeconds(2f);
+            Debug.Log("Enemy's Turn now...");
+            //battleState = BattleStates.EnemyTurn;
+            //StartCoroutine(EnemyTurn());
+        }
+        IEnumerator PlayerBlock()
+        {
+            Debug.Log("Show the block animation");
+            playerObject.GetComponent<Animator>().SetBool("Block",true);
+            dialogueText.text = $"{playerUnit.unitName} is blocking!";
             yield return new WaitForSeconds(2f);
             Debug.Log("Enemy's Turn now...");
             //battleState = BattleStates.EnemyTurn;
