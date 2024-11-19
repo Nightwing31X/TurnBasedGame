@@ -14,7 +14,6 @@ public class RandomSpawnItems : MonoBehaviour
 
     [SerializeField, Tooltip("Items which get spawned.")]
 
-    // private SpawnableItemData[] itemsToSpawn;
     private GameObject[] itemsToSpawn;
     private SavePlayerData _savePlayerData;
     [SerializeField, Tooltip("Player's current XP level to affect item rarity.")]
@@ -34,7 +33,7 @@ public class RandomSpawnItems : MonoBehaviour
     {
         playerXP = _savePlayerData.levelREF;
 
-        // Make sure the spawn locations match the requested spawn count
+        // Make sure the spawn locations match the spawn count
         if (_spawnLocations.Length < _spawnCount)
         {
             Debug.LogWarning("Not enough spawn locations for the requested spawn count.");
@@ -56,14 +55,12 @@ public class RandomSpawnItems : MonoBehaviour
 
         int spawnedItems = 0;
 
-        // Ensure we don't spawn more items than the available spawn count
+        // Don't spawn more items than the available spawn count
         while (spawnedItems < spawnCount)
         {
             // Select an item based on rarity and player XP
+            GameObject itemToSpawn = GetRandomItemBasedOnProbability();
 
-            // If forceItem is true, skip the probability check and force an item to spawn
-            GameObject itemToSpawn = forceItem ? GetRandomItemBasedOnProbability() : GetRandomItemBasedOnProbability();
-            //GameObject itemToSpawn = GetRandomItemBasedOnProbability();
             if (itemToSpawn == null) continue;
 
             // Get spawn position of the spawn location
@@ -76,7 +73,7 @@ public class RandomSpawnItems : MonoBehaviour
 
             // Spawn the item at the spawn location with the current Y value of the prefab
             GameObject spawnedItem = Instantiate(itemToSpawn, spawnPosition, Quaternion.identity, shuffledLocations[spawnedItems].transform);
-
+            //spawnedItem.transform.position = itemToSpawn.transform.position;
             // Log the final position of the instantiated object
             Debug.Log($"Spawned Item Position: {spawnedItem.transform.position}");
             Debug.Log($"Spawned Item Y Position: {spawnedItem.transform.position.y}");
@@ -101,11 +98,18 @@ public class RandomSpawnItems : MonoBehaviour
     private GameObject GetRandomItemBasedOnProbability()
     {
         List<(GameObject, float)> weightedItems = new List<(GameObject, float)>();
-
+        float baseRarity;
         foreach (var itemData in itemsToSpawn)
         {
             // Determine base rarity and player XP relationship
-            float baseRarity = itemData.GetComponent<ItemPickup>().item.baseRarity;
+            try
+            {
+                baseRarity = itemData.GetComponent<ItemPickup>().item.baseRarity;
+            }
+            catch
+            {
+                baseRarity = itemData.GetComponentInChildren<ItemPickup>().item.baseRarity;
+            }
 
             // High chance for matching or lower base rarities
             float spawnChance = 0f;

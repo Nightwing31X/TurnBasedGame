@@ -161,7 +161,9 @@ namespace TurnBase
 
         public void FleeBattle() //? This runs second
         {
-            // battleState = BattleStates.NotInBattle;
+            BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
+            BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
+
             if (PlayerCharacterManager.Instance.male)
             {
                 battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
@@ -172,10 +174,6 @@ namespace TurnBase
                 battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
                 //battleCameraFemale.SetActive(false);
             }
-
-
-            BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
-            BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
 
             EndBattle();
             //playerHUDContainer.SetActive(true);
@@ -245,7 +243,6 @@ namespace TurnBase
             else
             {
                 Debug.Log("Fled the battle...");
-                NotInBattle();
             }
         }
         IEnumerator SetupBattle()
@@ -341,10 +338,11 @@ namespace TurnBase
             Debug.Log("Undo the camera");
             FleeBattle(); // This runs second
             yield return new WaitForSeconds(2.35f);
+            NotInBattle();
             mainCameraREF.SetActive(true);
             playerHUDContainer.SetActive(true);
             playerHUDContainer.transform.Find("Player HUD").GetComponent<Animator>().SetBool("Show", true);
-            BattleHUDContainer.SetActive(false);
+            //BattleHUDContainer.SetActive(false);
             if (PlayerCharacterManager.Instance.male)
             {
                 battleCameraMale.SetActive(false);
