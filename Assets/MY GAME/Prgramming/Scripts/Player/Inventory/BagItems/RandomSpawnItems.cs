@@ -20,6 +20,9 @@ public class RandomSpawnItems : MonoBehaviour
     [SerializeField, Tooltip("Player's current XP level to affect item rarity.")]
     private int playerXP;
 
+    [SerializeField, Tooltip("If true, an item will always spawn.")]
+    private bool forceItem;
+
     private void Start()
     {
         _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
@@ -31,28 +34,69 @@ public class RandomSpawnItems : MonoBehaviour
     {
         playerXP = _savePlayerData.levelREF;
 
+        // Make sure the spawn locations match the requested spawn count
         if (_spawnLocations.Length < _spawnCount)
         {
             Debug.LogWarning("Not enough spawn locations for the requested spawn count.");
             return;
         }
 
-        // Sort spawn locations and shuffle them to randomise placement
+        // Shuffle spawn locations to randomise placement
         List<Transform> shuffledLocations = new List<Transform>(_spawnLocations);
         Shuffle(shuffledLocations);
 
+        // Randomise the number of items to spawn (from 0 to _spawnCount)
+        int spawnCount = Random.Range(0, _spawnCount + 1);  // This will be a number between 0 and _spawnCount
+
+        // If forceItem is true, ensure at least one item is spawned
+        if (forceItem)
+        {
+            spawnCount = Mathf.Max(1, spawnCount); // Ensure at least 1 item is spawned
+        }
+
         int spawnedItems = 0;
 
-        while (spawnedItems < _spawnCount)
+        // Ensure we don't spawn more items than the available spawn count
+        while (spawnedItems < spawnCount)
         {
             // Select an item based on rarity and player XP
-            GameObject itemToSpawn = GetRandomItemBasedOnProbability();
+
+            // If forceItem is true, skip the probability check and force an item to spawn
+            GameObject itemToSpawn = forceItem ? GetRandomItemBasedOnProbability() : GetRandomItemBasedOnProbability();
+            //GameObject itemToSpawn = GetRandomItemBasedOnProbability();
             if (itemToSpawn == null) continue;
 
-            Instantiate(itemToSpawn, shuffledLocations[spawnedItems].position, Quaternion.identity, shuffledLocations[spawnedItems]);
+            // Get spawn position of the spawn location
+            Vector3 spawnPosition = shuffledLocations[spawnedItems].position;
+
+            // Log spawn position and prefab Y value
+            Debug.Log($"Spawn Location: {spawnPosition}, Prefab Y value: {itemToSpawn.transform.position.y}");
+            Debug.Log(spawnPosition.y);
+            //spawnPosition.y = itemToSpawn.transform.localPosition.y;
+
+            // Spawn the item at the spawn location with the current Y value of the prefab
+            GameObject spawnedItem = Instantiate(itemToSpawn, spawnPosition, Quaternion.identity, shuffledLocations[spawnedItems].transform);
+
+            // Log the final position of the instantiated object
+            Debug.Log($"Spawned Item Position: {spawnedItem.transform.position}");
+            Debug.Log($"Spawned Item Y Position: {spawnedItem.transform.position.y}");
+
+
             spawnedItems++;
         }
+
+        // Debug message for the number of items spawned
+        if (spawnedItems == 0)
+        {
+            Debug.Log("No items spawned this time.");
+        }
+        else
+        {
+            Debug.Log(spawnedItems + " items spawned.");
+        }
     }
+
+
 
     private GameObject GetRandomItemBasedOnProbability()
     {

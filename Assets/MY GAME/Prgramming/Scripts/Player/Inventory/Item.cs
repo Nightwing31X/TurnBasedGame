@@ -10,5 +10,5 @@ public class Item : ScriptableObject
     public RenderTexture artwork;
     public float baseRarity; // e.g., from 0 to 1, where higher is rarer
     public bool isWeapon;
-    public bool isPoition;
+    public bool isPotion;
 }

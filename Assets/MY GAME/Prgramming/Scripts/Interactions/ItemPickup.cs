@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using GameDev;
 using Interactions;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,9 +19,6 @@ public class ItemPickup : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-            gameObject.GetComponent<Animator>().enabled = false;
-
             if (_savePlayerData == null)
             {
                 _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
@@ -38,29 +34,49 @@ public class ItemPickup : MonoBehaviour
             {
                 Debug.Log("Bag is full... " + _currentValue);
             }
+
+            if (item.isPotion)
+            { 
+                gameObject.GetComponentInChildren<ParticleSystem>().Stop();
+                gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+                gameObject.GetComponentInChildren<Animator>().enabled = false;
+            }
+            else
+            {
+                gameObject.GetComponent<MeshRenderer>().enabled = false;
+                gameObject.GetComponent<Animator>().enabled = false;
+            }
         }
     }
 
-    void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
-            gameObject.GetComponent<Animator>().enabled = false;
-        }
-    }
+    //void OnTriggerStay(Collider other)
+    //{
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        gameObject.GetComponent<MeshRenderer>().enabled = false;
+    //        gameObject.GetComponent<Animator>().enabled = false;
+    //    }
+    //}
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
-            gameObject.GetComponent<Animator>().enabled = true;
+            if (item.isPotion)
+            {
+                gameObject.GetComponentInChildren<ParticleSystem>().Play();
+                gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+                gameObject.GetComponentInChildren<Animator>().enabled = true;
+            }
+            else
+            {
+                gameObject.GetComponent<MeshRenderer>().enabled = true;
+                gameObject.GetComponent<Animator>().enabled = true;
+            }
         }
     }
 
     public void ChoicePickUp(Item itemREF)
     {
-
         InventoryManager.Instance.NameItemDetailText.text = item.name;
         InventoryManager.Instance.DescriptionItemDetailText.text = item.description;
         InventoryManager.Instance.IconItemDetail.texture = item.artwork;

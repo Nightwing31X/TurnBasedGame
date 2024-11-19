@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b5399863b6e797448bce3e8c397b3fe, type: 3}
-  m_Name: SwordGreen
+  m_Name: Bottle_Strength
   m_EditorClassIdentifier: 
-  name: Sword Green
-  description: This sword reminds me of something?
-  artwork: {fileID: 8400000, guid: 61c7cb932ad752d4397ac3bbe3db0616, type: 2}
+  name: Strength Potion
+  description: Gives me unbelieveable strength
+  artwork: {fileID: 8400000, guid: 05d1c64d12da8e54e8acce2e3a75c044, type: 2}
   baseRarity: 0
-  isWeapon: 1
-  isPotion: 0
+  isWeapon: 0
+  isPotion: 1
