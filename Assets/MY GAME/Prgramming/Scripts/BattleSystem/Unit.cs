@@ -20,8 +20,6 @@ namespace TurnBase
         public float currentHealth;
 
 
-
-
         private void Start()
         {
             _playerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
@@ -35,7 +33,7 @@ namespace TurnBase
             currentHealth = _playerData.currentHealthREF;
         }
 
-        // When durring TakeDamge pass a damge value in for calculations
+        // When during TakeDamage pass a damage value in for calculations
         public bool TakeDamage(int damage)
         {
             // Current health is affected by damage amount

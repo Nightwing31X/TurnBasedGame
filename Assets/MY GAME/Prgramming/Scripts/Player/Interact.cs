@@ -19,7 +19,6 @@ namespace Player
         //public string itemLayer;
         [Tooltip("Toggle on to print console messages from this component.")]
         [SerializeField] private bool _debug;
-        [SerializeField] private bool _hasRan;
         [SerializeField] private bool _checkControllerInput;
         [SerializeField] private bool _forceControllerInput;
         [Tooltip("The distance that the player can reach interactions."), SerializeField, Range(0, 100)] private float distance = 2f;
@@ -102,11 +101,7 @@ namespace Player
                 //{
                 //    if (_debug)
                 //    {
-                //        if (!_hasRan)
-                //        {
-                //            Debug.Log($"Player - Interaction layer; can click...");
-                //            _hasRan = true;
-                //        }
+                //        Debug.Log($"Player - Interaction layer; can click...");
                 //    }
                 //    // showToolTip = true;
                 //    // attackToolTip = false;
@@ -125,11 +120,7 @@ namespace Player
                 {
                     if (_debug)
                     {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - Enemy is in melee distance to fight!");
-                            _hasRan = true;
-                        }
+                        Debug.Log($"Player - Enemy is in melee distance to fight!");
                     }
                     enemyFront = true;
                     enemyFrontRange = false;
@@ -156,11 +147,7 @@ namespace Player
                 {
                     if (_debug)
                     {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - Wall is in-front.");
-                            _hasRan = true;
-                        }
+                        Debug.Log($"Player - Wall is in-front.");
                     }
                     wallHit = true;
                     //itemHit = false;
@@ -176,28 +163,24 @@ namespace Player
                 }
                 # endregion
                 # region Detect the item layer (Item Layer) - So I can remove the enemy front detection.
-                //if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
-                //{
-                //    if (_debug)
-                //    {
-                //        if (!_hasRan)
-                //        {
-                //            Debug.Log($"Player - item is in-front.");
-                //            _hasRan = true;
-                //        }
-                //    }
-                //    itemHit = true;
-                //    wallHit = false;
-                //    enemyFront = false;
-                //    enemyFrontRange = false;
-                //    meleeDistance = false;
-                //    BattleSystem.instance.meleeRange = meleeDistance;
-                //    _playerPick = false;
-                //    BattleSystem.instance.playerPicked = _playerPick;
-                //    // showToolTip = true;
-                //    // attackToolTip = false;
-                //    // OnGUI(); // Displays out ToolTip
-                //}
+                // if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
+                // {
+                //     if (_debug)
+                //     {
+                //         Debug.Log($"Player - item is in-front.");
+                //     }
+                //     itemHit = true;
+                //     wallHit = false;
+                //     enemyFront = false;
+                //     enemyFrontRange = false;
+                //     meleeDistance = false;
+                //     BattleSystem.instance.meleeRange = meleeDistance;
+                //     _playerPick = false;
+                //     BattleSystem.instance.playerPicked = _playerPick;
+                //     //    // showToolTip = true;
+                //     //    // attackToolTip = false;
+                //     //    // OnGUI(); // Displays out ToolTip
+                // }
                 # endregion
             }
             else
@@ -224,12 +207,8 @@ namespace Player
                     {
                         if (_debug)
                         {
-                            if (!_hasRan)
-                            {
-                                //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
-                                Debug.Log($"Player - Enemy is in-front; can do range attacks");
-                                _hasRan = true;
-                            }
+                            //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
+                            Debug.Log($"Player - Enemy is in-front; can do range attacks");
                         }
 
                         enemyFrontRange = true;
@@ -283,11 +262,7 @@ namespace Player
                 {
                     if (_debug)
                     {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - Enemy is on right side");
-                            _hasRan = true;
-                        }
+                        Debug.Log($"Player - Enemy is on right side");
                     }
                     enemyFront = false;
                     enemyFrontRange = false;
@@ -331,11 +306,7 @@ namespace Player
                 {
                     if (_debug)
                     {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - Enemy is on left side");
-                            _hasRan = true;
-                        }
+                        Debug.Log($"Player - Enemy is on left side");
                     }
 
                     enemyFront = false;
@@ -377,11 +348,7 @@ namespace Player
                 {
                     if (_debug)
                     {
-                        if (!_hasRan)
-                        {
-                            Debug.Log($"Player - Enemy is on behide.");
-                            _hasRan = true;
-                        }
+                        Debug.Log($"Player - Enemy is on behide.");
                     }
 
                     enemyFront = false;

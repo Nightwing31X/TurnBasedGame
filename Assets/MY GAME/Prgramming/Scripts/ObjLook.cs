@@ -21,7 +21,7 @@ namespace GameDev
             originalRotation = transform.rotation.eulerAngles;
         }
 
-        // Use Lateupdate so everything should have finished moving.
+        // Use LateUpdate so everything should have finished moving.
         void LateUpdate()
         {
             // There are two ways people billboard things
@@ -42,7 +42,7 @@ namespace GameDev
                 default:
                     break;
             }
-            // Modify the rotation in Euler space to lock certain dimensionns.
+            // Modify the rotation in Euler space to lock certain dimensions.
             Vector3 rotation = transform.rotation.eulerAngles;
             if (lockX) { rotation.x = originalRotation.x; }
             if (lockY) { rotation.y = originalRotation.y; }

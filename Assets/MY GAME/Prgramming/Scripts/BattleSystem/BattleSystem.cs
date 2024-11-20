@@ -59,9 +59,13 @@ namespace TurnBase
             {
                 Destroy(this);
             }
-            NotInBattle();
         }
 
+
+        void Start()
+        {
+            NotInBattle();
+        }
 
 
         public void NotInBattle()
@@ -72,10 +76,10 @@ namespace TurnBase
             Debug.Log("Not in a Battle...");
             battleState = BattleStates.NotInBattle;
             // enemy = enemyPrefab;
-            if (enemy == null)
-            {
-                enemy = GameObject.FindWithTag("Enemy");
-            }
+            // if (enemy == null)
+            // {
+            //     enemy = GameObject.FindWithTag("Enemy");
+            // }
         }
         public void BattleChoice()
         {
@@ -104,12 +108,15 @@ namespace TurnBase
 
         public void ShowBattleChoice(bool fromWho)
         {
+            enemy = GameObject.FindWithTag("Enemy");
             if (fromWho) // Means it is from the players interact.cs (True) 
             {
                 playerChoice = fromWho;
-                NamePersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.enemyName;
-                DescriptionPersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.description;
-                IconPersonDetail.texture = enemy.GetComponent<EnemyType>().enemyType.artwork;
+                enemy.GetComponent<EnemyType>().DefineNames();
+                // Debug.Log(NamePersonDetailText.text);
+                // NamePersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.enemyName;
+                // DescriptionPersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.description;
+                // IconPersonDetail.texture = enemy.GetComponent<EnemyType>().enemyType.artwork;
 
 
                 BattleChoicePopupContainer.SetActive(true);
@@ -118,7 +125,7 @@ namespace TurnBase
             }
             else // Means it is from the enemy's interact.cs (False)
             {
-                Debug.Log("Enemy chocie for the battle");
+                Debug.Log("Enemy choice for the battle");
             }
 
 
@@ -276,7 +283,7 @@ namespace TurnBase
                     mainCameraREF = Camera.main.gameObject;
                     mainCameraREF.SetActive(false);
                     battleCameraFemale.SetActive(true);
-                    battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
+                    battleCameraFemale.GetComponent<Animator>().SetBool("Player", true);
                     battleState = BattleStates.PlayerTurn;
                 }
             }
@@ -351,7 +358,7 @@ namespace TurnBase
             {
                 battleCameraFemale.SetActive(false);
             }
-            Debug.Log("Back to normal game - Enemey's turn - It costs 3 action points to leave...");
+            Debug.Log("Back to normal game - Enemy's turn - It costs 3 action points to leave...");
         }
 
         IEnumerator PlayerHeal()

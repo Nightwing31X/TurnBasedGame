@@ -27,6 +27,7 @@ namespace Player
         [SerializeField] private Vector3 _target;
         [SerializeField] private float _speed = 1;
         [SerializeField] private float _stoppingDistance = 0.1f; // A small value for how close is considered "reached"
+
         public bool isMoving;
 
         private void Start()

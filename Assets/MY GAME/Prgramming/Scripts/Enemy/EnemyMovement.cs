@@ -30,7 +30,7 @@ public class EnemyMovement : MonoBehaviour
         _enemyType = GetComponent<EnemyType>();
         _enemyName = _enemyType.enemyType.enemyName;
         Debug.Log(_enemyName);
-        _enemy = GameObject.Find(_enemyName);
+        _enemy = GameObject.Find($"{_enemyName}(Clone)");
     }
 
     private void Start()
@@ -64,7 +64,7 @@ public class EnemyMovement : MonoBehaviour
                     // Snap the player to the target position so things stay even 
                     transform.position = _target;
                     // Object has reached the _target
-                    Debug.Log("_target reached!");
+                    Debug.Log("Target reached!");
                     _enemyAnim.SetBool("Idle", true);
                     _enemyAnim.SetBool("Walk", false);
                     isMoving = false;

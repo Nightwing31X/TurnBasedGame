@@ -19,7 +19,6 @@ namespace GameDev
         public bool inINV = false;
         public string currentGameState;
 
-
         //[SerializeField] private float gameOverStateDuration = 3f;
         [SerializeField] private float timeToCredit = 3f;
         [SerializeField] private float CreditDuration = 3f;

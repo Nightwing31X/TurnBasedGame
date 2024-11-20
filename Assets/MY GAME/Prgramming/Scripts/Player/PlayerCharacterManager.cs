@@ -1,7 +1,6 @@
 using GameDev;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -64,10 +63,8 @@ public class PlayerCharacterManager : MonoBehaviour
         _femaleModel = GameObject.Find("FemaleModel");
 
 
-        username = GameObject.Find("Username").GetComponent<Text>();
-        level = GameObject.Find("characterLevel").GetComponent<Text>();
-
-
+        // username = GameObject.Find("Username").GetComponent<Text>();
+        // level = GameObject.Find("characterLevel").GetComponent<Text>();
 
         // Male Objects - Shield
         playerWoodenShieldMALE = GameObject.Find("INVWoodenShieldMALE");
@@ -331,6 +328,7 @@ public class PlayerCharacterManager : MonoBehaviour
 
     public void PlayerINFO()
     {
+        // Debug.Log("Name and level....");
         username.text = _playerData.usernameREF;
 
         level.text = _playerData.levelREF.ToString();

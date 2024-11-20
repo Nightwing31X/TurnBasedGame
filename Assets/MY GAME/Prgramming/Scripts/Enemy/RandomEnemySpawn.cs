@@ -1,35 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameDev;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class RandomSpawnItems : MonoBehaviour
+public class RandomEnemySpawn : MonoBehaviour
 {
-    [SerializeField, Tooltip("How many items do you want to spawn in that 'Grid'.")]
-    private int _spawnCount;
+    // [SerializeField, Tooltip("How many items do you want to spawn in that 'Grid'.")]
+    private int _spawnCount = 1;
 
-    [SerializeField, Tooltip("Where the items will spawn - As children.")]
+    [SerializeField, Tooltip("Where the enemy will spawn - As children.")]
     private Transform[] _spawnLocations;
 
-    [SerializeField, Tooltip("Items which get spawned.")]
+    [SerializeField, Tooltip("Enemy which get spawned.")]
 
-    private GameObject[] itemsToSpawn;
+    private GameObject[] enemiesToSpawn;
     private SavePlayerData _savePlayerData;
     [SerializeField, Tooltip("Player's current XP level to affect item rarity.")]
     private int playerXP;
-
-    [SerializeField, Tooltip("If true, an item will always spawn.")]
-    private bool forceItem;
 
     private void Start()
     {
         _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
         playerXP = _savePlayerData.levelREF;
-        SpawnItems();
+        SpawnEnemies();
     }
 
-    private void SpawnItems()
+    private void SpawnEnemies()
     {
         playerXP = _savePlayerData.levelREF;
 
@@ -45,18 +41,13 @@ public class RandomSpawnItems : MonoBehaviour
         Shuffle(shuffledLocations);
 
         // Randomise the number of items to spawn (from 0 to _spawnCount)
-        int spawnCount = Random.Range(0, _spawnCount + 1);  // This will be a number between 0 and _spawnCount
+        // int spawnCount = Random.Range(0, _spawnCount + 1);  // This will be a number between 0 and _spawnCount
 
-        // If forceItem is true, ensure at least one item is spawned
-        if (forceItem)
-        {
-            spawnCount = Mathf.Max(1, spawnCount); // Ensure at least 1 item is spawned
-        }
 
         int spawnedItems = 0;
 
         // Don't spawn more items than the available spawn count
-        while (spawnedItems < spawnCount)
+        while (spawnedItems < _spawnCount)
         {
             // Select an item based on rarity and player XP
             GameObject itemToSpawn = GetRandomItemBasedOnProbability();
@@ -85,11 +76,11 @@ public class RandomSpawnItems : MonoBehaviour
         // Debug message for the number of items spawned
         if (spawnedItems == 0)
         {
-            Debug.Log($"No items spawned this time. Out of {_spawnCount}");
+            Debug.Log("No items spawned this time.");
         }
         else
         {
-            Debug.Log($"{spawnedItems}/{_spawnCount} items spawned.");
+            Debug.Log(spawnedItems + " items spawned.");
         }
     }
 
@@ -99,17 +90,17 @@ public class RandomSpawnItems : MonoBehaviour
     {
         List<(GameObject, float)> weightedItems = new List<(GameObject, float)>();
         float baseRarity;
-        foreach (var itemData in itemsToSpawn)
+        foreach (var itemData in enemiesToSpawn)
         {
             // Determine base rarity and player XP relationship
-            try
-            {
-                baseRarity = itemData.GetComponent<ItemPickup>().item.baseRarity;
-            }
-            catch
-            {
-                baseRarity = itemData.GetComponentInChildren<ItemPickup>().item.baseRarity;
-            }
+            // try
+            // {
+            baseRarity = itemData.GetComponent<EnemyType>().enemyType.baseRarity;
+            // }
+            // catch
+            // {
+            //     baseRarity = itemData.GetComponentInChildren<ItemPickup>().item.baseRarity;
+            // }
 
             // High chance for matching or lower base rarities
             float spawnChance = 0f;

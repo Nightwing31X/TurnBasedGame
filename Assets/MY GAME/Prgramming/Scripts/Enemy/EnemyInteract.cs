@@ -12,15 +12,14 @@ public class EnemyInteract : MonoBehaviour
     public string wallLayer;
     [Tooltip("Toggle on to print console messages from this component.")]
     [SerializeField] private bool _debug;
-    [SerializeField] private bool _hasRan;
     [Tooltip("The distance that the player can reach interactions."), SerializeField, Range(0, 100)] private float distance = 2f;
     [SerializeField, Range(0, 100)] private float attackRadiusDistance = 6f;
 
     public bool wallHit = false;
     public bool playerFront = false;
     public bool playerRight = false;
-    public bool enemyLeft = false;
-    public bool enemyBack = false;
+    public bool playerLeft = false;
+    public bool playerBack = false;
 
     #region Reference to the player cameras - for the raycast 
     [Header("Cameras for Raycast")]
@@ -79,11 +78,7 @@ public class EnemyInteract : MonoBehaviour
             //{
             //    if (_debug)
             //    {
-            //        if (!_hasRan)
-            //        {
-            //            Debug.Log($"Hit Layer = {playerLayer}");
-            //            _hasRan = true;
-            //        }
+            //       Debug.Log($"Hit Layer = {playerLayer}");
             //    }
             //    //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //    //OnGUI(); // Displays out ToolTip
@@ -101,11 +96,7 @@ public class EnemyInteract : MonoBehaviour
             {
                 if (_debug)
                 {
-                    if (!_hasRan)
-                    {
-                        Debug.Log($"Enemy - Player is in range to fight!");
-                        _hasRan = true;
-                    }
+                    Debug.Log($"Enemy - Player is in range to fight!");
                 }
                 playerFront = true;
                 wallHit = false;
@@ -118,11 +109,7 @@ public class EnemyInteract : MonoBehaviour
             {
                 if (_debug)
                 {
-                    if (!_hasRan)
-                    {
-                        Debug.Log($"Enemy - Wall is infront.");
-                        _hasRan = true;
-                    }
+                    Debug.Log($"Enemy - Wall is infront.");
                 }
                 wallHit = true;
                 playerFront = false;
@@ -151,16 +138,12 @@ public class EnemyInteract : MonoBehaviour
             {
                 if (_debug)
                 {
-                    if (!_hasRan)
-                    {
-                        Debug.Log($"Enemy - Player is infront; can do range attacks");
-                        _hasRan = true;
-                    }
+                    Debug.Log($"Enemy - Player is infront; can do range attacks");
                 }
                 playerFront = true;
                 playerRight = false;
-                enemyLeft = false;
-                enemyBack = false;
+                playerLeft = false;
+                playerBack = false;
                 wallHit = false;
                 //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
                 //OnGUI(); // Displays out ToolTip
@@ -194,16 +177,12 @@ public class EnemyInteract : MonoBehaviour
             {
                 if (_debug)
                 {
-                    if (!_hasRan)
-                    {
-                        Debug.Log($"Enemy - Player is on right side");
-                        _hasRan = true;
-                    }
+                    Debug.Log($"Enemy - Player is on right side");
                 }
                 playerFront = false;
                 playerRight = true;
-                enemyLeft = false;
-                enemyBack = false;
+                playerLeft = false;
+                playerBack = false;
                 //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
                 //OnGUI(); // Displays out ToolTip
             }
@@ -235,23 +214,19 @@ public class EnemyInteract : MonoBehaviour
             {
                 if (_debug)
                 {
-                    if (!_hasRan)
-                    {
-                        Debug.Log($"Enemy - Player is on left side");
-                        _hasRan = true;
-                    }
+                    Debug.Log($"Enemy - Player is on left side");
                 }
                 playerFront = false;
                 playerRight = false;
-                enemyLeft = true;
-                enemyBack = false;
+                playerLeft = true;
+                playerBack = false;
                 //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
                 //OnGUI(); // Displays out ToolTip
             }
         }
         else
         {
-            enemyLeft = false;
+            playerLeft = false;
             //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //OnGUI(); // Displays out ToolTip
         }
@@ -276,24 +251,20 @@ public class EnemyInteract : MonoBehaviour
             {
                 if (_debug)
                 {
-                    if (!_hasRan)
-                    {
-                        Debug.Log($"Enemy - Player is on behide.");
-                        _hasRan = true;
-                    }
+                    Debug.Log($"Enemy - Player is on behide.");
                 }
 
                 playerFront = false;
                 playerRight = false;
-                enemyLeft = false;
-                enemyBack = true;
+                playerLeft = false;
+                playerBack = true;
                 //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
                 //OnGUI(); // Displays out ToolTip
             }
         }
         else
         {
-            enemyBack = false;
+            playerBack = false;
             //! PUT A FUNCTION WHICH WILL THEN CHECK IF IT SHOULD ATTACK OR MOVE, ETC.
             //OnGUI(); // Displays out ToolTip
         }
