@@ -11,6 +11,7 @@ TagManager:
   - PickUpItem
   - Enemy
   - Potion
+  - EnemyBattleCamera
   layers:
   - Default
   - TransparentFX

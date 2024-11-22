@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using TurnBase;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -76,6 +77,7 @@ namespace Player
         {
             if (BattleSystem.instance.battleState == BattleStates.NotInBattle || BattleSystem.instance.battleState == BattleStates.BattleChoice)
             {
+                //Debug.LogWarning("Not in battle");
                 //_forceControllerInput = InputHandler.instance.forceController;
                 //_checkControllerInput = InputHandler.instance.onController;
 
@@ -380,40 +382,14 @@ namespace Player
             }
             else
             {
+                //Debug.LogWarning("In battle");
 
-                Debug.LogWarning("This code runs when in the BattleState as I need to know if the enemy is infront or in the range distance.");
+                //Debug.LogWarning("This code runs when in the BattleState as I need to know if the enemy is infront or in the range distance.");
 
                 Ray interactRayForward;
                 interactRayForward = _mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
 
-                RaycastHit hitInfoForward;
-
-                if (!_playerMove.isMoving)
-                {
-                    #region BattleState - Detect the attack layer (Enemy Layer) - Forward Player view
-                    if (_debug)
-                    {
-                        Debug.DrawRay(transform.position, transform.forward * distance, Color.yellow, 0.5f);
-                    }
-
-                    if (Physics.Raycast(interactRayForward, out hitInfoForward, distance, Layers /*This part here is the layer its optional*/ ))
-                    {
-
-                        if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
-                        {
-                            if (_debug)
-                            {
-                                Debug.Log($"Player - Enemy is in melee distance to fight!");
-                            }
-                            enemyFrontRange = false;
-                            enemyFront = true;
-                            meleeDistance = true;
-                            BattleSystem.instance.meleeRange = meleeDistance;
-                            // showToolTip = true;
-                        }
-                    }
-                    #endregion
-                }
+                RaycastHit hitInfoForward;             
 
 
                 if (!_playerMove.isMoving)
@@ -425,7 +401,7 @@ namespace Player
                     }
                     if (Physics.Raycast(interactRayForward, out hitInfoForward, attackRadiusDistance, Layers /*This part here is the layer its optional*/ ))
                     {
-                        if (!enemyFront)
+                        if (hitInfoForward.distance > distance)
                         {
                             if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                             {
@@ -441,21 +417,14 @@ namespace Player
                                 BattleSystem.instance.meleeRange = meleeDistance;
                             }
                         }
-                    }
-                    //else
-                    //{
-                    //    enemyFrontRange = false;
-                    //    meleeDistance = false;
-                    //    BattleSystem.instance.meleeRange = meleeDistance;
-                    //    _playerPick = false;
-                    //    BattleSystem.instance.playerPicked = _playerPick;
-                    //    // showToolTip = false;
-                    //    // attackToolTip = false;
-                    //    //keyboardPickUpText.SetActive(false); //# Pickup text turns off
-                    //    //keyboardAttackText.SetActive(false);
-                    //    //controllerPickUpText.SetActive(false);
-                    //    //controllerAttackText.SetActive(false);
-                    //}
+                        else
+                        {
+                            enemyFrontRange = false;
+                            enemyFront = true;
+                            meleeDistance = true;
+                            BattleSystem.instance.meleeRange = meleeDistance;
+                        }
+                    }                   
                     #endregion
                 }
 

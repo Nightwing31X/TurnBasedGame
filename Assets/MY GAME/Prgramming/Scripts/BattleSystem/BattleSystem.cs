@@ -142,13 +142,16 @@ namespace TurnBase
         }
         public void HideBattleChoice()
         {
-            playerPicked = true;
-            _noBTN.enabled = false;
-            _yesBTN.enabled = false;
-            BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
-            BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
-            // BattleChoicePopupContainer.SetActive(true);
-            NotInBattle();
+            if (battleState == BattleStates.PlayerTurn)
+            {
+                playerPicked = true;
+                _noBTN.enabled = false;
+                _yesBTN.enabled = false;
+                BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Hide", true);
+                BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", false);
+                // BattleChoicePopupContainer.SetActive(true);
+                NotInBattle();
+            }
         }
 
 
@@ -176,43 +179,59 @@ namespace TurnBase
 
         public void ChangePosition()
         {
-            Debug.Log("This is the function which checks what position needs to be changed too");
-            //? Need to get the position forwards and backwards
-            _playerMovement = playerObject.GetComponent<Movement>();
-            // Should be able to just run the function - which does all the checks for me
-            _playerMovement.isMoving = true;
-            //_playerMovement.BattleMove();
-            //_forwardPOS = _playerMovement.walkPosition;
-            //_backwardPOS = _playerMovement.behidePosition;
-            //_melee = _playerMovement.enemyInFront;
-
-
+            if (battleState == BattleStates.PlayerTurn)
+            {
+                Debug.Log("This is the function which checks what position needs to be changed too");
+                //? Need to get the position forwards and backwards
+                _playerMovement = playerObject.GetComponent<Movement>();
+                // Should be able to just run the function - which does all the checks for me
+                _playerMovement.isMoving = true;
+                //_playerMovement.BattleMove();
+                //_forwardPOS = _playerMovement.walkPosition;
+                //_backwardPOS = _playerMovement.behidePosition;
+                //_melee = _playerMovement.enemyInFront;
+            }
+            else
+            {
+                if (PlayerCharacterManager.Instance.male)
+                {
+                    battleCameraMale.SetActive(false);
+                    battleCameraEnemy.SetActive(true);
+                }
+                else
+                {
+                    battleCameraFemale.SetActive(false);
+                    battleCameraEnemy.SetActive(true);
+                }
+            }
         }
 
         public void FleeBattle() //? This runs second
         {
-            BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
-            BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
-
-            if (PlayerCharacterManager.Instance.male)
+            if (battleState == BattleStates.PlayerTurn)
             {
-                battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
-                //battleCameraMale.SetActive(false);
+                BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
+                BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
+
+                if (PlayerCharacterManager.Instance.male)
+                {
+                    battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
+                    //battleCameraMale.SetActive(false);
+                }
+                else
+                {
+                    battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
+                    //battleCameraFemale.SetActive(false);
+                }
+
+                EndBattle();
+                //playerHUDContainer.SetActive(true);
+                //BattleHUDContainer.SetActive(false);
+                //mainCameraREF.SetActive(true);
+
+                //BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
+                //BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", true);
             }
-            else
-            {
-                battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
-                //battleCameraFemale.SetActive(false);
-            }
-
-            EndBattle();
-            //playerHUDContainer.SetActive(true);
-            //BattleHUDContainer.SetActive(false);
-            //mainCameraREF.SetActive(true);
-
-            //BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
-            //BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", true);
-
         }
 
 
@@ -331,6 +350,16 @@ namespace TurnBase
         }
         IEnumerator PlayerAttack()
         {
+            if (PlayerCharacterManager.Instance.male)
+            {
+                battleCameraMale.SetActive(false);
+                battleCameraEnemy.SetActive(true);
+            }
+            else
+            {
+                battleCameraFemale.SetActive(false);
+                battleCameraEnemy.SetActive(true);
+            }
             //playerObject.GetComponent<Animator>().SetTrigger("Block01");
             if (battleState == BattleStates.PlayerTurn)
             {
@@ -431,6 +460,16 @@ namespace TurnBase
             //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
+            if (PlayerCharacterManager.Instance.male)
+            {
+                battleCameraMale.SetActive(false);
+                battleCameraEnemy.SetActive(true);
+            }
+            else
+            {
+                battleCameraFemale.SetActive(false);
+                battleCameraEnemy.SetActive(true);
+            }
         }
         IEnumerator PlayerBlock()
         {
@@ -452,6 +491,16 @@ namespace TurnBase
             //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
+            if (PlayerCharacterManager.Instance.male)
+            {
+                battleCameraMale.SetActive(false);
+                battleCameraEnemy.SetActive(true);
+            }
+            else
+            {
+                battleCameraFemale.SetActive(false);
+                battleCameraEnemy.SetActive(true);
+            }
         }
         IEnumerator EnemyTurn()
         {
@@ -460,6 +509,7 @@ namespace TurnBase
             Debug.Log("Choose attack - range, melee, flee...");
             //dialogueText.text = $"{enemyNameText.text} attacks {playerUnit.unitName}";
             dialogueText.text = $"{enemyNameText.text} will do some sort of attack to {playerUnit.unitName}";
+
 
             yield return new WaitForSeconds(2f);
             if (battleState == BattleStates.EnemyTurn)
