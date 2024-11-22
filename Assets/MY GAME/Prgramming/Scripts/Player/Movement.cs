@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TurnBase;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Player
 {
@@ -16,6 +17,7 @@ namespace Player
         [SerializeField] private float _rotationDirection = 90f;
         [SerializeField] private float _bigRotationDirection = 180;
         [SerializeField] private GameObject _walkPosition;
+        [SerializeField] private GameObject _behidePosition;
         [SerializeField] private bool _turnedRight;
         [SerializeField] private bool _turnedLeft;
         [SerializeField] private bool _facingForward;
@@ -24,7 +26,8 @@ namespace Player
         [SerializeField] private bool _enemyInFront;
         [SerializeField] private bool _enemyInFrontRange;
         // [SerializeField] private Transform _target;
-        [SerializeField] private Vector3 _target;
+        [SerializeField] private Vector3 _targetForward;
+        [SerializeField] private Vector3 _targetBehide;
         [SerializeField] private float _speed = 1;
         [SerializeField] private float _stoppingDistance = 0.1f; // A small value for how close is considered "reached"
 
@@ -34,13 +37,15 @@ namespace Player
         {
             _player = GameObject.FindWithTag("Player");
             _playerAnim = _player.GetComponent<Animator>();
-            _target = _walkPosition.transform.position;
+            _targetForward = _walkPosition.transform.position;
+            _targetBehide = _behidePosition.transform.position;
         }
 
         void Update()
         {
-            if (GameManager.instance.state == GameStates.PlayerTurn)
-            {
+            //if (BattleSystem.instance.battleState == BattleStates.NotInBattle || BattleSystem.instance.battleState == BattleStates.BattleChoice)
+            if (GameManager.instance.state != GameStates.Pause)
+                {
                 if (_playerAnim.speed == 0)
                 {
                     _playerAnim.speed = 1;
@@ -52,24 +57,34 @@ namespace Player
 
                 if (isMoving)
                 {
-                    // Move towards the _target
-                    _playerAnim.SetBool("Walk", true);
-                    _playerAnim.SetBool("Idle", false);
-                    transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
-                    // Check if the object has reached the _target
-                    if (Vector3.Distance(transform.position, _target) <= _stoppingDistance)
+                    if (BattleSystem.instance.battleState == BattleStates.NotInBattle || BattleSystem.instance.battleState == BattleStates.BattleChoice)
                     {
-                        // Snap the player to the target position so things stay even 
-                        transform.position = _target;
-                        // Object has reached the _target
-                        Debug.Log("target reached!");
+                        // Move towards the _target
+                        _playerAnim.SetBool("Walk", true);
+                        _playerAnim.SetBool("Idle", false);
+                        transform.position = Vector3.MoveTowards(transform.position, _targetForward, _speed * Time.deltaTime);
+                        // Check if the object has reached the _target
+                        if (Vector3.Distance(transform.position, _targetForward) <= _stoppingDistance)
+                        {
+                            // Snap the player to the target position so things stay even 
+                            transform.position = _targetForward;
+                            // Object has reached the _target
+                            Debug.Log("target reached!");
 
-                        _playerAnim.SetBool("Idle", true);
-                        _playerAnim.SetBool("Walk", false);
+                            _playerAnim.SetBool("Idle", true);
+                            _playerAnim.SetBool("Walk", false);
 
-                        isMoving = false;
+                            isMoving = false;
                         
-                        StartCoroutine(CheckWalls());
+                            StartCoroutine(CheckWalls());
+                        }
+                    }
+                    else
+                    {
+                        if (BattleSystem.instance.battleState == BattleStates.PlayerTurn)
+                        {
+                            BattleMove();
+                        }
                     }
                 }
             }
@@ -84,7 +99,8 @@ namespace Player
             yield return new WaitForSeconds(0.1f);
             if (!_wallInFront)
             {
-                _target = _walkPosition.transform.position;
+                _targetForward = _walkPosition.transform.position;
+                _targetBehide = _behidePosition.transform.position;
             }
             else
             {
@@ -92,6 +108,61 @@ namespace Player
             }
         }
 
+        public void BattleMove()
+        {
+            //isMoving = true;
+            if (_enemyInFront)
+            {
+                //? Then need to move the player in that direction - call the movement script to do that
+                Debug.Log("Player can only run backwards into Range attacks...");
+                // Then run the backwardPOS
+                // Move towards the _target
+                _playerAnim.SetBool("Walk", true);
+                _playerAnim.SetBool("Idle", false);
+                transform.position = Vector3.MoveTowards(transform.position, _targetBehide, _speed * Time.deltaTime);
+                // Check if the object has reached the _target
+                if (Vector3.Distance(transform.position, _targetBehide) <= _stoppingDistance)
+                {
+                    // Snap the player to the target position so things stay even 
+                    transform.position = _targetBehide;
+                    // Object has reached the _target
+                    Debug.Log("target reached!");
+
+                    _playerAnim.SetBool("Idle", true);
+                    _playerAnim.SetBool("Walk", false);
+
+                    isMoving = false;
+
+                    StartCoroutine(CheckWalls());
+                }
+            }
+            else
+            {
+                //? Then need to move the player in that direction - call the movement script to do that
+                Debug.Log("Player can only run forwards into Melee attacks...");
+
+                // Then run the forwardPOS
+                // Move towards the _target
+                _playerAnim.SetBool("Walk", true);
+                _playerAnim.SetBool("Idle", false);
+                transform.position = Vector3.MoveTowards(transform.position, _targetForward, _speed * Time.deltaTime);
+                // Check if the object has reached the _target
+                if (Vector3.Distance(transform.position, _targetForward) <= _stoppingDistance)
+                {
+                    // Snap the player to the target position so things stay even 
+                    transform.position = _targetForward;
+                    // Object has reached the _target
+                    Debug.Log("target reached!");
+
+                    _playerAnim.SetBool("Idle", true);
+                    _playerAnim.SetBool("Walk", false);
+
+                    isMoving = false;
+
+                    StartCoroutine(CheckWalls());
+                }
+            }
+        }
 
         public void Move()
         {

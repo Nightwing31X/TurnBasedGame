@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   billboardType: 0
-  lockX: 0
+  lockX: 1
   lockY: 0
   lockZ: 0
 --- !u!95 &-5241679101624941720

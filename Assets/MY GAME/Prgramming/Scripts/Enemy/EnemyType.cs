@@ -10,8 +10,10 @@ public class EnemyType : MonoBehaviour
 
     public void DefineNames()
     {
-        BattleSystem.instance.NamePersonDetailText.text = enemyType.enemyName;
-        BattleSystem.instance.DescriptionPersonDetailText.text = enemyType.description;
-        BattleSystem.instance.IconPersonDetail.texture = enemyType.artwork;
+        //Debug.Log("Yep running the enemy details...");
+        BattleSystem.instance.enemyNameText.text = enemyType.enemyName;
+        BattleSystem.instance.enemyDescriptionText.text = enemyType.description;
+        BattleSystem.instance.enemyIconImage.texture = enemyType.artwork;
+        //Debug.Log("Finished reading all the details...");
     }
 }

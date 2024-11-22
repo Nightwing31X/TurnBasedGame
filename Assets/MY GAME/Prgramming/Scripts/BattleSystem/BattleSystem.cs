@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using GameDev;
+using Player;
 
 namespace TurnBase
 {
@@ -16,6 +17,9 @@ namespace TurnBase
         public bool meleeRange;
         public bool playerPicked;
         public bool playerChoice;
+
+
+        private bool _blockChange;
 
         [Header("Buttons")]
         [SerializeField] private Button _yesBTN;
@@ -33,19 +37,27 @@ namespace TurnBase
         //public Transform playerBattleStation;
         [SerializeField] private GameObject playerObject;
         public Unit playerUnit;
+
+        [Header("Player Position REFs")]
+        [SerializeField] private Movement _playerMovement;
+        //[SerializeField] private GameObject _forwardPOS;
+        //[SerializeField] private GameObject _backwardPOS;
+        //[SerializeField] private bool _melee;
+        //[SerializeField] private bool _range;
+
         [Header("Enemy")]
         // public GameObject enemyPrefab;
         [SerializeField] private GameObject battleCameraEnemy;
         public GameObject enemy;
         //public Transform enemyBattleStation;
-        public Unit enemyUnit;
+        //public Unit enemyUnit;
         public BattleHUD enemyHUD;
 
         [Header("Object for which is being displayed in the BattleChoice")]
         public GameObject BattleChoicePopupContainer;
-        public Text NamePersonDetailText;
-        public Text DescriptionPersonDetailText;
-        public RawImage IconPersonDetail;
+        public Text enemyNameText;
+        public Text enemyDescriptionText;
+        public RawImage enemyIconImage;
 
 
 
@@ -109,15 +121,11 @@ namespace TurnBase
         public void ShowBattleChoice(bool fromWho)
         {
             enemy = GameObject.FindWithTag("Enemy");
+            Debug.Log(enemy);
+            enemy.GetComponent<EnemyType>().DefineNames(); //? Gets all the info about the enemy you are looking at
             if (fromWho) // Means it is from the players interact.cs (True) 
             {
                 playerChoice = fromWho;
-                enemy.GetComponent<EnemyType>().DefineNames();
-                // Debug.Log(NamePersonDetailText.text);
-                // NamePersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.enemyName;
-                // DescriptionPersonDetailText.text = enemy.GetComponent<EnemyType>().enemyType.description;
-                // IconPersonDetail.texture = enemy.GetComponent<EnemyType>().enemyType.artwork;
-
 
                 BattleChoicePopupContainer.SetActive(true);
                 BattleChoicePopupContainer.GetComponent<Animator>().SetBool("Show", true);
@@ -144,7 +152,7 @@ namespace TurnBase
         }
 
 
-        public void YesBattleChoicePlayer()
+        public void YesBattleChoicePlayer() //? Gets active from the yes button on the PopUp
         {
             playerPicked = true;
             _yesBTN.enabled = false;
@@ -164,6 +172,21 @@ namespace TurnBase
             {
                 Debug.Log("Player is in Range distance");
             }
+        }
+
+        public void ChangePosition()
+        {
+            Debug.Log("This is the function which checks what position needs to be changed too");
+            //? Need to get the position forwards and backwards
+            _playerMovement = playerObject.GetComponent<Movement>();
+            // Should be able to just run the function - which does all the checks for me
+            _playerMovement.isMoving = true;
+            //_playerMovement.BattleMove();
+            //_forwardPOS = _playerMovement.walkPosition;
+            //_backwardPOS = _playerMovement.behidePosition;
+            //_melee = _playerMovement.enemyInFront;
+
+
         }
 
         public void FleeBattle() //? This runs second
@@ -229,6 +252,14 @@ namespace TurnBase
             }
             StartCoroutine(PlayerBlock());
         }
+        public void OnPosition()
+        {
+            if (battleState != BattleStates.PlayerTurn)
+            {
+                return;
+            }
+            StartCoroutine(PlayerChangePosition());
+        }
         public void OnFlee()
         {
             if (battleState != BattleStates.PlayerTurn)
@@ -237,15 +268,16 @@ namespace TurnBase
             }
             StartCoroutine(PlayerFlee());
         }
+
         void EndBattle()
         {
             if (battleState == BattleStates.Win)
             {
-                dialogueText.text = $"You Won the battle by defating {enemyUnit.unitDescription} {enemyUnit.unitName}";
+                dialogueText.text = $"You Won the battle by defating {enemyNameText.text}";
             }
             else if (battleState == BattleStates.Lose)
             {
-                dialogueText.text = $"You Lost the battle and were defated by {enemyUnit.unitDescription} {enemyUnit.unitName}";
+                dialogueText.text = $"You Lost the battle and were defated by {enemyNameText.text}";
             }
             else
             {
@@ -291,19 +323,11 @@ namespace TurnBase
 
             battleCameraEnemy = GameObject.Find("EnemyBattleCamera");
 
-            //GameObject player = Instantiate(playerPrefab);
-            //GameObject player = Instantiate(playerPrefab, playerBattleStation);
-            // playerUnit = player.GetComponent<Unit>();
-            //GameObject enemy = Instantiate(enemyPrefab, enemyBattleStation);
-
-            // enemy = Instantiate(enemyPrefab);
-            // enemyUnit = enemy.GetComponent<Unit>();
-            //dialogueText.text = $"{enemyUnit.unitDescription} {enemyUnit.unitName} {enemyUnit.unitAction}...";
             yield return new WaitForSeconds(2f);
             Debug.Log("Animation should play...");
             playerHUDContainer.SetActive(false);
-            //battleState = BattleStates.PlayerTurn;
-            //PlayerTurn();
+            battleState = BattleStates.PlayerTurn;
+            PlayerTurn();
         }
         IEnumerator PlayerAttack()
         {
@@ -321,10 +345,27 @@ namespace TurnBase
                     playerObject.GetComponent<Animator>().SetTrigger("RangeAttack01");
                 }
 
-                dialogueText.text = $"{playerUnit.unitName} attacks {NamePersonDetailText.text}";
+                dialogueText.text = $"{playerUnit.unitName} attacks {enemyNameText.text}";
             }
             yield return new WaitForSeconds(3f);
             Debug.Log("Player's turn must end after this...");
+            //bool isDead = GameManager.instance.isPlayerDead;
+            //if (isDead)
+            //{
+            //    battleState = BattleStates.Win
+            //}
+
+            if (!true)
+            {
+                battleState = BattleStates.Win;
+                EndBattle();
+            }
+            else
+            {
+                battleState = BattleStates.EnemyTurn;
+                StartCoroutine(EnemyTurn());
+            }
+
             //bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
             //enemyHUD.SetHealth(enemyUnit);
             //dialogueText.text = $"{playerUnit.unitName} attacked {enemyUnit.unitName}";
@@ -340,6 +381,16 @@ namespace TurnBase
             //    StartCoroutine(EnemyTurn());
             //}
         }
+        IEnumerator PlayerChangePosition() //? This will change the player's position - Range or Melee
+        {
+            Debug.Log("Change Position");
+            ChangePosition();
+            yield return new WaitForSeconds(10f);
+            Debug.Log("Player is now in the Position: {newPosition} --- Use all 3 Action Points...");
+            battleState = BattleStates.EnemyTurn;
+            StartCoroutine(EnemyTurn());
+        }
+
         IEnumerator PlayerFlee() //? This runs after the player has pressed the Flee Button (First thing to run)
         {
             Debug.Log("Undo the camera");
@@ -368,27 +419,69 @@ namespace TurnBase
             dialogueText.text = $"{playerUnit.unitName} feels stronger!";
             yield return new WaitForSeconds(2f);
             Debug.Log("Enemy's Turn now...");
-            //battleState = BattleStates.EnemyTurn;
-            //StartCoroutine(EnemyTurn());
+            battleState = BattleStates.EnemyTurn;
+            StartCoroutine(EnemyTurn());
+            //if (!true)
+            //{
+            //    battleState = BattleStates.Win;
+            //    EndBattle();
+            //}
+            //else
+            //{
+            //    battleState = BattleStates.EnemyTurn;
+            //    StartCoroutine(EnemyTurn());
+            //}
         }
         IEnumerator PlayerBlock()
         {
             Debug.Log("Show the block animation");
-            playerObject.GetComponent<Animator>().SetBool("Block", true);
+            _blockChange = !_blockChange;
+            playerObject.GetComponent<Animator>().SetBool("Block", _blockChange);
             dialogueText.text = $"{playerUnit.unitName} is blocking!";
             yield return new WaitForSeconds(2f);
             Debug.Log("Enemy's Turn now...");
-            //battleState = BattleStates.EnemyTurn;
-            //StartCoroutine(EnemyTurn());
+            battleState = BattleStates.EnemyTurn;
+            StartCoroutine(EnemyTurn());
+            //if (!true)
+            //{
+            //    battleState = BattleStates.Win;
+            //    EndBattle();
+            //}
+            //else
+            //{
+            //    battleState = BattleStates.EnemyTurn;
+            //    StartCoroutine(EnemyTurn());
+            //}
         }
         IEnumerator EnemyTurn()
         {
-            dialogueText.text = $"{enemyUnit.unitName} Attacks!!!";
-            yield return new WaitForSeconds(1f);
-            bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
-            playerHUD.SetHealth(playerUnit);
-            yield return new WaitForSeconds(1);
-            if (isDead)
+            Debug.Log("Need to write a check to see the players health...");
+            Debug.Log("Need to write a check to see your own health (enemey)...");
+            Debug.Log("Choose attack - range, melee, flee...");
+            //dialogueText.text = $"{enemyNameText.text} attacks {playerUnit.unitName}";
+            dialogueText.text = $"{enemyNameText.text} will do some sort of attack to {playerUnit.unitName}";
+
+            yield return new WaitForSeconds(2f);
+            if (battleState == BattleStates.EnemyTurn)
+            {
+                Debug.Log("Enemy has chosen to attack");
+                //if (meleeRange)
+                //{
+                //    Debug.Log("Melee");
+                //    enemy.GetComponent<Animator>().SetTrigger("Attack04");
+                //}
+                //else
+                //{
+                //    Debug.Log("Range");
+                //    enemy.GetComponent<Animator>().SetTrigger("RangeAttack01");
+                //}
+
+                dialogueText.text = $"{enemyNameText.text} attacks {playerUnit.unitName}";
+            }
+            //bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
+            //playerHUD.SetHealth(playerUnit);
+            yield return new WaitForSeconds(2f);
+            if (!true)
             {
                 battleState = BattleStates.Lose;
                 EndBattle();
@@ -398,6 +491,16 @@ namespace TurnBase
                 battleState = BattleStates.PlayerTurn;
                 PlayerTurn();
             }
+            //if (isDead)
+            //{
+            //    battleState = BattleStates.Lose;
+            //    EndBattle();
+            //}
+            //else
+            //{
+            //    battleState = BattleStates.PlayerTurn;
+            //    PlayerTurn();
+            //}
         }
     }
     public enum BattleStates
