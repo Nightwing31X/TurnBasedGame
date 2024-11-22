@@ -25,7 +25,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float _stoppingDistance = 0.1f; // A small value for how close is considered "reached"
     public bool isMoving;
 
-    private void Awake()
+    private void Awake() // This is attached to the enemy so I can use awake
     {
         _enemyType = GetComponent<EnemyType>();
         _enemyName = _enemyType.enemyType.enemyName;

@@ -40,18 +40,12 @@ namespace TurnBase
 
         [Header("Player Position REFs")]
         [SerializeField] private Movement _playerMovement;
-        //[SerializeField] private GameObject _forwardPOS;
-        //[SerializeField] private GameObject _backwardPOS;
-        //[SerializeField] private bool _melee;
-        //[SerializeField] private bool _range;
 
         [Header("Enemy")]
         // public GameObject enemyPrefab;
-        [SerializeField] private GameObject battleCameraEnemy;
-        public GameObject enemy;
-        //public Transform enemyBattleStation;
-        //public Unit enemyUnit;
-        public BattleHUD enemyHUD;
+        [SerializeField] private GameObject _battleCameraEnemy;
+        [SerializeField] private GameObject _enemy;
+        // private BattleHUD enemyHUD;
 
         [Header("Object for which is being displayed in the BattleChoice")]
         public GameObject BattleChoicePopupContainer;
@@ -87,12 +81,15 @@ namespace TurnBase
             _yesBTN.enabled = true;
             Debug.Log("Not in a Battle...");
             battleState = BattleStates.NotInBattle;
-            // enemy = enemyPrefab;
-            // if (enemy == null)
-            // {
-            //     enemy = GameObject.FindWithTag("Enemy");
-            // }
         }
+
+        public void EnemyCam(string name)
+        {
+            _enemy = GameObject.Find($"{name}(Clone)");
+            _battleCameraEnemy = GameObject.Find("EnemyBattleCamera");
+            _battleCameraEnemy.SetActive(false);
+        }
+
         public void BattleChoice()
         {
             // Debug.Log("Battle Choice; means popup should be here for if its the player's turn...");
@@ -120,9 +117,8 @@ namespace TurnBase
 
         public void ShowBattleChoice(bool fromWho)
         {
-            enemy = GameObject.FindWithTag("Enemy");
-            Debug.Log(enemy);
-            enemy.GetComponent<EnemyType>().DefineNames(); //? Gets all the info about the enemy you are looking at
+            Debug.Log(_enemy);
+            _enemy.GetComponent<EnemyType>().DefineNames(); //? Gets all the info about the enemy you are looking at
             if (fromWho) // Means it is from the players interact.cs (True) 
             {
                 playerChoice = fromWho;
@@ -191,19 +187,6 @@ namespace TurnBase
                 //_backwardPOS = _playerMovement.behidePosition;
                 //_melee = _playerMovement.enemyInFront;
             }
-            else
-            {
-                if (PlayerCharacterManager.Instance.male)
-                {
-                    battleCameraMale.SetActive(false);
-                    battleCameraEnemy.SetActive(true);
-                }
-                else
-                {
-                    battleCameraFemale.SetActive(false);
-                    battleCameraEnemy.SetActive(true);
-                }
-            }
         }
 
         public void FleeBattle() //? This runs second
@@ -216,14 +199,11 @@ namespace TurnBase
                 if (PlayerCharacterManager.Instance.male)
                 {
                     battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
-                    //battleCameraMale.SetActive(false);
                 }
                 else
                 {
                     battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
-                    //battleCameraFemale.SetActive(false);
                 }
-
                 EndBattle();
                 //playerHUDContainer.SetActive(true);
                 //BattleHUDContainer.SetActive(false);
@@ -246,6 +226,16 @@ namespace TurnBase
         void PlayerTurn()
         {
             dialogueText.text = "Choose Action..";
+            // if (PlayerCharacterManager.Instance.male)
+            // {
+            //     battleCameraMale.SetActive(true);
+            //     _battleCameraEnemy.SetActive(false);
+            // }
+            // else
+            // {
+            //     battleCameraFemale.SetActive(true);
+            //     _battleCameraEnemy.SetActive(false);
+            // }
         }
         public void OnAttack()
         {
@@ -339,9 +329,6 @@ namespace TurnBase
                 }
             }
 
-
-            battleCameraEnemy = GameObject.Find("EnemyBattleCamera");
-
             yield return new WaitForSeconds(2f);
             Debug.Log("Animation should play...");
             playerHUDContainer.SetActive(false);
@@ -350,16 +337,6 @@ namespace TurnBase
         }
         IEnumerator PlayerAttack()
         {
-            if (PlayerCharacterManager.Instance.male)
-            {
-                battleCameraMale.SetActive(false);
-                battleCameraEnemy.SetActive(true);
-            }
-            else
-            {
-                battleCameraFemale.SetActive(false);
-                battleCameraEnemy.SetActive(true);
-            }
             //playerObject.GetComponent<Animator>().SetTrigger("Block01");
             if (battleState == BattleStates.PlayerTurn)
             {
@@ -373,17 +350,25 @@ namespace TurnBase
                     Debug.Log("Range");
                     playerObject.GetComponent<Animator>().SetTrigger("RangeAttack01");
                 }
-
                 dialogueText.text = $"{playerUnit.unitName} attacks {enemyNameText.text}";
             }
             yield return new WaitForSeconds(3f);
             Debug.Log("Player's turn must end after this...");
+            // if (PlayerCharacterManager.Instance.male)
+            // {
+            //     battleCameraMale.SetActive(false);
+            //     _battleCameraEnemy.SetActive(true);
+            // }
+            // else
+            // {
+            //     battleCameraFemale.SetActive(false);
+            //     _battleCameraEnemy.SetActive(true);
+            // }
             //bool isDead = GameManager.instance.isPlayerDead;
             //if (isDead)
             //{
             //    battleState = BattleStates.Win
             //}
-
             if (!true)
             {
                 battleState = BattleStates.Win;
@@ -394,6 +379,7 @@ namespace TurnBase
                 battleState = BattleStates.EnemyTurn;
                 StartCoroutine(EnemyTurn());
             }
+
 
             //bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
             //enemyHUD.SetHealth(enemyUnit);
@@ -438,6 +424,7 @@ namespace TurnBase
             {
                 battleCameraFemale.SetActive(false);
             }
+            _battleCameraEnemy.SetActive(false);
             Debug.Log("Back to normal game - Enemy's turn - It costs 3 action points to leave...");
         }
 
@@ -460,16 +447,6 @@ namespace TurnBase
             //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
-            if (PlayerCharacterManager.Instance.male)
-            {
-                battleCameraMale.SetActive(false);
-                battleCameraEnemy.SetActive(true);
-            }
-            else
-            {
-                battleCameraFemale.SetActive(false);
-                battleCameraEnemy.SetActive(true);
-            }
         }
         IEnumerator PlayerBlock()
         {
@@ -491,19 +468,19 @@ namespace TurnBase
             //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
-            if (PlayerCharacterManager.Instance.male)
-            {
-                battleCameraMale.SetActive(false);
-                battleCameraEnemy.SetActive(true);
-            }
-            else
-            {
-                battleCameraFemale.SetActive(false);
-                battleCameraEnemy.SetActive(true);
-            }
         }
         IEnumerator EnemyTurn()
         {
+            // if (PlayerCharacterManager.Instance.male)
+            // {
+            //     battleCameraMale.SetActive(false);
+            //     _battleCameraEnemy.SetActive(true);
+            // }
+            // else
+            // {
+            //     battleCameraFemale.SetActive(false);
+            //     _battleCameraEnemy.SetActive(true);
+            // }
             Debug.Log("Need to write a check to see the players health...");
             Debug.Log("Need to write a check to see your own health (enemey)...");
             Debug.Log("Choose attack - range, melee, flee...");
@@ -515,17 +492,15 @@ namespace TurnBase
             if (battleState == BattleStates.EnemyTurn)
             {
                 Debug.Log("Enemy has chosen to attack");
-                //if (meleeRange)
-                //{
-                //    Debug.Log("Melee");
-                //    enemy.GetComponent<Animator>().SetTrigger("Attack04");
-                //}
-                //else
-                //{
-                //    Debug.Log("Range");
-                //    enemy.GetComponent<Animator>().SetTrigger("RangeAttack01");
-                //}
-
+                if (meleeRange)
+                {
+                    _enemy.GetComponent<Animator>().SetTrigger("Attack01");
+                }
+                else
+                {
+                    Debug.Log("Range");
+                    _enemy.GetComponent<Animator>().SetTrigger("RangeAttack01");
+                }
                 dialogueText.text = $"{enemyNameText.text} attacks {playerUnit.unitName}";
             }
             //bool isDead = playerUnit.TakeDamage(enemyUnit.damage);

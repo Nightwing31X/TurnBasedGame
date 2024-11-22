@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameDev;
+using TurnBase;
 using UnityEngine;
 
 public class RandomEnemySpawn : MonoBehaviour
@@ -69,7 +70,8 @@ public class RandomEnemySpawn : MonoBehaviour
             Debug.Log($"Spawned Item Position: {spawnedItem.transform.position}");
             Debug.Log($"Spawned Item Y Position: {spawnedItem.transform.position.y}");
 
-
+            // BattleSystem.instance.enemy = itemToSpawn; 
+            BattleSystem.instance.EnemyCam(itemToSpawn.GetComponent<EnemyType>().enemyType.enemyName);
             spawnedItems++;
         }
 
