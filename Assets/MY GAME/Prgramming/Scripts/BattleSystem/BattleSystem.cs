@@ -173,13 +173,14 @@ namespace TurnBase
             }
         }
 
-        public void ChangePosition()
+        public void ChangePosition(bool runAway)
         {
             if (battleState == BattleStates.PlayerTurn)
             {
                 Debug.Log("This is the function which checks what position needs to be changed too");
                 //? Need to get the position forwards and backwards
                 _playerMovement = playerObject.GetComponent<Movement>();
+                _playerMovement.checkFlee = runAway;
                 // Should be able to just run the function - which does all the checks for me
                 _playerMovement.isMoving = true;
                 //_playerMovement.BattleMove();
@@ -196,15 +197,17 @@ namespace TurnBase
                 BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
                 BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
 
-                if (PlayerCharacterManager.Instance.male)
-                {
-                    battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
-                }
-                else
-                {
-                    battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
-                }
-                EndBattle();
+                StartCoroutine(PlayerChangePosition(true));
+
+                //if (PlayerCharacterManager.Instance.male)
+                //{
+                //    battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
+                //}
+                //else
+                //{
+                //    battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
+                //}
+
                 //playerHUDContainer.SetActive(true);
                 //BattleHUDContainer.SetActive(false);
                 //mainCameraREF.SetActive(true);
@@ -225,7 +228,7 @@ namespace TurnBase
 
         void PlayerTurn()
         {
-            dialogueText.text = "Choose Action..";
+            dialogueText.text = "Choose Action...";
             // if (PlayerCharacterManager.Instance.male)
             // {
             //     battleCameraMale.SetActive(true);
@@ -237,6 +240,16 @@ namespace TurnBase
             //     _battleCameraEnemy.SetActive(false);
             // }
         }
+        public void OnWalk()
+        {
+            dialogueText.text = $"{playerUnit.unitName} walks...";
+        }
+
+        public void onFlee()
+        {
+            dialogueText.text = $"{playerUnit.unitName} has ran away!";
+        }
+
         public void OnAttack()
         {
             if (battleState != BattleStates.PlayerTurn)
@@ -267,7 +280,7 @@ namespace TurnBase
             {
                 return;
             }
-            StartCoroutine(PlayerChangePosition());
+            StartCoroutine(PlayerChangePosition(false));
         }
         public void OnFlee()
         {
@@ -376,7 +389,6 @@ namespace TurnBase
             }
             else
             {
-                battleState = BattleStates.EnemyTurn;
                 StartCoroutine(EnemyTurn());
             }
 
@@ -392,30 +404,51 @@ namespace TurnBase
             //}
             //else
             //{
-            //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
         }
-        IEnumerator PlayerChangePosition() //? This will change the player's position - Range or Melee
+        IEnumerator PlayerChangePosition(bool fromFlee) //? This will change the player's position - Range or Melee
         {
             Debug.Log("Change Position");
-            ChangePosition();
-            yield return new WaitForSeconds(10f);
-            Debug.Log("Player is now in the Position: {newPosition} --- Use all 3 Action Points...");
-            battleState = BattleStates.EnemyTurn;
-            StartCoroutine(EnemyTurn());
+            ChangePosition(fromFlee);
+            if (fromFlee)
+            {
+                onFlee();
+            }
+            else
+            {
+                OnWalk();
+            }
+            yield return new WaitForSeconds(8f);
+            if (!fromFlee)
+            //Debug.Log("Player is now in the Position: {newPosition} --- Use all 3 Action Points...");
+            {
+                StartCoroutine(EnemyTurn());
+            }
+            else
+            {
+                if (PlayerCharacterManager.Instance.male)
+                {
+                    battleCameraMale.GetComponent<Animator>().SetBool("Flee", true);
+                }
+                else
+                {
+                    battleCameraFemale.GetComponent<Animator>().SetBool("Flee", true);
+                }
+            }
         }
 
         IEnumerator PlayerFlee() //? This runs after the player has pressed the Flee Button (First thing to run)
         {
             Debug.Log("Undo the camera");
             FleeBattle(); // This runs second
-            yield return new WaitForSeconds(2.35f);
+            yield return new WaitForSeconds(11f);
+            Debug.Log("Should all be done now...");
             NotInBattle();
             mainCameraREF.SetActive(true);
             playerHUDContainer.SetActive(true);
             playerHUDContainer.transform.Find("Player HUD").GetComponent<Animator>().SetBool("Show", true);
-            //BattleHUDContainer.SetActive(false);
+            BattleHUDContainer.SetActive(false);
             if (PlayerCharacterManager.Instance.male)
             {
                 battleCameraMale.SetActive(false);
@@ -435,7 +468,6 @@ namespace TurnBase
             dialogueText.text = $"{playerUnit.unitName} feels stronger!";
             yield return new WaitForSeconds(2f);
             Debug.Log("Enemy's Turn now...");
-            battleState = BattleStates.EnemyTurn;
             StartCoroutine(EnemyTurn());
             //if (!true)
             //{
@@ -444,7 +476,6 @@ namespace TurnBase
             //}
             //else
             //{
-            //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
         }
@@ -456,7 +487,6 @@ namespace TurnBase
             dialogueText.text = $"{playerUnit.unitName} is blocking!";
             yield return new WaitForSeconds(2f);
             Debug.Log("Enemy's Turn now...");
-            battleState = BattleStates.EnemyTurn;
             StartCoroutine(EnemyTurn());
             //if (!true)
             //{
@@ -465,12 +495,12 @@ namespace TurnBase
             //}
             //else
             //{
-            //    battleState = BattleStates.EnemyTurn;
             //    StartCoroutine(EnemyTurn());
             //}
         }
         IEnumerator EnemyTurn()
         {
+            battleState = BattleStates.EnemyTurn;
             // if (PlayerCharacterManager.Instance.male)
             // {
             //     battleCameraMale.SetActive(false);

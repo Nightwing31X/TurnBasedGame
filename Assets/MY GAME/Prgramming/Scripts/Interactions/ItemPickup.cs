@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameDev;
 using Interactions;
+using TurnBase;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,34 +18,37 @@ public class ItemPickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (BattleSystem.instance.battleState == BattleStates.NotInBattle)
         {
-            if (_savePlayerData == null)
+            if (other.gameObject.tag == "Player")
             {
-                _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
-            }
+                if (_savePlayerData == null)
+                {
+                    _savePlayerData = GameObject.Find("PlayerManager").GetComponent<SavePlayerData>();
+                }
 
-            _currentValue = _savePlayerData.currentBagValueREF;
-            _maxValue = _savePlayerData.maxBagValueREF;
-            if (_currentValue != _maxValue)
-            {
-                ChoicePickUp(item);
-            }
-            else
-            {
-                Debug.Log("Bag is full... " + _currentValue);
-            }
+                _currentValue = _savePlayerData.currentBagValueREF;
+                _maxValue = _savePlayerData.maxBagValueREF;
+                if (_currentValue != _maxValue)
+                {
+                    ChoicePickUp(item);
+                }
+                else
+                {
+                    Debug.Log("Bag is full... " + _currentValue);
+                }
 
-            if (item.isPotion)
-            { 
-                gameObject.GetComponentInChildren<ParticleSystem>().Stop();
-                gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
-                gameObject.GetComponentInChildren<Animator>().enabled = false;
-            }
-            else
-            {
-                gameObject.GetComponent<MeshRenderer>().enabled = false;
-                gameObject.GetComponent<Animator>().enabled = false;
+                if (item.isPotion)
+                { 
+                    gameObject.GetComponentInChildren<ParticleSystem>().Stop();
+                    gameObject.GetComponentInChildren<MeshRenderer>().enabled = false;
+                    gameObject.GetComponentInChildren<Animator>().enabled = false;
+                }
+                else
+                {
+                    gameObject.GetComponent<MeshRenderer>().enabled = false;
+                    gameObject.GetComponent<Animator>().enabled = false;
+                }
             }
         }
     }
@@ -59,18 +63,21 @@ public class ItemPickup : MonoBehaviour
     //}
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (BattleSystem.instance.battleState == BattleStates.NotInBattle)
         {
-            if (item.isPotion)
+            if (other.gameObject.tag == "Player")
             {
-                gameObject.GetComponentInChildren<ParticleSystem>().Play();
-                gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
-                gameObject.GetComponentInChildren<Animator>().enabled = true;
-            }
-            else
-            {
-                gameObject.GetComponent<MeshRenderer>().enabled = true;
-                gameObject.GetComponent<Animator>().enabled = true;
+                if (item.isPotion)
+                {
+                    gameObject.GetComponentInChildren<ParticleSystem>().Play();
+                    gameObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+                    gameObject.GetComponentInChildren<Animator>().enabled = true;
+                }
+                else
+                {
+                    gameObject.GetComponent<MeshRenderer>().enabled = true;
+                    gameObject.GetComponent<Animator>().enabled = true;
+                }
             }
         }
     }

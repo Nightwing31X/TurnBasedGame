@@ -32,6 +32,7 @@ namespace Player
         [SerializeField] private float _stoppingDistance = 0.1f; // A small value for how close is considered "reached"
 
         public bool isMoving;
+        public bool checkFlee;
 
         private void Start()
         {
@@ -83,7 +84,7 @@ namespace Player
                     {
                         if (BattleSystem.instance.battleState == BattleStates.PlayerTurn)
                         {
-                            BattleMove();
+                            BattleMove(checkFlee);
                         }
                     }
                 }
@@ -108,63 +109,91 @@ namespace Player
             }
         }
 
-        public void BattleMove()
+        public void BattleMove(bool checkFlee)
         {
-            //isMoving = true;
-            if (_enemyInFront)
+            if (checkFlee) // This one only happens when the player flees
             {
-                //? Then need to move the player in that direction - call the movement script to do that
-                Debug.Log("Player can only run backwards into Range attacks...");
-                // Then run the backwardPOS
-                // Move towards the _target
-                _playerAnim.SetBool("Walk", true);
-                _playerAnim.SetBool("Idle", false);
-                transform.position = Vector3.MoveTowards(transform.position, _targetBehide, _speed * Time.deltaTime);
-                // Check if the object has reached the _target
-                if (Vector3.Distance(transform.position, _targetBehide) <= _stoppingDistance)
+                if (_enemyInFront) // If the player is right in front of the enemy then run backwards
                 {
-                    // Snap the player to the target position so things stay even 
-                    transform.position = _targetBehide;
-                    // Object has reached the _target
-                    Debug.Log("target reached!");
+                    _playerAnim.SetBool("Walk", true);
+                    _playerAnim.SetBool("Idle", false);
+                    transform.position = Vector3.MoveTowards(transform.position, _targetBehide, _speed * Time.deltaTime);
+                    // Check if the object has reached the _target
+                    if (Vector3.Distance(transform.position, _targetBehide) <= _stoppingDistance)
+                    {
+                        // Snap the player to the target position so things stay even 
+                        transform.position = _targetBehide;
+                        // Object has reached the _target
+                        Debug.Log("target reached!");
 
-                    _playerAnim.SetBool("Idle", true);
-                    _playerAnim.SetBool("Walk", false);
+                        _playerAnim.SetBool("Idle", true);
+                        _playerAnim.SetBool("Walk", false);
 
-                    isMoving = false;
+                        isMoving = false;
 
-                    StartCoroutine(CheckWalls());
+                        StartCoroutine(CheckWalls());
+                    }
                 }
             }
-            else
+            else // This run if it isn't because of the flee - which means it must be because they clicked "walk"
             {
-                //? Then need to move the player in that direction - call the movement script to do that
-                Debug.Log("Player can only run forwards into Melee attacks...");
-
-                // Then run the forwardPOS
-                // Move towards the _target
-                _playerAnim.SetBool("Walk", true);
-                _playerAnim.SetBool("Idle", false);
-                transform.position = Vector3.MoveTowards(transform.position, _targetForward, _speed * Time.deltaTime);
-                // Check if the object has reached the _target
-                if (Vector3.Distance(transform.position, _targetForward) <= _stoppingDistance)
+                //isMoving = true;
+                if (_enemyInFront)
                 {
-                    // Snap the player to the target position so things stay even 
-                    transform.position = _targetForward;
-                    // Object has reached the _target
-                    Debug.Log("target reached!");
+                    //? Then need to move the player in that direction - call the movement script to do that
+                    Debug.Log("Player can only run backwards into Range attacks...");
+                    // Then run the backwardPOS
+                    // Move towards the _target
+                    _playerAnim.SetBool("Walk", true);
+                    _playerAnim.SetBool("Idle", false);
+                    transform.position = Vector3.MoveTowards(transform.position, _targetBehide, _speed * Time.deltaTime);
+                    // Check if the object has reached the _target
+                    if (Vector3.Distance(transform.position, _targetBehide) <= _stoppingDistance)
+                    {
+                        // Snap the player to the target position so things stay even 
+                        transform.position = _targetBehide;
+                        // Object has reached the _target
+                        Debug.Log("target reached!");
 
-                    _playerAnim.SetBool("Idle", true);
-                    _playerAnim.SetBool("Walk", false);
+                        _playerAnim.SetBool("Idle", true);
+                        _playerAnim.SetBool("Walk", false);
 
-                    isMoving = false;
+                        isMoving = false;
 
-                    StartCoroutine(CheckWalls());
+                        StartCoroutine(CheckWalls());
+                    }
+                }
+                else
+                {
+                    //? Then need to move the player in that direction - call the movement script to do that
+                    Debug.Log("Player can only run forwards into Melee attacks...");
+
+                    // Then run the forwardPOS
+                    // Move towards the _target
+                    _playerAnim.SetBool("Walk", true);
+                    _playerAnim.SetBool("Idle", false);
+                    transform.position = Vector3.MoveTowards(transform.position, _targetForward, _speed * Time.deltaTime);
+                    // Check if the object has reached the _target
+                    if (Vector3.Distance(transform.position, _targetForward) <= _stoppingDistance)
+                    {
+                        // Snap the player to the target position so things stay even 
+                        transform.position = _targetForward;
+                        // Object has reached the _target
+                        Debug.Log("target reached!");
+
+                        _playerAnim.SetBool("Idle", true);
+                        _playerAnim.SetBool("Walk", false);
+
+                        isMoving = false;
+
+                        StartCoroutine(CheckWalls());
+                    }
                 }
             }
         }
 
-        public void Move()
+        #region Used for the button UI events
+        public void Move() //? All used on the buttons UI
         {
             if (_player != null)
             {
@@ -281,5 +310,6 @@ namespace Player
                 _facingBackward = false;
             }
         }
+        #endregion
     }
 }

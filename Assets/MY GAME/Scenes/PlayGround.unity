@@ -3230,9 +3230,8 @@ MonoBehaviour:
   playerObject: {fileID: 0}
   playerUnit: {fileID: 0}
   _playerMovement: {fileID: 0}
-  battleCameraEnemy: {fileID: 0}
-  enemy: {fileID: 0}
-  enemyHUD: {fileID: 1588029669}
+  _battleCameraEnemy: {fileID: 0}
+  _enemy: {fileID: 0}
   BattleChoicePopupContainer: {fileID: 461092716}
   enemyNameText: {fileID: 1912722649}
   enemyDescriptionText: {fileID: 1522699983}
@@ -13378,15 +13377,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289405683}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 6, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 492483559}
   - {fileID: 625674392}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1314315173
 GameObject:
   m_ObjectHideFlags: 0
