@@ -20,7 +20,7 @@ namespace Player
         public string wallLayer;
         //public string itemLayer;
         [Tooltip("Toggle on to print console messages from this component.")]
-        [SerializeField] private bool _debug;
+        [SerializeField] private bool _debugErrors;
         [SerializeField] private bool _checkControllerInput;
         [SerializeField] private bool _forceControllerInput;
         [Tooltip("The distance that the player can reach interactions."), SerializeField, Range(0, 100)] private float distance = 2f;
@@ -86,7 +86,7 @@ namespace Player
                 Ray interactRayForward;
                 // this ray shoots forward from the center of the camera
                 interactRayForward = _mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.DrawRay(interactRayForward.origin, transform.forward * distance, Color.green); // Forward side
                     // Debug.DrawRay(interactRayForward.origin, transform.right * distance, Color.green); // Right side
@@ -98,14 +98,14 @@ namespace Player
                 // if this physics ray that gets cast in a direction hits a object within our distance and or layer
                 if (Physics.Raycast(interactRayForward, out hitInfoForward, distance, Layers /*This part here is the layer its optional*/ ))
                 {
-                    if (_debug)
+                    if (_debugErrors)
                     {
                         Debug.DrawRay(transform.position, transform.forward * distance, Color.yellow, 0.5f);
                     }
                     # region Detect the interact layer (Interaction Layer)
                     //if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(interactionLayer))
                     //{
-                    //    if (_debug)
+                    //    if (_debugErrors)
                     //    {
                     //        Debug.Log($"Player - Interaction layer; can click...");
                     //    }
@@ -124,7 +124,7 @@ namespace Player
                     # region Detect the attack layer (Enemy Layer) - Forward Player view
                     if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                     {
-                        if (_debug)
+                        if (_debugErrors)
                         {
                             Debug.Log($"Player - Enemy is in melee distance to fight!");
                         }
@@ -151,7 +151,7 @@ namespace Player
                     # region Detect the wall layer (Wall Layer)
                     if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
                     {
-                        if (_debug)
+                        if (_debugErrors)
                         {
                             Debug.Log($"Player - Wall is in-front.");
                         }
@@ -171,7 +171,7 @@ namespace Player
                     # region Detect the item layer (Item Layer) - So I can remove the enemy front detection.
                     // if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
                     // {
-                    //     if (_debug)
+                    //     if (_debugErrors)
                     //     {
                     //         Debug.Log($"Player - item is in-front.");
                     //     }
@@ -200,7 +200,7 @@ namespace Player
 
 
                 # region Raycast for the Front side view - Range Attack
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.magenta); // Forward side
                 }
@@ -211,7 +211,7 @@ namespace Player
                     {
                         if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                         {
-                            if (_debug)
+                            if (_debugErrors)
                             {
                                 //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
                                 Debug.Log($"Player - Enemy is in-front; can do range attacks");
@@ -221,6 +221,7 @@ namespace Player
                             meleeDistance = false;
                             BattleSystem.instance.meleeRange = meleeDistance;
                             _playerPick = BattleSystem.instance.playerPicked;
+                            Debug.Log(_playerPick);
                             enemyRight = false;
                             enemyLeft = false;
                             enemyBack = false;
@@ -252,7 +253,7 @@ namespace Player
                 Ray interactRayRight;
                 // this ray shoots forward from the center of the camera (Right)
                 interactRayRight = _rightCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                if (_debug)
+                if (_debugErrors)
                 {
                     // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
                     Debug.DrawRay(interactRayRight.origin, transform.right * attackRadiusDistance, Color.magenta); // Right side
@@ -266,7 +267,7 @@ namespace Player
                 {
                     if (hitInfoRight.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                     {
-                        if (_debug)
+                        if (_debugErrors)
                         {
                             Debug.Log($"Player - Enemy is on right side");
                         }
@@ -299,7 +300,7 @@ namespace Player
                 Ray interactRayLeft;
                 // this ray shoots forward from the center of the camera (Left)
                 interactRayLeft = _leftCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.DrawRay(interactRayLeft.origin, -transform.right * attackRadiusDistance, Color.magenta); // Left side
                 }
@@ -310,7 +311,7 @@ namespace Player
                 {
                     if (hitInfoLeft.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                     {
-                        if (_debug)
+                        if (_debugErrors)
                         {
                             Debug.Log($"Player - Enemy is on left side");
                         }
@@ -341,7 +342,7 @@ namespace Player
                 Ray interactRayBehide;
                 // this ray shoots forward from the center of the camera (Behide)
                 interactRayBehide = _behideCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.DrawRay(interactRayBehide.origin, -transform.forward * attackRadiusDistance, Color.magenta); // Behide side
                 }
@@ -352,7 +353,7 @@ namespace Player
                 {
                     if (hitInfoBehide.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                     {
-                        if (_debug)
+                        if (_debugErrors)
                         {
                             Debug.Log($"Player - Enemy is on behide.");
                         }
@@ -395,7 +396,7 @@ namespace Player
                 if (!_playerMove.isMoving)
                 {
                     #region BattleState - Raycast for the Front side view - Range Attack
-                    if (_debug)
+                    if (_debugErrors)
                     {
                         Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.magenta); // Forward side
                     }
@@ -405,7 +406,7 @@ namespace Player
                         {
                             if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                             {
-                                if (_debug)
+                                if (_debugErrors)
                                 {
                                     //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
                                     Debug.Log($"Player - Enemy is in-front; can do range attacks");

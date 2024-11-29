@@ -6,12 +6,12 @@ using UnityEngine.EventSystems;
 
 public class EnemyInteract : MonoBehaviour
 {
+    [Tooltip("Toggle on to print console messages from this component.")]
+    [SerializeField] private bool _debugErrors;
     //public GUIStyle crossHair, tooltip;
     public LayerMask Layers;
     public string playerLayer;
     public string wallLayer;
-    [Tooltip("Toggle on to print console messages from this component.")]
-    [SerializeField] private bool _debug;
     [Tooltip("The distance that the player can reach interactions."), SerializeField, Range(0, 100)] private float distance = 2f;
     [SerializeField, Range(0, 100)] private float attackRadiusDistance = 6f;
 
@@ -57,7 +57,7 @@ public class EnemyInteract : MonoBehaviour
         Ray interactRayForward;
         // this ray shoots forward from the center of the camera
         interactRayForward = _frontCameraEnemy.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        if (_debug)
+        if (_debugErrors)
         {
             Debug.DrawRay(interactRayForward.origin, transform.forward * distance, Color.green); // Forward side
             // Debug.DrawRay(interactRayForward.origin, transform.right * distance, Color.green); // Right side
@@ -69,14 +69,14 @@ public class EnemyInteract : MonoBehaviour
         // if this physics ray that gets cast in a direction hits a object within our distance and or layer
         if (Physics.Raycast(interactRayForward, out hitInfoForward, distance, Layers /*This part here is the layer its optional*/ ))
         {
-            if (_debug)
+            if (_debugErrors)
             {
                 Debug.DrawRay(transform.position, transform.forward * distance, Color.yellow, 0.5f);
             }
             //# region Detect the interact layer (Interaction Layer)
             //if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(playerLayer))
             //{
-            //    if (_debug)
+            //    if (_debugErrors)
             //    {
             //       Debug.Log($"Hit Layer = {playerLayer}");
             //    }
@@ -94,7 +94,7 @@ public class EnemyInteract : MonoBehaviour
             # region Detect the attack layer (Player Layer) - Forward Enemy view
             if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(playerLayer))
             {
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.Log($"Enemy - Player is in range to fight!");
                 }
@@ -107,7 +107,7 @@ public class EnemyInteract : MonoBehaviour
             # region Detect the wall layer (Wall Layer)
             if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
             {
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.Log($"Enemy - Wall is infront.");
                 }
@@ -127,7 +127,7 @@ public class EnemyInteract : MonoBehaviour
 
 
         # region Raycast for the Front side view)
-        if (_debug)
+        if (_debugErrors)
         {
             Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.red); // Right side
         }
@@ -136,7 +136,7 @@ public class EnemyInteract : MonoBehaviour
         {
             if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(playerLayer))
             {
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.Log($"Enemy - Player is infront; can do range attacks");
                 }
@@ -161,7 +161,7 @@ public class EnemyInteract : MonoBehaviour
         Ray interactRayRight;
         // this ray shoots forward from the center of the camera (Right)
         interactRayRight = _rightCameraEnemy.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        if (_debug)
+        if (_debugErrors)
         {
             // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
             Debug.DrawRay(interactRayRight.origin, transform.right * attackRadiusDistance, Color.red); // Right side
@@ -175,7 +175,7 @@ public class EnemyInteract : MonoBehaviour
         {
             if (hitInfoRight.transform.gameObject.layer == LayerMask.NameToLayer(playerLayer))
             {
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.Log($"Enemy - Player is on right side");
                 }
@@ -198,7 +198,7 @@ public class EnemyInteract : MonoBehaviour
         Ray interactRayLeft;
         // this ray shoots forward from the center of the camera (Right)
         interactRayLeft = _leftCameraEnemy.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        if (_debug)
+        if (_debugErrors)
         {
             // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
             Debug.DrawRay(interactRayLeft.origin, -transform.right * attackRadiusDistance, Color.red); // Right side
@@ -212,7 +212,7 @@ public class EnemyInteract : MonoBehaviour
         {
             if (hitInfoLeft.transform.gameObject.layer == LayerMask.NameToLayer(playerLayer))
             {
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.Log($"Enemy - Player is on left side");
                 }
@@ -235,7 +235,7 @@ public class EnemyInteract : MonoBehaviour
         Ray interactRayBehide;
         // this ray shoots forward from the center of the camera (Right)
         interactRayBehide = _behideCameraEnemy.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-        if (_debug)
+        if (_debugErrors)
         {
             // Debug.DrawRay(interactRayRight.origin, transform.forward * distance, Color.green); // Forward side
             Debug.DrawRay(interactRayBehide.origin, -transform.forward * attackRadiusDistance, Color.red); // Right side
@@ -249,7 +249,7 @@ public class EnemyInteract : MonoBehaviour
         {
             if (hitInfoBehide.transform.gameObject.layer == LayerMask.NameToLayer(playerLayer))
             {
-                if (_debug)
+                if (_debugErrors)
                 {
                     Debug.Log($"Enemy - Player is on behide.");
                 }

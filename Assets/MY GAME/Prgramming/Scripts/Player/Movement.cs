@@ -12,6 +12,7 @@ namespace Player
     [AddComponentMenu("GameDev/Player/First Person Movement")]
     public class Movement : MonoBehaviour
     {
+        [SerializeField] private bool _debugErrors = false;
         GameObject _player;
         Animator _playerAnim;
         [SerializeField] private float _rotationDirection = 90f;
@@ -46,7 +47,7 @@ namespace Player
         {
             //if (BattleSystem.instance.battleState == BattleStates.NotInBattle || BattleSystem.instance.battleState == BattleStates.BattleChoice)
             if (GameManager.instance.state != GameStates.Pause)
-                {
+            {
                 if (_playerAnim.speed == 0)
                 {
                     _playerAnim.speed = 1;
@@ -70,13 +71,16 @@ namespace Player
                             // Snap the player to the target position so things stay even 
                             transform.position = _targetForward;
                             // Object has reached the _target
-                            Debug.Log("target reached!");
+                            if (_debugErrors)
+                            {
+                                Debug.Log("target reached!");
+                            }
 
                             _playerAnim.SetBool("Idle", true);
                             _playerAnim.SetBool("Walk", false);
 
                             isMoving = false;
-                        
+
                             StartCoroutine(CheckWalls());
                         }
                     }
@@ -105,7 +109,10 @@ namespace Player
             }
             else
             {
-                Debug.Log("I cannot move Object, a wall is in front of Player...");
+                if (_debugErrors)
+                {
+                    Debug.Log("I cannot move Object, a wall is in front of Player...");
+                }
             }
         }
 
@@ -124,7 +131,10 @@ namespace Player
                         // Snap the player to the target position so things stay even 
                         transform.position = _targetBehide;
                         // Object has reached the _target
-                        Debug.Log("target reached!");
+                        if (_debugErrors)
+                        {
+                            Debug.Log("target reached!");
+                        }
 
                         _playerAnim.SetBool("Idle", true);
                         _playerAnim.SetBool("Walk", false);
@@ -134,6 +144,17 @@ namespace Player
                         StartCoroutine(CheckWalls());
                     }
                 }
+                else
+                {
+                    if (_enemyInFrontRange)
+                    {
+                        if (_debugErrors)
+                        {
+                            Debug.Log("SHOULDN'T WALK OR DO ANYTHING AFTER LEAVING THE FLEE...");
+                        }
+                        isMoving = false;
+                    }
+                }
             }
             else // This run if it isn't because of the flee - which means it must be because they clicked "walk"
             {
@@ -141,7 +162,10 @@ namespace Player
                 if (_enemyInFront)
                 {
                     //? Then need to move the player in that direction - call the movement script to do that
-                    Debug.Log("Player can only run backwards into Range attacks...");
+                    if (_debugErrors)
+                    {
+                        Debug.Log("Player can only run backwards into Range attacks...");
+                    }
                     // Then run the backwardPOS
                     // Move towards the _target
                     _playerAnim.SetBool("Walk", true);
@@ -153,7 +177,10 @@ namespace Player
                         // Snap the player to the target position so things stay even 
                         transform.position = _targetBehide;
                         // Object has reached the _target
-                        Debug.Log("target reached!");
+                        if (_debugErrors)
+                        {
+                            Debug.Log("target reached!");
+                        }
 
                         _playerAnim.SetBool("Idle", true);
                         _playerAnim.SetBool("Walk", false);
@@ -166,7 +193,10 @@ namespace Player
                 else
                 {
                     //? Then need to move the player in that direction - call the movement script to do that
-                    Debug.Log("Player can only run forwards into Melee attacks...");
+                    if (_debugErrors)
+                    {
+                        Debug.Log("Player can only run forwards into Melee attacks...");
+                    }
 
                     // Then run the forwardPOS
                     // Move towards the _target
@@ -179,7 +209,10 @@ namespace Player
                         // Snap the player to the target position so things stay even 
                         transform.position = _targetForward;
                         // Object has reached the _target
-                        Debug.Log("target reached!");
+                        if (_debugErrors)
+                        {
+                            Debug.Log("target reached!");
+                        }
 
                         _playerAnim.SetBool("Idle", true);
                         _playerAnim.SetBool("Walk", false);
@@ -211,13 +244,19 @@ namespace Player
                         }
                         else
                         {
-                            Debug.Log("Enemy is in right in-front... I cannot move...");
+                            if (_debugErrors)
+                            {
+                                Debug.Log("Enemy is in right in-front... I cannot move...");
+                            }
                         }
                     }
                 }
                 else
                 {
-                    Debug.Log("I cannot move, a wall is in front of me...");
+                    if (_debugErrors)
+                    {
+                        Debug.Log("I cannot move, a wall is in front of me...");
+                    }
                 }
             }
         }

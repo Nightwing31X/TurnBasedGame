@@ -3214,11 +3214,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608df62c9b844224d869a5ae1e75a48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugErrors: 0
   battleState: 0
   dialogueText: {fileID: 423353727}
   meleeRange: 0
   playerPicked: 0
   playerChoice: 0
+  _actionPointsText: {fileID: 2092504696}
+  _actionPoints: 3
+  _currentActionPoints: 0
   _yesBTN: {fileID: 1337780969}
   _noBTN: {fileID: 1751713109}
   mainCameraREF: {fileID: 0}
@@ -3231,7 +3235,7 @@ MonoBehaviour:
   playerUnit: {fileID: 0}
   _playerMovement: {fileID: 0}
   _battleCameraEnemy: {fileID: 0}
-  _enemy: {fileID: 0}
+  _enemyObject: {fileID: 0}
   BattleChoicePopupContainer: {fileID: 461092716}
   enemyNameText: {fileID: 1912722649}
   enemyDescriptionText: {fileID: 1522699983}
@@ -5894,6 +5898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f11ec0a0de2eb5f458d26729f182e55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugErrors: 0
   _rotationDirection: 90
   _bigRotationDirection: 180
   _walkPosition: {fileID: 248561919}
@@ -5910,6 +5915,7 @@ MonoBehaviour:
   _speed: 1
   _stoppingDistance: 0.1
   isMoving: 0
+  checkFlee: 0
 --- !u!114 &492483562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5928,7 +5934,7 @@ MonoBehaviour:
   interactionLayer: Interaction
   attackLayer: Attack
   wallLayer: Wall
-  _debug: 1
+  _debugErrors: 0
   _checkControllerInput: 0
   _forceControllerInput: 0
   distance: 6
@@ -8369,7 +8375,7 @@ MonoBehaviour:
   interactionLayer: Interaction
   attackLayer: Attack
   wallLayer: Wall
-  _debug: 1
+  _debugErrors: 0
   _checkControllerInput: 0
   _forceControllerInput: 0
   distance: 6
@@ -8403,6 +8409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f11ec0a0de2eb5f458d26729f182e55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugErrors: 0
   _rotationDirection: 90
   _bigRotationDirection: 180
   _walkPosition: {fileID: 605969115}
@@ -8419,6 +8426,7 @@ MonoBehaviour:
   _speed: 1
   _stoppingDistance: 0.1
   isMoving: 0
+  checkFlee: 0
 --- !u!143 &625674396
 CharacterController:
   m_ObjectHideFlags: 0
@@ -8958,6 +8966,7 @@ RectTransform:
   m_Children:
   - {fileID: 1495342716}
   - {fileID: 423353726}
+  - {fileID: 2092504695}
   - {fileID: 1588029668}
   - {fileID: 2040764827}
   m_Father: {fileID: 650091374}
@@ -20182,6 +20191,85 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083366073}
+  m_CullTransparentMesh: 1
+--- !u!1 &2092504694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2092504695}
+  - component: {fileID: 2092504697}
+  - component: {fileID: 2092504696}
+  m_Layer: 5
+  m_Name: ActionPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2092504695
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092504694}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 680183500}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 180, y: -300}
+  m_SizeDelta: {x: 350, y: 80}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &2092504696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092504694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Action Points: 0/3'
+--- !u!222 &2092504697
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092504694}
   m_CullTransparentMesh: 1
 --- !u!1 &2096572324
 GameObject:
