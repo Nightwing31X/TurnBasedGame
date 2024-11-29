@@ -86,7 +86,6 @@ namespace Player
             menuINV.transform.Find("PlayerINV").GetComponent<Animator>().SetBool("PlayerINVOpen", true);
             menuINV.transform.Find("PlayerInfo").GetComponent<Animator>().SetBool("PlayerInfoOpen", true);
 
-
             // playerHUD.SetActive(false);
         }
 

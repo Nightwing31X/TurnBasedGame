@@ -42,6 +42,9 @@ namespace TurnBase
 
         [Header("Player Position REFs")]
         [SerializeField] private Movement _playerMovement;
+        [SerializeField] private bool _wallInFront;
+        [SerializeField] private bool _wallInBehide;
+        [SerializeField] private float _fleeDelay;
 
         [Header("Enemy")]
         // public GameObject enemyPrefab;
@@ -349,11 +352,11 @@ namespace TurnBase
         {
             if (battleState == BattleStates.Win)
             {
-                dialogueText.text = $"You Won the battle by defating {enemyNameText.text}";
+                dialogueText.text = $"You Won the battle by defeat {enemyNameText.text}";
             }
             else if (battleState == BattleStates.Lose)
             {
-                dialogueText.text = $"You Lost the battle and were defated by {enemyNameText.text}";
+                dialogueText.text = $"You Lost the battle and were defeated by {enemyNameText.text}";
             }
             else
             {
@@ -372,10 +375,18 @@ namespace TurnBase
             }
             _actionPointsText.text = $"Action Points: {_currentActionPoints.ToString()}/{_actionPoints.ToString()}";
         }
+
+        void WallCheck()
+        {
+            _wallInFront = GetComponent<Interact>().wallFrontHit;
+            // _wallInBehide = GetComponent<Interact>().wallBehideHit;
+        }
+
         IEnumerator SetupBattle()
         {
             _currentActionPoints = _actionPoints;
             UpdateActionPoints();
+            // WallCheck();
             if (PlayerCharacterManager.Instance.male)
             {
                 if (_debugErrors)
@@ -535,8 +546,18 @@ namespace TurnBase
             {
                 Debug.Log("Undo the camera");
             }
-            FleeBattle(); // This runs second
-            yield return new WaitForSeconds(11f);
+            if (!_wallInBehide)
+            {
+                _fleeDelay = 11f;
+                FleeBattle(); //? This runs second
+            }
+            else
+            {
+                _fleeDelay = 4f;
+                BattleHUDContainer.transform.Find("BattlePlayerHUD").GetComponent<Animator>().SetBool("PlayerInfoOpen", false);
+                BattleHUDContainer.transform.Find("All Buttons").GetComponent<Animator>().SetBool("Show", false);
+            }
+            yield return new WaitForSeconds(_fleeDelay);
             if (_debugErrors)
             {
                 Debug.Log("Should all be done now...");

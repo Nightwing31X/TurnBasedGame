@@ -24,6 +24,7 @@ namespace Player
         [SerializeField] private bool _facingForward;
         [SerializeField] private bool _facingBackward;
         [SerializeField] private bool _wallInFront;
+        // [SerializeField] private bool _wallInBehide;
         [SerializeField] private bool _enemyInFront;
         [SerializeField] private bool _enemyInFrontRange;
         // [SerializeField] private Transform _target;
@@ -52,7 +53,8 @@ namespace Player
                 {
                     _playerAnim.speed = 1;
                 }
-                _wallInFront = GetComponent<Interact>().wallHit;
+                _wallInFront = GetComponent<Interact>().wallFrontHit;
+                // _wallInBehide = GetComponent<Interact>().wallBehideHit;
                 _enemyInFront = GetComponent<Interact>().enemyFront;
                 _enemyInFrontRange = GetComponent<Interact>().enemyFrontRange;
 
