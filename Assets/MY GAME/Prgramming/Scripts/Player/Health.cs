@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-
     public SavePlayerData _playerData;
     public GameObject playerObject;
     public Unit _playerUnit;
@@ -23,7 +22,7 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         _playerData = GetComponent<SavePlayerData>();
-        
+
         if (_playerData.maleREF)
         {
             playerObject = GameObject.Find("MalePlayer");
@@ -36,18 +35,21 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void UpdatePlayersHealth()
+    public void UpdatePlayersHealth(bool value)
     {
         // maxHealth = _playerData.maxHealthREF;
         // currentHealth = _playerData.currentHealthREF;
-
+        if (value)
+        {
+            _playerUnit.SetUpPlayerDataForBattle(); //? Have to put this here so that the health elements would get updated
+        }
         maxHealth = _playerUnit.maxHealth;
         currentHealth = _playerUnit.currentHealth;
 
         _playHealthText.text = $"{currentHealth}/{maxHealth}";
-        _playHealthBar.fillAmount = Mathf.Clamp01(currentHealth/maxHealth);  
+        _playHealthBar.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
 
         _battleHealthText.text = $"{currentHealth}/{maxHealth}";
-        _battleHealthBar.fillAmount = Mathf.Clamp01(currentHealth/maxHealth);  
+        _battleHealthBar.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
     }
 }

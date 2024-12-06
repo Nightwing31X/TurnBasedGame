@@ -204,7 +204,7 @@ namespace Player
                             meleeDistance = false;
                             BattleSystem.instance.meleeRange = meleeDistance;
                             _playerPick = BattleSystem.instance.playerPicked;
-                            Debug.Log(_playerPick);
+                            // Debug.Log(_playerPick);
                             enemyRight = false;
                             enemyLeft = false;
                             enemyBack = false;

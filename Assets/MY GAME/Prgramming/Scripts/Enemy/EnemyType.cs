@@ -7,6 +7,8 @@ using UnityEngine;
 public class EnemyType : MonoBehaviour
 {
     public Enemy enemyType;
+    public EnemyUnit enemyUnit;
+    public EnemyHealth enemyHealth;
     public int meleeDamageREF;
     public int rangeDamageREF;
     public int maxHealthREF;
@@ -24,7 +26,19 @@ public class EnemyType : MonoBehaviour
         rangeDamageREF = enemyType.rangeDamage;
         maxHealthREF = enemyType.maxHealth;
         currentHealthREF = enemyType.currentHealth;
+
+        enemyUnit = GetComponent<EnemyUnit>();
+        enemyUnit.SetUpEnemyDataForBattle();
+        
+        enemyHealth = GetComponent<EnemyHealth>();
+        enemyHealth.UpdateEnemyHealth();
     }
 
-
+    // void Awake()
+    // {
+    // }
+    // void Start()
+    // {
+    //     enemyUnit.SetUpEnemyDataForBattle();
+    // }
 }

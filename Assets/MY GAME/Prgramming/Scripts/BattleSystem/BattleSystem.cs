@@ -5,6 +5,7 @@ using UnityEngine;
 using GameDev;
 using Player;
 using System;
+using Unity.VisualScripting;
 
 namespace TurnBase
 {
@@ -17,6 +18,7 @@ namespace TurnBase
         public bool meleeRange;
         public bool playerPicked;
         public bool playerChoice;
+        [SerializeField] private bool alreadyDefined;
         private bool _blockChange;
         [Header("Action Points")]
         [SerializeField] private Text _actionPointsText;
@@ -401,51 +403,74 @@ namespace TurnBase
             // WallCheck();
             if (PlayerCharacterManager.Instance.male)
             {
-                if (_debugErrors)
-                {
-                    Debug.Log("Should be male");
-                }
                 if (playerChoice)
                 {
-                    playerObject = GameObject.Find("MalePlayer");
-                    playerUnit = playerObject.GetComponent<Unit>();
-                    playerUnit.SetUpDataForBattle();
+                    if (_debugErrors)
+                    {
+                        Debug.Log("Should be male");
+                    }
+                    if (!alreadyDefined)
+                    {
+                        alreadyDefined = true;
+                        playerObject = GameObject.Find("MalePlayer");
+                        playerUnit = playerObject.GetComponent<Unit>();
+                        playerUnit.SetUpPlayerDataForBattle();
 
-                    enemyUnit = _enemyObject.GetComponent<EnemyUnit>();
-                    enemyUnit.SetUpDataForBattle();
+                        enemyUnit = _enemyObject.GetComponent<EnemyUnit>();
+                        enemyUnit.SetUpEnemyDataForBattle();
 
-                    playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
-                    playerHUD.SetHUD(playerUnit);
-                    mainCameraREF = Camera.main.gameObject;
-                    mainCameraREF.SetActive(false);
-                    battleCameraMale.SetActive(true);
-                    battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
-                    PlayerTurn(false);
+                        playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
+                        mainCameraREF = Camera.main.gameObject;
+                        playerHUD.SetHUD(playerUnit);
+                        mainCameraREF.SetActive(false);
+                        battleCameraMale.SetActive(true);
+                        battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
+                        PlayerTurn(false);
+                    }
+                    else
+                    {
+                        playerHUD.SetHUD(playerUnit);
+                        mainCameraREF.SetActive(false);
+                        battleCameraMale.SetActive(true);
+                        battleCameraMale.GetComponent<Animator>().SetBool("Player", true);
+                        PlayerTurn(false);
+                    }
                 }
             }
             else
             {
-                if (_debugErrors)
-                {
-                    Debug.Log("Should be female");
-                }
                 if (playerChoice)
                 {
-                    playerObject = GameObject.Find("FemalePlayer");
-                    playerUnit = playerObject.GetComponent<Unit>();
-                    playerUnit.SetUpDataForBattle();
+                    if (_debugErrors)
+                    {
+                        Debug.Log("Should be female");
+                    }
+                    if (!alreadyDefined)
+                    {
+                        alreadyDefined = true;
+                        playerObject = GameObject.Find("FemalePlayer");
+                        playerUnit = playerObject.GetComponent<Unit>();
+                        playerUnit.SetUpPlayerDataForBattle();
 
-                    enemyUnit = _enemyObject.GetComponent<EnemyUnit>();
-                    enemyUnit.SetUpDataForBattle();
+                        enemyUnit = _enemyObject.GetComponent<EnemyUnit>();
+                        enemyUnit.SetUpEnemyDataForBattle();
 
-                    playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
-                    playerHUD.SetHUD(playerUnit);
-                    mainCameraREF = Camera.main.gameObject;
-                    mainCameraREF.SetActive(false);
-                    battleCameraFemale.SetActive(true);
-                    battleCameraFemale.GetComponent<Animator>().SetBool("Player", true);
-                    PlayerTurn(false);
+                        playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
+                        mainCameraREF = Camera.main.gameObject;
+                        playerHUD.SetHUD(playerUnit);
+                        mainCameraREF.SetActive(false);
+                        battleCameraFemale.SetActive(true);
+                        battleCameraFemale.GetComponent<Animator>().SetBool("Player", true);
+                    }
+                    else
+                    {
+                        playerHUD.SetHUD(playerUnit);
+                        mainCameraREF.SetActive(false);
+                        battleCameraFemale.SetActive(true);
+                        battleCameraFemale.GetComponent<Animator>().SetBool("Player", true);
+                    }
                 }
+                PlayerTurn(false);
             }
 
             yield return new WaitForSeconds(2f);
@@ -468,8 +493,15 @@ namespace TurnBase
                 if (meleeRange)
                 {
                     Debug.Log("Player did melee damage");
-                    enemyUnit.TakeDamage(playerUnit.meleeDamage);
+                    bool isDead = enemyUnit.TakeDamage(playerUnit.meleeDamage);
+                    yield return new WaitForSeconds(1f);
+                    if (isDead)
+                    {
+                        battleState = BattleStates.Win;
+                        EndBattle();
+                    }
                     playerObject.GetComponent<Animator>().SetTrigger("Attack04");
+                    yield return new WaitForSeconds(0.5f);
                     _enemyObject.GetComponent<Animator>().SetTrigger("Stun");
                 }
                 else
@@ -481,6 +513,7 @@ namespace TurnBase
                     Debug.Log("Player did range damage");
                     enemyUnit.TakeDamage(playerUnit.rangeDamage);
                     playerObject.GetComponent<Animator>().SetTrigger("RangeAttack01");
+                    yield return new WaitForSeconds(1.5f);
                     _enemyObject.GetComponent<Animator>().SetTrigger("Stun");
                 }
                 dialogueText.text = $"{playerUnit.unitName} attacks {enemyNameText.text}";
@@ -516,19 +549,19 @@ namespace TurnBase
             }
 
 
-            //bool isDead = enemyUnit.TakeDamage(playerUnit.meleeDamage);
-            //enemyHUD.SetHealth(enemyUnit);
-            //dialogueText.text = $"{playerUnit.unitName} attacked {enemyUnit.unitName}";
-            //yield return new WaitForSeconds(2f);
-            //if (isDead)
-            //{
-            //    battleState = BattleStates.Win;
-            //    EndBattle();
-            //}
-            //else
-            //{
-            //    StartCoroutine(EnemyTurn());
-            //}
+            // bool isDead = enemyUnit.TakeDamage(playerUnit.meleeDamage);
+            // enemyHUD.SetHealth(enemyUnit);
+            // dialogueText.text = $"{playerUnit.unitName} attacked {enemyUnit.unitName}";
+            // yield return new WaitForSeconds(2f);
+            // if (isDead)
+            // {
+            //     battleState = BattleStates.Win;
+            //     EndBattle();
+            // }
+            // else
+            // {
+            //     StartCoroutine(EnemyTurn());
+            // }
         }
         IEnumerator PlayerChangePosition(bool fromFlee) //? This will change the player's position - Range or Melee
         {

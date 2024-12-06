@@ -75,7 +75,7 @@ namespace Player
             GameManager.instance.inINV = _inINV;
 
             PlayerCharacterManager.Instance.PlayerINFO();
-            _playerManager.GetComponent<Health>().UpdatePlayersHealth();
+            _playerManager.GetComponent<Health>().UpdatePlayersHealth(true);
 
             pausedBTN.SetActive(false);
             profileBTN.SetActive(false);

@@ -2,7 +2,6 @@ using GameDev;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 namespace TurnBase
@@ -27,7 +26,7 @@ namespace TurnBase
             _playerData = _playerManager.GetComponent<SavePlayerData>();
         }
 
-        public void SetUpDataForBattle()
+        public void SetUpPlayerDataForBattle()
         {
             unitName = _playerData.usernameREF;
             unitLevel = _playerData.levelREF;
@@ -42,7 +41,7 @@ namespace TurnBase
         {
             // Current health is affected by damage amount
             currentHealth -= damage;
-            _playerManager.GetComponent<Health>().UpdatePlayersHealth();
+            _playerManager.GetComponent<Health>().UpdatePlayersHealth(false);
             // Debug.Log(damage);
             // Debug.Log(currentHealth);
             if (currentHealth <= 0)
@@ -59,7 +58,7 @@ namespace TurnBase
         public void Heal(int amount)
         {
             currentHealth += amount;
-            _playerManager.GetComponent<Health>().UpdatePlayersHealth();
+            _playerManager.GetComponent<Health>().UpdatePlayersHealth(false);
             if (currentHealth > maxHealth)
             {
                 currentHealth = maxHealth;

@@ -2,13 +2,13 @@ using GameDev;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 namespace TurnBase
 {
     public class EnemyUnit : MonoBehaviour
     {
+        public GameObject _enemyObject;
         public EnemyType _enemyData;
         public string unitName;
         public string unitDescription;
@@ -20,13 +20,10 @@ namespace TurnBase
         public float currentHealth;
 
 
-        // private void Start()
-        // {
-        // }
-
-        public void SetUpDataForBattle()
+        public void SetUpEnemyDataForBattle()
         {
-            _enemyData = GameObject.FindWithTag("Enemy").GetComponent<EnemyType>();
+            _enemyObject = GameObject.FindWithTag("Enemy");
+            _enemyData = _enemyObject.GetComponent<EnemyType>();
             unitName = _enemyData.name;
             // unitLevel = _enemyData.baseRarity;
             meleeDamageREF = _enemyData.meleeDamageREF;
@@ -35,6 +32,7 @@ namespace TurnBase
             maxHealth = _enemyData.maxHealthREF;
             currentHealth = _enemyData.currentHealthREF;
 
+            
         }
 
         // When during TakeDamage pass a damage value in for calculations
@@ -42,13 +40,14 @@ namespace TurnBase
         {
             // Current health is affected by damage amount
             currentHealth -= damage;
+            _enemyObject.GetComponent<EnemyHealth>().UpdateEnemyHealth();
             Debug.Log("Need to add a health bar above the enemy");
             // _playerManager.GetComponent<Health>().UpdatePlayersHealth();
             if (currentHealth <= 0)
             {
                 // Say that kills us
                 return true;
-            }    
+            }
             else
             {
                 // Else say it didn't kill us
@@ -58,6 +57,7 @@ namespace TurnBase
         public void Heal(int amount)
         {
             currentHealth += amount;
+            _enemyObject.GetComponent<EnemyHealth>().UpdateEnemyHealth();
             if (currentHealth > maxHealth)
             {
                 currentHealth = maxHealth;
