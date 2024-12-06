@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Rock Golem
   m_EditorClassIdentifier: 
   enemyName: Rock Golem
-  description: Seems like they can break anything
+  description: Can break anything
   artwork: {fileID: 8400000, guid: 971146c5b379a8044a663f68e8542e9b, type: 2}
-  damage: 10
-  health: 100
+  meleeDamage: 10
+  rangeDamage: 5
+  currentHealth: 100
+  maxHealth: 100
   baseRarity: 0

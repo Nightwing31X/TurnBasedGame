@@ -7,6 +7,10 @@ using UnityEngine;
 public class EnemyType : MonoBehaviour
 {
     public Enemy enemyType;
+    public int meleeDamageREF;
+    public int rangeDamageREF;
+    public int maxHealthREF;
+    public int currentHealthREF;
 
     public void DefineNames()
     {
@@ -15,5 +19,12 @@ public class EnemyType : MonoBehaviour
         BattleSystem.instance.enemyDescriptionText.text = enemyType.description;
         BattleSystem.instance.enemyIconImage.texture = enemyType.artwork;
         //Debug.Log("Finished reading all the details...");
+
+        meleeDamageREF = enemyType.meleeDamage;
+        rangeDamageREF = enemyType.rangeDamage;
+        maxHealthREF = enemyType.maxHealth;
+        currentHealthREF = enemyType.currentHealth;
     }
+
+
 }

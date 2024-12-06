@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 2489307523273568955}
   - component: {fileID: 2971367252085101990}
   - component: {fileID: 3014571516947169081}
+  - component: {fileID: -2994302739705704453}
   m_Layer: 7
   m_Name: Polyart Golem
   m_TagString: Enemy
@@ -421,12 +422,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2fbf14f476cd149a1c58a27f7ace68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugErrors: 0
   Layers:
     serializedVersion: 2
     m_Bits: 4294967295
   playerLayer: HidePlayer
   wallLayer: Wall
-  _debug: 1
   distance: 6
   attackRadiusDistance: 12
   wallHit: 0
@@ -478,6 +479,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: {fileID: 11400000, guid: 76046b196a392bc4fa2719cffb7fead4, type: 2}
+--- !u!114 &-2994302739705704453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077356408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1baec16a53d4b748bba414e10a11b72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyData: {fileID: 0}
+  unitName: 
+  unitDescription: 
+  unitAction: 
+  damage: 0
+  maxHealth: 0
+  currentHealth: 0
 --- !u!1 &1099011281
 GameObject:
   m_ObjectHideFlags: 0

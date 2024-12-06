@@ -22,6 +22,8 @@ namespace GameDev
         public bool shieldWoodREF;
         public int currentHealthREF;
         public int maxHealthREF;
+        public int meleeDamageREF;
+        public int rangeDamageREF;
         public int currentBagValueREF = 0;
         public int maxBagValueREF = 24;
 
@@ -120,6 +122,9 @@ namespace GameDev
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
 
+            meleeDamageREF = playerDataSave.meleeDamage;
+            rangeDamageREF = playerDataSave.rangeDamage;
+
             currentBagValueREF = playerDataSave.currentBagValue;
             maxBagValueREF = playerDataSave.maxBagValue;
 
@@ -137,6 +142,9 @@ namespace GameDev
             playerDataSave.shieldWood = shieldWoodREF;
             playerDataSave.maxHealth = maxHealthREF;
             playerDataSave.currentHealth = currentHealthREF;
+
+            playerDataSave.meleeDamage = meleeDamageREF;
+            playerDataSave.rangeDamage = rangeDamageREF;
 
             playerDataSave.currentBagValue = currentBagValueREF;
             playerDataSave.maxBagValue = maxBagValueREF;
@@ -158,6 +166,9 @@ namespace GameDev
 
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
+
+            meleeDamageREF = playerDataSave.meleeDamage;
+            rangeDamageREF = playerDataSave.rangeDamage;
 
             currentBagValueREF = playerDataSave.currentBagValue;
             maxBagValueREF = playerDataSave.maxBagValue;
@@ -191,6 +202,8 @@ namespace GameDev
         [SerializeField] public bool shieldWood = false;
         [SerializeField] public int currentHealth = 100;
         [SerializeField] public int maxHealth = 100;
+        [SerializeField] public int meleeDamage = 6;
+        [SerializeField] public int rangeDamage = 3;
         [SerializeField] public int currentBagValue = 0;
         [SerializeField] public int maxBagValue = 24;
     }

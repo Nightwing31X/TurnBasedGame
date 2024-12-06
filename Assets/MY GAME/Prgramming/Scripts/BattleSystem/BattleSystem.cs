@@ -50,6 +50,8 @@ namespace TurnBase
         // public GameObject enemyPrefab;
         [SerializeField] private GameObject _battleCameraEnemy;
         [SerializeField] private GameObject _enemyObject;
+        public EnemyUnit enemyUnit;
+
         // private BattleHUD enemyHUD;
 
         [Header("Object for which is being displayed in the BattleChoice")]
@@ -93,7 +95,7 @@ namespace TurnBase
 
         public void EnemyCam(string name)
         {
-            _enemyObject = GameObject.Find($"{name}(Clone)");
+            _enemyObject = GameObject.Find($"{name}(Clone)"); //? This get defined on start
             _battleCameraEnemy = GameObject.Find("EnemyBattleCamera");
             _battleCameraEnemy.SetActive(false);
         }
@@ -284,7 +286,7 @@ namespace TurnBase
             dialogueText.text = $"{playerUnit.unitName} has ran away!";
         }
 
-        public void OnAttack()
+        public void OnAttack() // Player button AttackBTN
         {
             if (_currentActionPoints > 0)
             {
@@ -297,13 +299,23 @@ namespace TurnBase
         }
         public void OnHeal()
         {
-            if (_currentActionPoints > 0)
+            // float _halfMaxHealthValue = playerUnit.maxHealth * 0.5f;
+            // if (playerUnit.currentHealth <= _halfMaxHealthValue)
+            if (playerUnit.currentHealth < playerUnit.maxHealth)
             {
-                if (battleState != BattleStates.PlayerTurn)
+                if (_currentActionPoints > 0)
                 {
-                    return;
+                    if (battleState != BattleStates.PlayerTurn)
+                    {
+                        return;
+                    }
+                    StartCoroutine(PlayerHeal());
                 }
-                StartCoroutine(PlayerHeal());
+            }
+            else
+            {
+                // dialogueText.text = $"Need to be {_halfMaxHealthValue} or below to heal.";
+                dialogueText.text = $"Need to be below max health to heal.";
             }
         }
         public void OnBlock()
@@ -398,6 +410,10 @@ namespace TurnBase
                     playerObject = GameObject.Find("MalePlayer");
                     playerUnit = playerObject.GetComponent<Unit>();
                     playerUnit.SetUpDataForBattle();
+
+                    enemyUnit = _enemyObject.GetComponent<EnemyUnit>();
+                    enemyUnit.SetUpDataForBattle();
+
                     playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
                     playerHUD.SetHUD(playerUnit);
                     mainCameraREF = Camera.main.gameObject;
@@ -418,6 +434,10 @@ namespace TurnBase
                     playerObject = GameObject.Find("FemalePlayer");
                     playerUnit = playerObject.GetComponent<Unit>();
                     playerUnit.SetUpDataForBattle();
+
+                    enemyUnit = _enemyObject.GetComponent<EnemyUnit>();
+                    enemyUnit.SetUpDataForBattle();
+
                     playerHUD = GameObject.Find("BattleManager").GetComponent<BattleHUD>();
                     playerHUD.SetHUD(playerUnit);
                     mainCameraREF = Camera.main.gameObject;
@@ -447,6 +467,8 @@ namespace TurnBase
                 }
                 if (meleeRange)
                 {
+                    Debug.Log("Player did melee damage");
+                    enemyUnit.TakeDamage(playerUnit.meleeDamage);
                     playerObject.GetComponent<Animator>().SetTrigger("Attack04");
                     _enemyObject.GetComponent<Animator>().SetTrigger("Stun");
                 }
@@ -456,16 +478,18 @@ namespace TurnBase
                     {
                         Debug.Log("Range");
                     }
+                    Debug.Log("Player did range damage");
+                    enemyUnit.TakeDamage(playerUnit.rangeDamage);
                     playerObject.GetComponent<Animator>().SetTrigger("RangeAttack01");
                     _enemyObject.GetComponent<Animator>().SetTrigger("Stun");
                 }
                 dialogueText.text = $"{playerUnit.unitName} attacks {enemyNameText.text}";
             }
             yield return new WaitForSeconds(3f);
-            if (_debugErrors)
-            {
-                Debug.Log("Player's turn must end after this...");
-            }
+            // if (_debugErrors)
+            // {
+            //     Debug.Log("Player's turn must end after this...");
+            // }
             // if (PlayerCharacterManager.Instance.male)
             // {
             //     battleCameraMale.SetActive(false);
@@ -492,7 +516,7 @@ namespace TurnBase
             }
 
 
-            //bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
+            //bool isDead = enemyUnit.TakeDamage(playerUnit.meleeDamage);
             //enemyHUD.SetHealth(enemyUnit);
             //dialogueText.text = $"{playerUnit.unitName} attacked {enemyUnit.unitName}";
             //yield return new WaitForSeconds(2f);
@@ -586,7 +610,7 @@ namespace TurnBase
         {
             _currentActionPoints = _currentActionPoints - 1;
             UpdateActionPoints();
-            playerUnit.Heal(2);
+            playerUnit.Heal(3);
             playerHUD.SetHealth(playerUnit);
             dialogueText.text = $"{playerUnit.unitName} feels stronger!";
             yield return new WaitForSeconds(2f);
@@ -689,12 +713,12 @@ namespace TurnBase
             //     battleCameraFemale.SetActive(false);
             //     _battleCameraEnemy.SetActive(true);
             // }
-            if (_debugErrors)
-            {
-                Debug.Log("Need to write a check to see the players health...");
-                Debug.Log("Need to write a check to see your own health (enemy)...");
-                Debug.Log("Choose attack - range, melee, flee...");
-            }
+            // if (_debugErrors)
+            // {
+            //     Debug.Log("Need to write a check to see the players health...");
+            //     Debug.Log("Need to write a check to see your own health (enemy)...");
+            //     Debug.Log("Choose attack - range, melee, flee...");
+            // }
             //dialogueText.text = $"{enemyNameText.text} attacks {playerUnit.unitName}";
             dialogueText.text = $"{enemyNameText.text} will do some sort of attack to {playerUnit.unitName}";
 
@@ -713,12 +737,17 @@ namespace TurnBase
                         Debug.Log("Melee");
                     }
                     _enemyObject.GetComponent<Animator>().SetTrigger("Attack01");
-                    if (_blockChange)
+                    if (_blockChange) // Deals less damage to the player
                     {
+                        Debug.Log("Player was blocking; half melee damage");
+                        Debug.Log(enemyUnit.meleeDamageREF);
+                        playerUnit.TakeDamage(enemyUnit.meleeDamageREF / 2);
                         playerObject.GetComponent<Animator>().SetTrigger("StunBlock");
                     }
-                    else
+                    else // Deals max damage to the player
                     {
+                        Debug.Log("Player didn't block; max melee damage");
+                        playerUnit.TakeDamage(enemyUnit.meleeDamageREF);
                         playerObject.GetComponent<Animator>().SetTrigger("Stun");
                     }
                 }
@@ -731,10 +760,14 @@ namespace TurnBase
                     _enemyObject.GetComponent<Animator>().SetTrigger("RangeAttack01");
                     if (_blockChange)
                     {
+                        Debug.Log("Player was blocking; half range damage");
+                        playerUnit.TakeDamage(enemyUnit.rangeDamageREF / 2);
                         playerObject.GetComponent<Animator>().SetTrigger("StunBlock");
                     }
                     else
                     {
+                        Debug.Log("Player didn't block; max range damage");
+                        playerUnit.TakeDamage(enemyUnit.rangeDamageREF);
                         playerObject.GetComponent<Animator>().SetTrigger("Stun");
                     }
                 }
