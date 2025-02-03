@@ -2,7 +2,6 @@ using GameDev;
 using System.Collections;
 using System.Collections.Generic;
 using TurnBase;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +21,7 @@ public class EnemyHealth : MonoBehaviour
     {
         // _enemyData = GetComponent<EnemyType>();
         _enemyUnit = GetComponent<EnemyUnit>();
-        _canvas.GetComponent<Canvas>().rootCanvas.worldCamera = Camera.main;
+        // _canvas.GetComponent<Canvas>().rootCanvas.worldCamera = Camera.main;
         // SetEnemyHealth();
         ToggleEnemyUIHealth(true);
         // _enemyHealthText.enabled = false;
@@ -58,9 +57,9 @@ public class EnemyHealth : MonoBehaviour
         // }
         maxHealth = _enemyUnit.maxHealth;
         currentHealth = _enemyUnit.currentHealth;
-        _canvas.GetComponent<Canvas>().rootCanvas.worldCamera = Camera.main;
+        //_canvas.GetComponent<Canvas>().rootCanvas.worldCamera = Camera.main;
 
-        // _enemyHealthText.text = $"{currentHealth}/{maxHealth}";
+        _enemyHealthText.text = $"{currentHealth}/{maxHealth}";
         _enemyHealthBar.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
         // if (value)
         // {

@@ -1,6 +1,4 @@
 using GameDev;
-using System.Collections;
-using System.Collections.Generic;
 using TurnBase;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,8 +35,6 @@ public class Health : MonoBehaviour
 
     public void UpdatePlayersHealth(bool value)
     {
-        // maxHealth = _playerData.maxHealthREF;
-        // currentHealth = _playerData.currentHealthREF;
         if (value)
         {
             _playerUnit.SetUpPlayerDataForBattle(); //? Have to put this here so that the health elements would get updated

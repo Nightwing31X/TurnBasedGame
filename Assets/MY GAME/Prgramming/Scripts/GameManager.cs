@@ -1,7 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using TurnBase;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace GameDev
 {
@@ -11,15 +12,21 @@ namespace GameDev
         public static GameManager instance;
         public GameStates state = GameStates.PlayerTurn;
         public bool isPlayerDead = false;
-        public bool inQuest = false;
         public bool inCutscene = false;
-        public bool inDialogue = false;
-        public bool inDialoguePlace = false;
         public bool inPause = false;
         public bool inINV = false;
         public string currentGameState;
+        public Unit playerUnit;
+        [SerializeField] private GameObject playerObject;
 
+
+        [Header("GameOver")]
+        [SerializeField] private GameObject GameOverContainer;
+        [SerializeField] private Text GameOverText;
+        [SerializeField] private Text GameOverDefeatedText;
         //[SerializeField] private float gameOverStateDuration = 3f;
+
+        [Header("Credit")]
         [SerializeField] private float timeToCredit = 3f;
         [SerializeField] private float CreditDuration = 3f;
         [SerializeField] private GameObject CreditContainer;
@@ -35,6 +42,16 @@ namespace GameDev
             {
                 Destroy(this);
             }
+
+            if (GameOverContainer != null)
+            {
+                Debug.LogWarning("NEED TO PUT IN THE GAMEOVERCONTAINER MENU!!!");
+            }
+            else
+            {
+                GameOverContainer.SetActive(false);
+            }
+
             if (CreditContainer == null)
             {
                 Debug.LogWarning("NEED TO PUT IN THE CREDITCONTAINER MENU!!!");
@@ -43,7 +60,21 @@ namespace GameDev
             {
                 CreditContainer.SetActive(false);
             }
+
             OnPlayerTurn();
+        }
+
+        void Start()
+        {
+            if (PlayerCharacterManager.Instance.male)
+            {
+                playerObject = GameObject.Find("MalePlayer");
+            }
+            else
+            {
+                playerObject = GameObject.Find("FemalePlayer");
+            }
+            playerUnit = playerObject.GetComponent<Unit>();
         }
 
         public void CheckCurrentStat()
@@ -72,7 +103,7 @@ namespace GameDev
             {
                 OnEndGame();
             }
-            else 
+            else
             {
                 Debug.LogWarning("GAME MANAGER - THIS SHOULD NOT SHOW AS CURRENT STATE!!!");
             }
@@ -132,7 +163,7 @@ namespace GameDev
         }
         public void OnDeath()
         {
-            //Cursor.lockState = CursorLockMode.None;
+            // Cursor.lockState = CursorLockMode.None;
             //Cursor.visible = true;
             // if (!InputHandler.instance.forceController)
             // {
@@ -146,8 +177,17 @@ namespace GameDev
             // {
             //     Cursor.visible = true;
             // }
+            GameOverContainer.SetActive(true);
+            GameOverText.text = $"{playerUnit.unitName} has Died!";
+            GameOverDefeatedText.text = $"Defeated by {BattleSystem.instance.enemyNameText.text}";
+            isPlayerDead = true;
             state = GameStates.Death;
             currentGameState = "Death";
+        }
+
+        public void DefeatedEnemy()
+        {
+            OnPlayerTurn();
         }
 
         public void OnEndGame()
@@ -161,7 +201,8 @@ namespace GameDev
 
         private IEnumerator GameWonSequence(bool restartLevel)
         {
-            instance.OnEndGame();
+            // instance.OnEndGame();
+            OnEndGame();
             yield return new WaitForSeconds(timeToCredit);
             CreditContainer.SetActive(true);
             yield return new WaitForSeconds(CreditDuration);

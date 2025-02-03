@@ -1,8 +1,5 @@
 using GameDev;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TurnBase
 {
@@ -14,10 +11,11 @@ namespace TurnBase
         public string unitDescription;
         public string unitAction;
         public int unitLevel;
+        public float currentHealth;
+        public int maxHealth;
+        public int healValue;
         public int meleeDamage;
         public int rangeDamage;
-        public int maxHealth;
-        public float currentHealth;
 
 
         private void Start()
@@ -30,8 +28,11 @@ namespace TurnBase
         {
             unitName = _playerData.usernameREF;
             unitLevel = _playerData.levelREF;
-            maxHealth = _playerData.maxHealthREF;
             currentHealth = _playerData.currentHealthREF;
+            maxHealth = _playerData.maxHealthREF;
+
+            healValue = _playerData.healValueREF;
+
             meleeDamage = _playerData.meleeDamageREF;
             rangeDamage = _playerData.rangeDamageREF;
         }
@@ -55,9 +56,9 @@ namespace TurnBase
                 return false;
             }
         }
-        public void Heal(int amount)
+        public void Heal()
         {
-            currentHealth += amount;
+            currentHealth += healValue;
             _playerManager.GetComponent<Health>().UpdatePlayersHealth(false);
             if (currentHealth > maxHealth)
             {

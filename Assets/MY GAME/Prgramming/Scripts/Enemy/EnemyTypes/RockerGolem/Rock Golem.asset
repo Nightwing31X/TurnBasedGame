@@ -15,8 +15,8 @@ MonoBehaviour:
   enemyName: Rock Golem
   description: Can break anything
   artwork: {fileID: 8400000, guid: 971146c5b379a8044a663f68e8542e9b, type: 2}
-  meleeDamage: 10
-  rangeDamage: 5
+  meleeDamage: 20
+  rangeDamage: 15
   currentHealth: 100
   maxHealth: 100
   baseRarity: 0

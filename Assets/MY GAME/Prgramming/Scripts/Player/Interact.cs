@@ -19,8 +19,6 @@ namespace Player
         public LayerMask Layers;
         public string interactionLayer;
         public string attackLayer;
-        public string wallLayer;
-        //public string itemLayer;
         [Tooltip("Toggle on to print console messages from this component.")]
         [SerializeField] private bool _checkControllerInput;
         [SerializeField] private bool _forceControllerInput;
@@ -29,11 +27,7 @@ namespace Player
 
         [Header("Wall Hit Checks")]
         public bool wallFrontHit = false;
-        // public bool wallRightHit = false;
-        // public bool wallLeftHit = false;
-        // public bool wallBehideHit = false;
-        //public bool itemHit = false;
-
+        public bool wallBehideHit = false;
         [Header("Enemy Checks")]
         public bool enemyFront = false;
         public bool enemyFrontRange = false;
@@ -109,25 +103,6 @@ namespace Player
                     {
                         Debug.DrawRay(transform.position, transform.forward * distance, Color.yellow, 0.5f);
                     }
-                    // # region Detect the interact layer (Interaction Layer)
-                    // //if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(interactionLayer))
-                    // //{
-                    // //    if (_debugErrors)
-                    // //    {
-                    // //        Debug.Log($"Player - Interaction layer; can click...");
-                    // //    }
-                    // //    // showToolTip = true;
-                    // //    // attackToolTip = false;
-                    // //    // OnGUI(); // Displays out ToolTip
-                    // //    if (Input.GetButtonDown("Interaction"))
-                    // //    {
-                    // //        if (hitInfoForward.collider.TryGetComponent(out IInteractable interactableObject))
-                    // //        {
-                    // //            interactableObject.Interact();
-                    // //        }
-                    // //    }
-                    // //}
-                    // # endregion
                     # region Detect the attack layer (Enemy Layer) - Forward Player view
                     if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
                     {
@@ -154,31 +129,10 @@ namespace Player
                         // showToolTip = true;
                     }
                     # endregion
-                    // #region Detect the item layer (Item Layer) - So I can remove the enemy front detection.
-                    // // if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(itemLayer))
-                    // // {
-                    // //     if (_debugErrors)
-                    // //     {
-                    // //         Debug.Log($"Player - item is in-front.");
-                    // //     }
-                    // //     itemHit = true;
-                    // //     wallFrontHit = false;
-                    // //     enemyFront = false;
-                    // //     enemyFrontRange = false;
-                    // //     meleeDistance = false;
-                    // //     BattleSystem.instance.meleeRange = meleeDistance;
-                    // //     _playerPick = false;
-                    // //     BattleSystem.instance.playerPicked = _playerPick;
-                    // //     //    // showToolTip = true;
-                    // //     //    // attackToolTip = false;
-                    // //     //    // OnGUI(); // Displays out ToolTip
-                    // // }
-                    // #endregion
                 }
                 else
                 {
                     enemyFront = false;
-                    //itemHit = false;
                 }
                 #endregion
 
@@ -196,7 +150,6 @@ namespace Player
                         {
                             if (_debugErrors)
                             {
-                                //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
                                 Debug.Log($"Player - Enemy is in-front; can do range attacks");
                             }
 
@@ -204,7 +157,6 @@ namespace Player
                             meleeDistance = false;
                             BattleSystem.instance.meleeRange = meleeDistance;
                             _playerPick = BattleSystem.instance.playerPicked;
-                            // Debug.Log(_playerPick);
                             enemyRight = false;
                             enemyLeft = false;
                             enemyBack = false;
@@ -317,16 +269,6 @@ namespace Player
                     //controllerAttackText.SetActive(false);
                 }
                 #endregion
-                // # region Left Wall
-                // if (hitInfoLeft.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                // {
-                //     if (_debugErrors)
-                //     {
-                //         Debug.Log($"Player - Wall is Left.");
-                //     }
-                //     wallLeftHit = true;
-                // }
-                // #endregion
                 #endregion
 
                 # region Raycast Behide side
@@ -334,10 +276,10 @@ namespace Player
                 Ray interactRayBehide;
                 // this ray shoots forward from the center of the camera (Behide)
                 interactRayBehide = _behideCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(interactRayBehide.origin, -transform.forward * attackRadiusDistance, Color.magenta); // Behide side
-                // }
+                if (_debugErrors)
+                {
+                    Debug.DrawRay(interactRayBehide.origin, -transform.forward * attackRadiusDistance, Color.magenta); // Behide side
+                }
                 // create hit info (this holds the info for the stuff we interact with) 
                 RaycastHit hitInfoBehide;
 
@@ -372,276 +314,7 @@ namespace Player
                     //controllerAttackText.SetActive(false);
                 }
                 #endregion
-                // # region Behide Wall
-                // if (hitInfoBehide.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                // {
-                //     if (_debugErrors)
-                //     {
-                //         Debug.Log($"Player - Wall is right.");
-                //     }
-                //     wallBehideHit = true;
-                // }
-                // #endregion
                 #endregion
-
-                #region Raycast for wall -- Not Using
-                // RaycastHit hitInfoForWall;
-
-                // #region Front Wall RayCast
-                // Ray WallRayFront;
-                // WallRayFront = _mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayFront.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayFront, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is in-front.");
-                //         }
-                //         wallFrontHit = true;
-                //         enemyFront = false;
-                //         enemyFrontRange = false;
-                //         meleeDistance = false;
-                //         BattleSystem.instance.meleeRange = meleeDistance;
-                //         _playerPick = false;
-                //         BattleSystem.instance.playerPicked = _playerPick;
-                //     }
-                // }
-                // else
-                // {
-                //     wallFrontHit = false;
-                // }
-                // #endregion
-
-                // #region Right Wall RayCast
-                // Ray WallRayRight;
-                // WallRayRight = _rightCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayRight.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayRight, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is right.");
-                //         }
-                //         wallRightHit = true;
-                //     }
-                // }
-                // else
-                // {
-                //     wallRightHit = false;
-                // }
-                // #endregion
-
-                // #region Left Wall RayCast
-                // Ray WallRayLeft;
-                // WallRayLeft = _leftCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayLeft.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayLeft, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is left.");
-                //         }
-                //         wallLeftHit = true;
-                //     }
-                // }
-                // else
-                // {
-                //     wallLeftHit = false;
-                // }
-                // #endregion
-
-                // #region Behide Wall RayCast
-                // Ray WallRayBack;
-                // WallRayBack = _behideCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayBack.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayBack, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is back.");
-                //         }
-                //         wallBehideHit = true;
-                //     }
-                // }
-                // else
-                // {
-                //     wallBehideHit = false;
-                // }
-                // #endregion
-                #endregion
-
-            }
-            else
-            {
-                #region Raycast for wall -- Not using
-                // RaycastHit hitInfoForWall;
-
-                // #region Front Wall RayCast
-                // Ray WallRayFront;
-                // WallRayFront = _mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayFront.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayFront, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is in-front.");
-                //         }
-                //         wallFrontHit = true;
-                //         enemyFront = false;
-                //         enemyFrontRange = false;
-                //         meleeDistance = false;
-                //         BattleSystem.instance.meleeRange = meleeDistance;
-                //         _playerPick = false;
-                //         BattleSystem.instance.playerPicked = _playerPick;
-                //     }
-                // }
-                // else
-                // {
-                //     wallFrontHit = false;
-                // }
-                // #endregion
-
-                // #region Right Wall RayCast
-                // Ray WallRayRight;
-                // WallRayRight = _rightCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayRight.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayRight, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is right.");
-                //         }
-                //         wallRightHit = true;
-                //     }
-                // }
-                // else
-                // {
-                //     wallRightHit = false;
-                // }
-                // #endregion
-
-                // #region Left Wall RayCast
-                // Ray WallRayLeft;
-                // WallRayLeft = _leftCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayLeft.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayLeft, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is left.");
-                //         }
-                //         wallLeftHit = true;
-                //     }
-                // }
-                // else
-                // {
-                //     wallLeftHit = false;
-                // }
-                // #endregion
-
-                // #region Behide Wall RayCast
-                // Ray WallRayBack;
-                // WallRayBack = _behideCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                // if (_debugErrors)
-                // {
-                //     Debug.DrawRay(WallRayBack.origin, transform.forward * attackRadiusDistance, Color.white);
-                // }
-                // if (Physics.Raycast(WallRayBack, out hitInfoForWall, distance, Layers))
-                // {
-                //     if (hitInfoForWall.transform.gameObject.layer == LayerMask.NameToLayer(wallLayer))
-                //     {
-                //         if (_debugErrors)
-                //         {
-                //             Debug.Log($"Player - Wall is back.");
-                //         }
-                //         wallBehideHit = true;
-                //     }
-                // }
-                // else
-                // {
-                //     wallBehideHit = false;
-                // }
-                // #endregion
-                #endregion
-
-
-                Ray interactRayForward;
-                interactRayForward = _mainCamera.GetComponent<Camera>().ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-
-                RaycastHit hitInfoForward;
-
-
-                if (!_playerMove.isMoving)
-                {
-                    #region BattleState - Raycast for the Front side view - Range Attack
-                    // if (_debugErrors)
-                    // {
-                    //     Debug.DrawRay(interactRayForward.origin, transform.forward * attackRadiusDistance, Color.magenta); // Forward side
-                    // }
-                    if (Physics.Raycast(interactRayForward, out hitInfoForward, attackRadiusDistance, Layers /*This part here is the layer its optional*/ ))
-                    {
-                        if (hitInfoForward.distance > distance)
-                        {
-                            if (hitInfoForward.transform.gameObject.layer == LayerMask.NameToLayer(attackLayer))
-                            {
-                                if (_debugErrors)
-                                {
-                                    //Debug.Log($"Enemy is in front though to far to fight...Can range attack?");
-                                    Debug.Log($"Player - Enemy is in-front; can do range attacks");
-                                }
-
-                                enemyFrontRange = true;
-                                enemyFront = false;
-                                meleeDistance = false;
-                                BattleSystem.instance.meleeRange = meleeDistance;
-                            }
-                        }
-                        else
-                        {
-                            enemyFrontRange = false;
-                            enemyFront = true;
-                            meleeDistance = true;
-                            BattleSystem.instance.meleeRange = meleeDistance;
-                        }
-                    }
-                    #endregion
-                }
-
             }
         }
 

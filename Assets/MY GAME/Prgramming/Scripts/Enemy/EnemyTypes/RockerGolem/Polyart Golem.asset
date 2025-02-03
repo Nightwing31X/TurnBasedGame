@@ -15,8 +15,8 @@ MonoBehaviour:
   enemyName: Polyart Golem
   description: Can almost break anything
   artwork: {fileID: 8400000, guid: dc8c90d70a4912149a9364c5a82b76c3, type: 2}
-  meleeDamage: 7
-  rangeDamage: 4
+  meleeDamage: 23
+  rangeDamage: 17
   currentHealth: 100
   maxHealth: 100
   baseRarity: 0

@@ -41,7 +41,6 @@ namespace TurnBase
             // Current health is affected by damage amount
             currentHealth -= damage;
             _enemyObject.GetComponent<EnemyHealth>().UpdateEnemyHealth();
-            Debug.Log("Need to add a health bar above the enemy");
             // _playerManager.GetComponent<Health>().UpdatePlayersHealth();
             if (currentHealth <= 0)
             {

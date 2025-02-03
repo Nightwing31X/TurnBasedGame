@@ -12,6 +12,8 @@ TagManager:
   - Enemy
   - Potion
   - EnemyBattleCamera
+  - WalkPosition
+  - BackPosition
   layers:
   - Default
   - TransparentFX

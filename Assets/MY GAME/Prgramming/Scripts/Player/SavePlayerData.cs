@@ -22,10 +22,12 @@ namespace GameDev
         public bool shieldWoodREF;
         public int currentHealthREF;
         public int maxHealthREF;
+        public int healValueREF;
         public int meleeDamageREF;
         public int rangeDamageREF;
         public int currentBagValueREF = 0;
         public int maxBagValueREF = 24;
+
 
         private bool hasRan;
 
@@ -122,6 +124,8 @@ namespace GameDev
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
 
+            healValueREF = playerDataSave.healValue;
+
             meleeDamageREF = playerDataSave.meleeDamage;
             rangeDamageREF = playerDataSave.rangeDamage;
 
@@ -131,7 +135,7 @@ namespace GameDev
             DropdownValueREF = playerDataSave.DropdownValue;
         }
 
-        public void RefValues()
+        public void RefValues() //? Update the saved values with the new in game values
         {
             playerDataSave.firstTime = firstTimeREF;
 
@@ -140,8 +144,10 @@ namespace GameDev
             playerDataSave.level = levelREF;
             playerDataSave.swordPurple = swordPurpleREF;
             playerDataSave.shieldWood = shieldWoodREF;
-            playerDataSave.maxHealth = maxHealthREF;
             playerDataSave.currentHealth = currentHealthREF;
+            playerDataSave.maxHealth = maxHealthREF;
+
+            playerDataSave.healValue = healValueREF;
 
             playerDataSave.meleeDamage = meleeDamageREF;
             playerDataSave.rangeDamage = rangeDamageREF;
@@ -166,6 +172,8 @@ namespace GameDev
 
             currentHealthREF = playerDataSave.currentHealth;
             maxHealthREF = playerDataSave.maxHealth;
+
+            healValueREF = playerDataSave.healValue;
 
             meleeDamageREF = playerDataSave.meleeDamage;
             rangeDamageREF = playerDataSave.rangeDamage;
@@ -202,8 +210,9 @@ namespace GameDev
         [SerializeField] public bool shieldWood = false;
         [SerializeField] public int currentHealth = 100;
         [SerializeField] public int maxHealth = 100;
-        [SerializeField] public int meleeDamage = 6;
-        [SerializeField] public int rangeDamage = 3;
+        [SerializeField] public int healValue = 5;
+        [SerializeField] public int meleeDamage = 17;
+        [SerializeField] public int rangeDamage = 13;
         [SerializeField] public int currentBagValue = 0;
         [SerializeField] public int maxBagValue = 24;
     }
